@@ -590,7 +590,9 @@ impl<'prop, 'std_nom, 'aisc_label> ShapeBuilder<'std_nom, 'aisc_label> {
         self
     }
 
-    fn try_build<T: TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>>(self) -> Result<T, <T as TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>>::Error> {
+    fn try_build<T: TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>>(
+        self,
+    ) -> Result<T, <T as TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>>::Error> {
         T::try_from(self)
     }
 }
@@ -598,53 +600,53 @@ impl<'prop, 'std_nom, 'aisc_label> ShapeBuilder<'std_nom, 'aisc_label> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::aisc_shapes::{AISCShape};
+    use crate::aisc_shapes::AISCShape;
 
     #[test]
     fn builder_happy_path_works() {
         let shape_result = ShapeBuilder::new()
-        .with_edi_std_nomenclature("W6X9")
-        .with_aisc_manual_label("W6X9")
-        .with_t_f(false)
-        .with_w_upper(9.0)
-        .with_a_upper(2.68)
-        .with_d_lower(5.9)
-        .with_ddet(5.875)
-        .with_bf(3.94)
-        .with_bfdet(4.0)
-        .with_tw(0.17)
-        .with_twdet(0.1875)
-        .with_twdet_2(0.125)
-        .with_tf(0.215)
-        .with_tfdet(0.1875)
-        .with_kdes(0.465)
-        .with_kdet(0.6875)
-        .with_k1(0.5)
-        .with_bf_2tf(9.16)
-        .with_h_tw(29.2)
-        .with_ix(16.4)
-        .with_zx(6.23)
-        .with_sx(5.56)
-        .with_rx(2.47)
-        .with_ly(2.2)
-        .with_zy(1.72)
-        .with_sy(1.11)
-        .with_ry(0.905)
-        .with_j_upper(0.0405)
-        .with_cw(17.7)
-        .with_wno(5.6)
-        .with_sw1(1.19)
-        .with_qf(1.15)
-        .with_qw(3.04)
-        .with_rts(1.06)
-        .with_ho(5.69)
-        .with_pa(22.9)
-        .with_pb(26.8)
-        .with_pc(15.7)
-        .with_pd(19.7)
-        .with_t(0.5)
-        .with_wgi(2.25)
-        .try_build::<AISCShape>();
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_ly(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(0.5)
+            .with_wgi(2.25)
+            .try_build::<AISCShape>();
 
         assert!(shape_result.is_ok());
     }
