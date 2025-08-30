@@ -3,7 +3,7 @@ use std::fmt;
 
 #[derive(Debug)]
 pub struct MissingPropertyError {
-    property_name: &'static str,
+    pub property_name: &'static str,
 }
 
 impl MissingPropertyError {
