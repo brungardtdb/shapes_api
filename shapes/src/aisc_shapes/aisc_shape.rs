@@ -1,9 +1,8 @@
-use crate::aisc_shapes::{MissingPropertyError, ShapeBuilder, ShapeType};
+use crate::aisc_shapes::{MissingPropertyError, ShapeBuilder};
 
 #[derive(Debug)]
 #[allow(dead_code)]
 pub struct AISCShape<'std_nom, 'aisc_label> {
-    shape_type: ShapeType,
     edi_std_nomenclature: &'std_nom str,
     aisc_manual_label: &'aisc_label str,
     t_f: Option<bool>,
@@ -97,7 +96,6 @@ impl<'std_nom, 'aisc_label> TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>
         builder: ShapeBuilder<'std_nom, 'aisc_label>,
     ) -> Result<Self, MissingPropertyError> {
         Ok(AISCShape {
-            shape_type: builder.shape_type,
             edi_std_nomenclature: match &builder.edi_std_nomenclature {
                 Some(nom) => *nom,
                 None => {

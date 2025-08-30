@@ -1,9 +1,6 @@
-use crate::aisc_shapes::{errors::MissingPropertyError, AISCShape, ShapeType};
-
 #[derive(Debug)]
 #[allow(dead_code)]
 pub struct ShapeBuilder<'std_nom, 'aisc_label> {
-    pub shape_type: ShapeType,
     pub edi_std_nomenclature: Option<&'std_nom str>,
     pub aisc_manual_label: Option<&'aisc_label str>,
     pub t_f: Option<bool>,
@@ -90,9 +87,8 @@ pub struct ShapeBuilder<'std_nom, 'aisc_label> {
 }
 
 impl<'prop, 'std_nom, 'aisc_label> ShapeBuilder<'std_nom, 'aisc_label> {
-    pub fn new(shape_type: ShapeType) -> Self {
+    pub fn new() -> Self {
         ShapeBuilder {
-            shape_type: shape_type,
             edi_std_nomenclature: None,
             aisc_manual_label: None,
             t_f: None,
@@ -594,18 +590,19 @@ impl<'prop, 'std_nom, 'aisc_label> ShapeBuilder<'std_nom, 'aisc_label> {
         self
     }
 
-    fn try_build(self) -> Result<AISCShape<'std_nom, 'aisc_label>, MissingPropertyError> {
-        AISCShape::try_from(self)
+    fn try_build<T: TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>>(self) -> Result<T, <T as TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>>::Error> {
+        T::try_from(self)
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::aisc_shapes::{AISCShape};
 
     #[test]
     fn builder_happy_path_works() {
-        let shape_result = ShapeBuilder::new(ShapeType::W)
+        let shape_result = ShapeBuilder::new()
         .with_edi_std_nomenclature("W6X9")
         .with_aisc_manual_label("W6X9")
         .with_t_f(false)
@@ -647,9 +644,8 @@ mod tests {
         .with_pd(19.7)
         .with_t(0.5)
         .with_wgi(2.25)
-        .try_build();
+        .try_build::<AISCShape>();
 
         assert!(shape_result.is_ok());
-        
     }
 }
