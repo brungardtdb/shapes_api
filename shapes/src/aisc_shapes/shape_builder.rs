@@ -42,7 +42,7 @@ pub struct ShapeBuilder<'std_nom, 'aisc_label> {
     pub zx: Option<f64>,
     pub sx: Option<f64>,
     pub rx: Option<f64>,
-    pub ly: Option<f64>,
+    pub iy: Option<f64>,
     pub zy: Option<f64>,
     pub sy: Option<f64>,
     pub ry: Option<f64>,
@@ -130,7 +130,7 @@ impl<'prop, 'std_nom, 'aisc_label> ShapeBuilder<'std_nom, 'aisc_label> {
             zx: None,
             sx: None,
             rx: None,
-            ly: None,
+            iy: None,
             zy: None,
             sy: None,
             ry: None,
@@ -192,7 +192,7 @@ impl<'prop, 'std_nom, 'aisc_label> ShapeBuilder<'std_nom, 'aisc_label> {
         self.t_f = Some(t_f);
         self
     }
-#[allow(dead_code)]
+    #[allow(dead_code)]
     pub fn with_w_upper(mut self, w_upper: f64) -> Self {
         self.w_upper = Some(w_upper);
         self
@@ -402,7 +402,7 @@ impl<'prop, 'std_nom, 'aisc_label> ShapeBuilder<'std_nom, 'aisc_label> {
         self
     }
 
-#[allow(dead_code)]
+    #[allow(dead_code)]
     pub fn with_zx(mut self, zx: f64) -> Self {
         self.zx = Some(zx);
         self
@@ -421,8 +421,8 @@ impl<'prop, 'std_nom, 'aisc_label> ShapeBuilder<'std_nom, 'aisc_label> {
     }
 
     #[allow(dead_code)]
-    pub fn with_ly(mut self, ly: f64) -> Self {
-        self.ly = Some(ly);
+    pub fn with_iy(mut self, iy: f64) -> Self {
+        self.iy = Some(iy);
         self
     }
 
@@ -623,7 +623,7 @@ impl<'prop, 'std_nom, 'aisc_label> ShapeBuilder<'std_nom, 'aisc_label> {
         self.ho = Some(ho);
         self
     }
-    
+
     #[allow(dead_code)]
     pub fn with_pa(mut self, pa: f64) -> Self {
         self.pa = Some(pa);

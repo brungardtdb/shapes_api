@@ -1,4 +1,9 @@
 use crate::aisc_shapes::{MissingPropertyError, ShapeBuilder};
+// TODO - REMOVE GENERIC AISC CLASS WHEN OTHER SHAPES ARE IMPLEMENTED
+// I CAN'T SEE ANY USE FOR THIS, YOU CAN'T HAVE AN AISC SHAPE WITHOUT 
+// HAVING A SHAPE OF A SPECIFIC TYPE. THIS IS STILL USEFUL FOR NOW SINCE
+// THIS HAS A SUPERSET OF PROPERTIES THAT ENCOMPASSES ALL SHAPES
+// BUT ONCE THOSE ARE IN PLACE, THIS SHOULD GO AWAY
 
 #[derive(Debug)]
 #[allow(dead_code)]
@@ -44,7 +49,7 @@ pub struct AISCShape<'std_nom, 'aisc_label> {
     zx: f64,
     sx: f64,
     rx: f64,
-    ly: f64,
+    iy: f64,
     zy: f64,
     sy: f64,
     ry: f64,
@@ -156,19 +161,19 @@ impl<'std_nom, 'aisc_label> TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>
             ix: match &builder.ix {
                 Some(ix) => *ix,
                 None => {
-                    return Err(MissingPropertyError::from("ix"));
+                    return Err(MissingPropertyError::from("Ix"));
                 }
             },
             zx: match &builder.zx {
                 Some(zx) => *zx,
                 None => {
-                    return Err(MissingPropertyError::from("zx"));
+                    return Err(MissingPropertyError::from("Zx"));
                 }
             },
             sx: match &builder.sx {
                 Some(sx) => *sx,
                 None => {
-                    return Err(MissingPropertyError::from("sx"));
+                    return Err(MissingPropertyError::from("Sx"));
                 }
             },
             rx: match &builder.rx {
@@ -177,22 +182,22 @@ impl<'std_nom, 'aisc_label> TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>
                     return Err(MissingPropertyError::from("rx"));
                 }
             },
-            ly: match &builder.ly {
-                Some(ly) => *ly,
+            iy: match &builder.iy {
+                Some(iy) => *iy,
                 None => {
-                    return Err(MissingPropertyError::from("ly"));
+                    return Err(MissingPropertyError::from("Iy"));
                 }
             },
             zy: match &builder.zy {
                 Some(zy) => *zy,
                 None => {
-                    return Err(MissingPropertyError::from("zy"));
+                    return Err(MissingPropertyError::from("Zy"));
                 }
             },
             sy: match &builder.sy {
                 Some(sy) => *sy,
                 None => {
-                    return Err(MissingPropertyError::from("sy"));
+                    return Err(MissingPropertyError::from("Sy"));
                 }
             },
             ry: match &builder.ry {
@@ -274,7 +279,7 @@ mod tests {
             .with_zx(6.23)
             .with_sx(5.56)
             .with_rx(2.47)
-            .with_ly(2.2)
+            .with_iy(2.2)
             .with_zy(1.72)
             .with_sy(1.11)
             .with_ry(0.905)
@@ -296,7 +301,6 @@ mod tests {
 
         assert!(shape_result.is_ok());
     }
-
 
     #[test]
     fn missing_edi_std_nom_throws_error() {
@@ -323,7 +327,7 @@ mod tests {
             .with_zx(6.23)
             .with_sx(5.56)
             .with_rx(2.47)
-            .with_ly(2.2)
+            .with_iy(2.2)
             .with_zy(1.72)
             .with_sy(1.11)
             .with_ry(0.905)
@@ -352,7 +356,7 @@ mod tests {
         }
     }
 
-        #[test]
+    #[test]
     fn missing_aisc_man_lbl_throws_error() {
         let shape_result = ShapeBuilder::new()
             .with_edi_std_nomenclature("W6X9")
@@ -377,7 +381,7 @@ mod tests {
             .with_zx(6.23)
             .with_sx(5.56)
             .with_rx(2.47)
-            .with_ly(2.2)
+            .with_iy(2.2)
             .with_zy(1.72)
             .with_sy(1.11)
             .with_ry(0.905)
