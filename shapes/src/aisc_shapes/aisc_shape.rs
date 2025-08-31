@@ -1,12 +1,14 @@
 use crate::aisc_shapes::{MissingPropertyError, ShapeBuilder};
+use std::convert::TryFrom;
 // TODO - REMOVE GENERIC AISC CLASS WHEN OTHER SHAPES ARE IMPLEMENTED
-// I CAN'T SEE ANY USE FOR THIS, YOU CAN'T HAVE AN AISC SHAPE WITHOUT 
+// I CAN'T SEE ANY USE FOR THIS, YOU CAN'T HAVE AN AISC SHAPE WITHOUT
 // HAVING A SHAPE OF A SPECIFIC TYPE. THIS IS STILL USEFUL FOR NOW SINCE
 // THIS HAS A SUPERSET OF PROPERTIES THAT ENCOMPASSES ALL SHAPES
 // BUT ONCE THOSE ARE IN PLACE, THIS SHOULD GO AWAY
 
 #[derive(Debug)]
 #[allow(dead_code)]
+#[doc(hidden)]
 pub struct AISCShape<'std_nom, 'aisc_label> {
     edi_std_nomenclature: &'std_nom str,
     aisc_manual_label: &'aisc_label str,
