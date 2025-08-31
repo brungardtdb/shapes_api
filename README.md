@@ -1,4 +1,4 @@
-# Shapes API # 🦀
+# Shapes API 🦀
 
 The shapes API is REST API (under development) written in the Rust programming language that enables users to easily get information about steel shapes. Initially only AISC steel shapes will be supported. It's possible that other shapes such as aluminum shapes will be supported in the future. 
 
