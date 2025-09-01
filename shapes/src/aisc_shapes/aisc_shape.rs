@@ -305,7 +305,7 @@ mod tests {
     }
 
     #[test]
-    fn missing_edi_std_nom_throws_error() {
+    fn missing_edi_std_nom_returns_error() {
         let shape_result = ShapeBuilder::new()
             .with_aisc_manual_label("W6X9")
             .with_t_f(false)
@@ -359,7 +359,7 @@ mod tests {
     }
 
     #[test]
-    fn missing_aisc_man_lbl_throws_error() {
+    fn missing_aisc_man_lbl_returns_error() {
         let shape_result = ShapeBuilder::new()
             .with_edi_std_nomenclature("W6X9")
             .with_t_f(false)

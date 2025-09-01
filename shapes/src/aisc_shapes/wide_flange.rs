@@ -237,7 +237,7 @@ impl<'std_nom, 'aisc_label> TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>
             rx: match &builder.rx {
                 Some(rx) => *rx,
                 None => {
-                    return Err(MissingPropertyError::from("Rx"));
+                    return Err(MissingPropertyError::from("rx"));
                 }
             },
             iy: match &builder.iy {
@@ -249,13 +249,13 @@ impl<'std_nom, 'aisc_label> TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>
             zy: match &builder.zy {
                 Some(zy) => *zy,
                 None => {
-                    return Err(MissingPropertyError::from("zy"));
+                    return Err(MissingPropertyError::from("Zy"));
                 }
             },
             sy: match &builder.sy {
                 Some(sy) => *sy,
                 None => {
-                    return Err(MissingPropertyError::from("sy"));
+                    return Err(MissingPropertyError::from("Sy"));
                 }
             },
             ry: match &builder.ry {
@@ -427,7 +427,7 @@ mod tests {
     }
 
     #[test]
-    fn missing_edi_std_nom_throws_error() {
+    fn missing_edi_std_nom_returns_error() {
         let shape_result = ShapeBuilder::new()
             .with_aisc_manual_label("W6X9")
             .with_t_f(false)
@@ -481,7 +481,7 @@ mod tests {
     }
 
     #[test]
-    fn missing_aisc_man_lbl_throws_error() {
+    fn missing_aisc_man_lbl_returns_error() {
         let shape_result = ShapeBuilder::new()
             .with_edi_std_nomenclature("W6X9")
             .with_t_f(false)
@@ -535,7 +535,7 @@ mod tests {
     }
 
     #[test]
-    fn missing_t_f_throws_error() {
+    fn missing_t_f_returns_error() {
         let shape_result = ShapeBuilder::new()
             .with_edi_std_nomenclature("W6X9")
             .with_aisc_manual_label("W6X9")
@@ -589,7 +589,7 @@ mod tests {
     }
 
     #[test]
-    fn missing_w_upper_throws_error() {
+    fn missing_w_upper_returns_error() {
         let shape_result = ShapeBuilder::new()
             .with_edi_std_nomenclature("W6X9")
             .with_aisc_manual_label("W6X9")
@@ -637,6 +637,2004 @@ mod tests {
         if let Err(err) = shape_result {
             let msg = format!("{}", err);
             assert!("The required property W was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_a_upper_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property A was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_d_lower_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property d was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_ddet_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property ddet was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_bf_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property bf was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_bfdet_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property bfdet was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_tw_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property tw was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_twdet_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property twdet was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_twdet_2_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property twdet/2 was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_tf_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property tf was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_tfdet_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property tfdet was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_kdes_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property kdes was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_kdet_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property kdet was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_k1_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property k1 was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_bf_2tf_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property bf/2tf was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_h_tw_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property h/tw was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_ix_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property Ix was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_zx_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property Zx was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_sx_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property Sx was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_rx_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property rx was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_iy_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property Iy was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_zy_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property Zy was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_sy_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property Sy was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_ry_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property ry was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_j_upper_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property J was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_cw_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property Cw was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_wno_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property Wno was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_sw1_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property Sw1 was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_qf_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property Qf was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_qw_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property Qw was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_rts_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property rts was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_ho_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property ho was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_pa_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property PA was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_pb_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property PB was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_pc_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property PC was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_pd_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_t(4.5)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property PD was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_t_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_wgi(2.25)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property T was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
+    fn missing_wgi_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("W6X9")
+            .with_aisc_manual_label("W6X9")
+            .with_t_f(false)
+            .with_w_upper(9.0)
+            .with_a_upper(2.68)
+            .with_d_lower(5.9)
+            .with_ddet(5.875)
+            .with_bf(3.94)
+            .with_bfdet(4.0)
+            .with_tw(0.17)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.215)
+            .with_tfdet(0.1875)
+            .with_kdes(0.465)
+            .with_kdet(0.6875)
+            .with_k1(0.5)
+            .with_bf_2tf(9.16)
+            .with_h_tw(29.2)
+            .with_ix(16.4)
+            .with_zx(6.23)
+            .with_sx(5.56)
+            .with_rx(2.47)
+            .with_iy(2.2)
+            .with_zy(1.72)
+            .with_sy(1.11)
+            .with_ry(0.905)
+            .with_j_upper(0.0405)
+            .with_cw(17.7)
+            .with_wno(5.6)
+            .with_sw1(1.19)
+            .with_qf(1.15)
+            .with_qw(3.04)
+            .with_rts(1.06)
+            .with_ho(5.69)
+            .with_pa(22.9)
+            .with_pb(26.8)
+            .with_pc(15.7)
+            .with_pd(19.7)
+            .with_t(4.5)
+            .try_build::<WideFlange>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property WGi was missing." == msg);
         } else {
             unreachable!("Failed shape conversion did not return an error");
         }
