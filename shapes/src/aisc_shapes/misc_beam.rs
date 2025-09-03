@@ -98,8 +98,6 @@ pub struct MiscBeam<'std_nom, 'aisc_label> {
     /// The actual size, combination, and orientation of fastener components should be compared with the geometry of the cross section to ensure compatibility.
     /// See AISC Manual Part 1 for additional information, in. (mm)
     pub wgi: Option<f64>,
-    /// (WGo) The bolt spacing between inner and outer fastener holes when the workable gage is compatible with four holes across the flange. See AISC Manual Part 1 for additional information, in. (mm)
-    pub wgo: Option<f64>,
 }
 
 impl<'std_nom, 'aisc_label> TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>
@@ -318,7 +316,6 @@ impl<'std_nom, 'aisc_label> TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>
                 None => return Err(MissingPropertyError::from("T")),
             },
             wgi: *&builder.wgi,
-            wgo: *&builder.wgo,
         })
     }
 }
