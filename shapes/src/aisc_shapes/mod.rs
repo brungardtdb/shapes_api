@@ -11,8 +11,10 @@ pub mod shape_builder;
 pub mod wide_flange;
 /// Struct that models misc beams or "m" steel profiles
 pub mod misc_beam;
-/// Struct that modesl structural beams or "s" steel profiles
+/// Struct that models structural beams or "s" steel profiles
 pub mod structural_beam;
+/// Struct that models h-pile beams or "hp" steel profiles
+pub mod h_pile;
 
 pub use self::aisc_shape::AISCShape;
 pub use self::errors::MissingPropertyError;
@@ -20,3 +22,4 @@ pub use self::shape_builder::ShapeBuilder;
 pub use self::wide_flange::WideFlange;
 pub use self::misc_beam::MiscBeam;
 pub use self::structural_beam::StructuralBeam;
+pub use self::h_pile::HPile;
