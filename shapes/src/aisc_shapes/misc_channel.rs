@@ -3,8 +3,8 @@ use std::convert::TryFrom;
 
 #[derive(Debug)]
 #[allow(dead_code)]
-/// A struct that models the data for cee channel (C) steel profiles
-pub struct CeeChannel<'std_nom, 'aisc_label> {
+/// A struct that models the data for misc channel (MC) steel profiles
+pub struct MiscChannel<'std_nom, 'aisc_label> {
     /// The shape designation according to the AISC Naming Convention
     /// for Structural Steel Products for Use in Electronic Data Interchange (EDI), June 25, 2001.
     /// This information is intended solely for the use of software developers to facilitate the electronic
@@ -119,13 +119,13 @@ pub struct CeeChannel<'std_nom, 'aisc_label> {
 }
 
 impl<'std_nom, 'aisc_label> TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>
-    for CeeChannel<'std_nom, 'aisc_label>
+    for MiscChannel<'std_nom, 'aisc_label>
 {
     type Error = MissingPropertyError;
     fn try_from(
         builder: ShapeBuilder<'std_nom, 'aisc_label>,
     ) -> Result<Self, MissingPropertyError> {
-        Ok(CeeChannel {
+        Ok(MiscChannel {
             edi_std_nomenclature: match &builder.edi_std_nomenclature {
                 Some(nom) => *nom,
                 None => {
@@ -429,7 +429,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_ok());
         let shape = shape_result.unwrap();
@@ -528,7 +528,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -587,7 +587,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -646,7 +646,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -705,7 +705,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -764,7 +764,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -823,7 +823,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -882,7 +882,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -941,7 +941,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1000,7 +1000,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1059,7 +1059,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1118,7 +1118,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1177,7 +1177,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1236,7 +1236,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1295,7 +1295,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1354,7 +1354,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1413,7 +1413,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1472,7 +1472,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1531,7 +1531,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1590,7 +1590,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1649,7 +1649,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1708,7 +1708,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1767,7 +1767,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1826,7 +1826,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1885,7 +1885,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -1944,7 +1944,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2003,7 +2003,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2062,7 +2062,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2121,7 +2121,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2180,7 +2180,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2239,7 +2239,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2298,7 +2298,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2357,7 +2357,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2416,7 +2416,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2475,7 +2475,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2534,7 +2534,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2593,7 +2593,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2652,7 +2652,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2711,7 +2711,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2770,7 +2770,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2829,7 +2829,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2888,7 +2888,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -2947,7 +2947,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -3006,7 +3006,7 @@ mod tests {
             .with_pd(20.5)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -3065,7 +3065,7 @@ mod tests {
             .with_pc(18.3)
             .with_t(6.125)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -3124,7 +3124,7 @@ mod tests {
             .with_pc(18.3)
             .with_pd(20.5)
             .with_wgi(1.375)
-            .try_build::<CeeChannel>();
+            .try_build::<MiscChannel>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
