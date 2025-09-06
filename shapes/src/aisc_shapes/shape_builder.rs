@@ -90,7 +90,7 @@ pub struct ShapeBuilder<'std_nom, 'aisc_label> {
     pub yp: Option<f64>,
     /// (bf/2tf) Slenderness ratio for W, M, S, HP, WT, and ST flange
     pub bf_2tf: Option<f64>,
-    /// Slenderness ratio for angles and channel flange
+    /// (b/t) Slenderness ratio for angles and channel flange
     pub b_t: Option<f64>,
     /// (b/tdes) Slenderness ratio for square HSS or shorter wall of rectangular HSS
     pub b_tdes: Option<f64>,
