@@ -176,7 +176,7 @@ pub struct ShapeBuilder<'std_nom, 'aisc_label> {
     pub sza: Option<f64>,
     /// (SzB) Elastic section modulus about the z-axis at point B on cross section
     pub szb: Option<f64>,
-    /// (SzB) Elastic section modulus about the z-axis at point C on cross section
+    /// (SzC) Elastic section modulus about the z-axis at point C on cross section
     pub szc: Option<f64>,
     /// Effective radius of gyration, in. (mm)
     pub rts: Option<f64>,

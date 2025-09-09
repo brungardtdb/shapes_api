@@ -398,10 +398,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -415,12 +415,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -497,10 +497,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -514,12 +514,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -556,10 +556,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -573,12 +573,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -615,10 +615,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -632,12 +632,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -674,10 +674,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -691,12 +691,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -733,10 +733,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -750,12 +750,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -792,10 +792,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -809,12 +809,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -851,10 +851,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -868,12 +868,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -910,10 +910,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -927,12 +927,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -969,10 +969,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -986,12 +986,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1028,10 +1028,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1045,12 +1045,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1087,10 +1087,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1104,12 +1104,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1146,10 +1146,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1163,12 +1163,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1205,10 +1205,10 @@ mod tests {
             .with_tf(0.390)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1222,12 +1222,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1264,10 +1264,10 @@ mod tests {
             .with_tf(0.390)
             .with_tfdet(0.375)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1281,12 +1281,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1323,10 +1323,10 @@ mod tests {
             .with_tf(0.390)
             .with_tfdet(0.375)
             .with_kdes(0.938)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1340,12 +1340,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1383,9 +1383,9 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1399,12 +1399,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1442,9 +1442,9 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1458,12 +1458,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1501,9 +1501,9 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1517,12 +1517,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1560,9 +1560,9 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1576,12 +1576,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1619,10 +1619,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_ix(32.5)
             .with_zx(9.63)
             .with_sx(8.14)
@@ -1635,12 +1635,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1678,10 +1678,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_zx(9.63)
             .with_sx(8.14)
@@ -1694,12 +1694,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1737,10 +1737,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_sx(8.14)
@@ -1753,12 +1753,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1796,10 +1796,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1812,12 +1812,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1855,10 +1855,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1871,12 +1871,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1914,10 +1914,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1930,12 +1930,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -1973,10 +1973,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -1989,12 +1989,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2032,10 +2032,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2048,12 +2048,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2091,10 +2091,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2107,12 +2107,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2150,10 +2150,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2166,12 +2166,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2209,10 +2209,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2225,12 +2225,12 @@ mod tests {
             .with_j_upper(0.13)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2268,10 +2268,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2284,12 +2284,12 @@ mod tests {
             .with_j_upper(0.13)
             .with_cw(16.5)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2327,10 +2327,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2343,12 +2343,12 @@ mod tests {
             .with_j_upper(0.13)
             .with_cw(16.5)
             .with_wno(5.11)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2386,10 +2386,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2403,11 +2403,11 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2445,10 +2445,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2462,11 +2462,11 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2504,10 +2504,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2521,11 +2521,11 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2563,10 +2563,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2580,11 +2580,11 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2622,10 +2622,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2639,11 +2639,11 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2681,10 +2681,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2698,11 +2698,11 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
+            .with_ro(3.41) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2740,10 +2740,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2757,12 +2757,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_ho(7.61)
             .with_pa(21.9)
             .with_pb(24.1)
@@ -2799,10 +2799,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2816,12 +2816,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_pa(21.9)
             .with_pb(24.1)
@@ -2858,10 +2858,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2875,12 +2875,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pb(24.1)
@@ -2917,10 +2917,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2934,12 +2934,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -2976,10 +2976,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -2993,12 +2993,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -3035,10 +3035,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -3052,12 +3052,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)
@@ -3094,10 +3094,10 @@ mod tests {
             .with_tfdet(0.375)
             .with_kdes(0.938)
             .with_kdet(0.9375)
-            .with_x_lower(0.572) // TODO - NEEDS TEST
-            .with_eo(0.697) // TODO - NEEDS TEST
-            .with_xp(0.211) // TODO - NEEDS TEST
-            .with_b_t(5.79) // TODO - NEEDS TEST
+            .with_x_lower(0.572) 
+            .with_eo(0.697) 
+            .with_xp(0.211) 
+            .with_b_t(5.79) 
             .with_h_tw(28.9)
             .with_ix(32.5)
             .with_zx(9.63)
@@ -3111,12 +3111,12 @@ mod tests {
             .with_cw(16.5)
             .with_wno(5.11)
             .with_sw1(1.34)
-            .with_sw2(0.855) // TODO - NEEDS TEST
-            .with_sw3(0.430) // TODO - NEEDS TEST
+            .with_sw2(0.855) 
+            .with_sw3(0.430) 
             .with_qf(3.03)
             .with_qw(4.79)
-            .with_ro(3.41) // TODO - NEEDS TEST
-            .with_h_upper(0.862) // TODO - NEEDS TEST
+            .with_ro(3.41) 
+            .with_h_upper(0.862) 
             .with_rts(0.756)
             .with_ho(7.61)
             .with_pa(21.9)

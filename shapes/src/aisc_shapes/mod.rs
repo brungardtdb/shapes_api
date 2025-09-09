@@ -19,6 +19,8 @@ pub mod h_pile;
 pub mod cee_channel;
 /// Struct that models miscelaneous channels
 pub mod misc_channel;
+/// Struct that models hot-rolled angles
+pub mod angle;
 
 pub use self::aisc_shape::AISCShape;
 pub use self::errors::MissingPropertyError;
@@ -29,3 +31,4 @@ pub use self::structural_beam::StructuralBeam;
 pub use self::h_pile::HPile;
 pub use self::cee_channel::CeeChannel;
 pub use self::misc_channel::MiscChannel;
+pub use self::angle::Angle;
