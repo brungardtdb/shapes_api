@@ -3,7 +3,7 @@ use std::convert::TryFrom;
 
 #[derive(Debug)]
 #[allow(dead_code)]
-/// A struct that models the data for cee channel (C) steel profiles
+/// A struct that models the data for double angle (2L) steel profiles
 pub struct DoubleAngle<'std_nom, 'aisc_label> {
     /// The shape designation according to the AISC Naming Convention
     /// for Structural Steel Products for Use in Electronic Data Interchange (EDI), June 25, 2001.
