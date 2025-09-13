@@ -339,7 +339,7 @@ mod tests {
         assert_eq!(0.155, shape.tw);
         assert_eq!(0.125, shape.twdet);
         assert_eq!(0.0625, shape.twdet_2);
-        assert_eq!(0.59, shape.tf);
+        assert_eq!(0.228, shape.tf);
         assert_eq!(0.25, shape.tfdet);
         assert_eq!(0.563, shape.kdes);
         assert_eq!(0.5625, shape.kdet);
@@ -907,6 +907,7 @@ mod tests {
         let shape_result = ShapeBuilder::new()
             .with_edi_std_nomenclature("MT6.25X6.2")
             .with_aisc_manual_label("MT6.25X6.2")
+            .with_t_f(false)
             .with_w_upper(6.2)
             .with_a_upper(1.82)
             .with_d_lower(6.27)
@@ -916,7 +917,6 @@ mod tests {
             .with_tw(0.155)
             .with_twdet(0.125)
             .with_twdet_2(0.0625)
-            .with_tf(0.228)
             .with_tfdet(0.25)
             .with_kdes(0.563)
             .with_kdet(0.5625)

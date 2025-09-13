@@ -25,6 +25,8 @@ pub mod angle;
 pub mod wide_flange_tee;
 /// Struct that models misc. tee shapes
 pub mod misc_tee;
+/// Struct that models structural tee shapes
+pub mod structural_tee;
 
 pub use self::aisc_shape::AISCShape;
 pub use self::errors::MissingPropertyError;
@@ -38,3 +40,4 @@ pub use self::misc_channel::MiscChannel;
 pub use self::angle::Angle;
 pub use self::wide_flange_tee::WideFlangeTee;
 pub use self::misc_tee::MiscTee;
+pub use self::structural_tee::StructuralTee;
