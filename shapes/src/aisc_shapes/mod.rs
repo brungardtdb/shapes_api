@@ -29,6 +29,8 @@ pub mod misc_tee;
 pub mod structural_tee;
 /// Struct that models double angle shapes
 pub mod double_angle;
+/// Struct that models square and rectangular HSS shapes
+pub mod hollow_structural_section;
 
 pub use self::aisc_shape::AISCShape;
 pub use self::errors::MissingPropertyError;
@@ -44,3 +46,4 @@ pub use self::wide_flange_tee::WideFlangeTee;
 pub use self::misc_tee::MiscTee;
 pub use self::structural_tee::StructuralTee;
 pub use self::double_angle::DoubleAngle;
+pub use self::hollow_structural_section::HollowStructuralSection;
