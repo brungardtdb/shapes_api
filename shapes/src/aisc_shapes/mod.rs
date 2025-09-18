@@ -33,6 +33,8 @@ pub mod double_angle;
 pub mod hollow_structural_section;
 /// Struct that models round HSS shapes
 pub mod round_hollow_structural_section;
+///Struct that models pipe shapes
+pub mod pipe;
 
 pub use self::aisc_shape::AISCShape;
 pub use self::errors::MissingPropertyError;
@@ -50,3 +52,4 @@ pub use self::structural_tee::StructuralTee;
 pub use self::double_angle::DoubleAngle;
 pub use self::hollow_structural_section::HollowStructuralSection;
 pub use self::round_hollow_structural_section::RoundHollowStructuralSection;
+pub use self::pipe::Pipe;
