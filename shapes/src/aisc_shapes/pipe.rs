@@ -5,7 +5,7 @@ use std::convert::TryFrom;
 #[allow(dead_code)]
 
 /// A struct that models the data for square and rectangular HSS steel profiles
-pub struct RoundHollowStructuralSection<'std_nom, 'aisc_label> {
+pub struct Pipe<'std_nom, 'aisc_label> {
     /// The shape designation according to the AISC Naming Convention
     /// for Structural Steel Products for Use in Electronic Data Interchange (EDI), June 25, 2001.
     /// This information is intended solely for the use of software developers to facilitate the electronic
@@ -19,6 +19,8 @@ pub struct RoundHollowStructuralSection<'std_nom, 'aisc_label> {
     pub a_upper: f64,
     /// (OD) Outside diameter of round HSS or pipe, in. (mm)
     pub od: f64,
+    /// (ID) Inside diameter of pipe, in. (mm)
+    pub id: f64,
     /// Nominal thickness of HSS and pipe wall, in. (mm)
     pub t_nom: f64,
     /// Design thickness of HSS and pipe wall, in. (mm)
@@ -43,18 +45,16 @@ pub struct RoundHollowStructuralSection<'std_nom, 'aisc_label> {
     pub ry: f64,
     /// (J) Torsional constant, in.4 (´103 mm4)
     pub j_upper: f64,
-    /// (C) HSS torsional constant, in.3 (´103 mm3)
-    pub c_upper: f64,
 }
 
 impl<'std_nom, 'aisc_label> TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>
-    for RoundHollowStructuralSection<'std_nom, 'aisc_label>
+    for Pipe<'std_nom, 'aisc_label>
 {
     type Error = MissingPropertyError;
     fn try_from(
         builder: ShapeBuilder<'std_nom, 'aisc_label>,
     ) -> Result<Self, MissingPropertyError> {
-        Ok(RoundHollowStructuralSection {
+        Ok(Pipe {
             edi_std_nomenclature: match *&builder.edi_std_nomenclature {
                 Some(nom) => nom,
                 None => {
@@ -82,6 +82,10 @@ impl<'std_nom, 'aisc_label> TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>
             od: match *&builder.od {
                 Some(od) => od,
                 None => return Err(MissingPropertyError::from("OD")),
+            },
+            id: match *&builder.id {
+                Some(id) => id,
+                None => return Err(MissingPropertyError::from("ID")),
             },
             t_nom: match *&builder.t_nom {
                 Some(t_nom) => t_nom,
@@ -151,10 +155,6 @@ impl<'std_nom, 'aisc_label> TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>
                 Some(j_upper) => j_upper,
                 None => return Err(MissingPropertyError::from("J")),
             },
-            c_upper: match *&builder.c_upper {
-                Some(c_upper) => c_upper,
-                None => return Err(MissingPropertyError::from("C")),
-            },
         })
     }
 }
@@ -167,69 +167,69 @@ mod tests {
     #[test]
     fn builder_happy_path_works() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_ok());
         let shape = shape_result.unwrap();
-        assert_eq!("HSS10X.625", shape.edi_std_nomenclature);
-        assert_eq!("HSS10.000X0.625", shape.aisc_manual_label);
-        assert_eq!(62.64, shape.w_upper);
-        assert_eq!(17.2, shape.a_upper);
-        assert_eq!(10.0, shape.od);
-        assert_eq!(0.625, shape.t_nom);
-        assert_eq!(0.581, shape.tdes);
-        assert_eq!(17.2, shape.d_t);
-        assert_eq!(191.0, shape.ix);
-        assert_eq!(51.6, shape.zx);
-        assert_eq!(38.3, shape.sx);
-        assert_eq!(3.34, shape.rx);
+        assert_eq!("Pipe26STD", shape.edi_std_nomenclature);
+        assert_eq!("Pipe26STD", shape.aisc_manual_label);
+        assert_eq!(103.0, shape.w_upper);
+        assert_eq!(28.2, shape.a_upper);
+        assert_eq!(26.0, shape.od);
+        assert_eq!(25.3, shape.id);
+        assert_eq!(0.375, shape.t_nom);
+        assert_eq!(0.349, shape.tdes);
+        assert_eq!(74.5, shape.d_t);
+        assert_eq!(2320.0, shape.ix);
+        assert_eq!(230.0, shape.zx);
+        assert_eq!(178.0, shape.sx);
+        assert_eq!(9.07, shape.rx);
         assert_eq!(191.0, shape.iy);
-        assert_eq!(51.6, shape.zy);
-        assert_eq!(38.3, shape.sy);
-        assert_eq!(3.34, shape.ry);
-        assert_eq!(383.0, shape.j_upper);
-        assert_eq!(76.6, shape.c_upper);
+        assert_eq!(230.0, shape.zy);
+        assert_eq!(178.0, shape.sy);
+        assert_eq!(9.07, shape.ry);
+        assert_eq!(4640.0, shape.j_upper);
     }
 
     #[test]
     fn missing_edi_std_nom_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -243,24 +243,24 @@ mod tests {
     #[test]
     fn missing_aisc_man_lbl_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -274,24 +274,24 @@ mod tests {
     #[test]
     fn missing_w_upper_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -305,24 +305,24 @@ mod tests {
     #[test]
     fn missing_a_upper_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -336,24 +336,24 @@ mod tests {
     #[test]
     fn missing_od_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -365,26 +365,57 @@ mod tests {
     }
 
     #[test]
+    fn missing_id_returns_error() {
+        let shape_result = ShapeBuilder::new()
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
+            .with_iy(191.0)
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
+
+        assert!(shape_result.is_err());
+        if let Err(err) = shape_result {
+            let msg = format!("{}", err);
+            assert!("The required property ID was missing." == msg);
+        } else {
+            unreachable!("Failed shape conversion did not return an error");
+        }
+    }
+
+    #[test]
     fn missing_t_nom_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -398,24 +429,24 @@ mod tests {
     #[test]
     fn missing_tdes_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -429,24 +460,24 @@ mod tests {
     #[test]
     fn missing_d_t_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -460,24 +491,24 @@ mod tests {
     #[test]
     fn missing_ix_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -491,24 +522,24 @@ mod tests {
     #[test]
     fn missing_zx_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -522,24 +553,24 @@ mod tests {
     #[test]
     fn missing_sx_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -553,24 +584,24 @@ mod tests {
     #[test]
     fn missing_rx_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -584,24 +615,24 @@ mod tests {
     #[test]
     fn missing_iy_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -615,24 +646,24 @@ mod tests {
     #[test]
     fn missing_zy_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -646,24 +677,24 @@ mod tests {
     #[test]
     fn missing_sy_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_ry(9.07)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -677,24 +708,24 @@ mod tests {
     #[test]
     fn missing_ry_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_j_upper(383.0)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_j_upper(4640.0)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
@@ -708,60 +739,29 @@ mod tests {
     #[test]
     fn missing_j_upper_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
+            .with_edi_std_nomenclature("Pipe26STD")
+            .with_aisc_manual_label("Pipe26STD")
+            .with_w_upper(103.0)
+            .with_a_upper(28.2)
+            .with_od(26.0)
+            .with_id(25.3)
+            .with_t_nom(0.375)
+            .with_tdes(0.349)
+            .with_d_t(74.5) 
+            .with_ix(2320.0)
+            .with_zx(230.0)
+            .with_sx(178.0)
+            .with_rx(9.07)
             .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_c_upper(76.6)
-            .try_build::<RoundHollowStructuralSection>();
+            .with_zy(230.0)
+            .with_sy(178.0)
+            .with_ry(9.07)
+            .try_build::<Pipe>();
 
         assert!(shape_result.is_err());
         if let Err(err) = shape_result {
             let msg = format!("{}", err);
             assert!("The required property J was missing." == msg);
-        } else {
-            unreachable!("Failed shape conversion did not return an error");
-        }
-    }
-
-    #[test]
-    fn missing_c_upper_returns_error() {
-        let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("HSS10X.625")
-            .with_aisc_manual_label("HSS10.000X0.625")
-            .with_w_upper(62.64)
-            .with_a_upper(17.2)
-            .with_od(10.0) 
-            .with_t_nom(0.625)
-            .with_tdes(0.581)
-            .with_d_t(17.2) 
-            .with_ix(191.0)
-            .with_zx(51.6)
-            .with_sx(38.3)
-            .with_rx(3.34)
-            .with_iy(191.0)
-            .with_zy(51.6)
-            .with_sy(38.3)
-            .with_ry(3.34)
-            .with_j_upper(383.0)
-            .try_build::<RoundHollowStructuralSection>();
-
-        assert!(shape_result.is_err());
-        if let Err(err) = shape_result {
-            let msg = format!("{}", err);
-            assert!("The required property C was missing." == msg);
         } else {
             unreachable!("Failed shape conversion did not return an error");
         }
