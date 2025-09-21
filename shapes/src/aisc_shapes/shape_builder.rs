@@ -5,17 +5,14 @@ use std::convert::TryFrom;
 /// [ShapeBuilder] is use to build AISC steel shapes,
 /// it contains a superset of the required fields for
 /// each shape defined in the AISC steel shapes database.
-/// The ['std_nom] and ['aisc_label] lifetimes correspond
-/// to the edi_std_nomenclature and aisc_manual_label
-/// fields respectively.
-pub struct ShapeBuilder<'std_nom, 'aisc_label> {
+pub struct ShapeBuilder {
     /// The shape designation according to the AISC Naming Convention
     /// for Structural Steel Products for Use in Electronic Data Interchange (EDI), June 25, 2001.
     /// This information is intended solely for the use of software developers to facilitate the electronic
     /// labeling of shape-specific data and electronic transfer of that data.
-    pub edi_std_nomenclature: Option<&'std_nom str>,
+    pub edi_std_nomenclature: Option<String>,
     /// The shape designation as seen in the AISC Steel Construction Manual, 16th Edition.
-    pub aisc_manual_label: Option<&'aisc_label str>,
+    pub aisc_manual_label: Option<String>,
     /// Boolean variable that indicates whether there is a special note for that shape.
     pub t_f: Option<bool>,
     /// (W) Nominal weight, lb/ft (kg/m)
@@ -204,7 +201,7 @@ pub struct ShapeBuilder<'std_nom, 'aisc_label> {
     pub wgo: Option<f64>,
 }
 
-impl<'prop, 'std_nom, 'aisc_label> ShapeBuilder<'std_nom, 'aisc_label> {
+impl ShapeBuilder {
     /// Creates a new instance of [ShapeBuilder] with all
     /// fields defaulted to `None`
     pub fn new() -> Self {
@@ -297,14 +294,14 @@ impl<'prop, 'std_nom, 'aisc_label> ShapeBuilder<'std_nom, 'aisc_label> {
 
     #[allow(dead_code)]
     /// Assigns value for EDI Std Nomenclature
-    pub fn with_edi_std_nomenclature(mut self, edi_std_nom: &'std_nom str) -> Self {
+    pub fn with_edi_std_nomenclature(mut self, edi_std_nom: String) -> Self {
         self.edi_std_nomenclature = Some(edi_std_nom);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns value for AISC Manual Label
-    pub fn with_aisc_manual_label(mut self, aisc_label: &'aisc_label str) -> Self {
+    pub fn with_aisc_manual_label(mut self, aisc_label: String) -> Self {
         self.aisc_manual_label = Some(aisc_label);
         self
     }
@@ -878,12 +875,12 @@ impl<'prop, 'std_nom, 'aisc_label> ShapeBuilder<'std_nom, 'aisc_label> {
 
     #[allow(dead_code)]
     /// Attempts to build a shape with populated shape data fields,
-    /// takes a type of [T: TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>]
+    /// takes a type of [T: TryFrom<ShapeBuilder>]
     /// and returns either the shape that implements the `TryFrom` trait
     /// or an error explaining why the builder was unable to build that shape
-    pub fn try_build<T: TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>>(
+    pub fn try_build<T: TryFrom<ShapeBuilder>>(
         self,
-    ) -> Result<T, <T as TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>>::Error> {
+    ) -> Result<T, <T as TryFrom<ShapeBuilder>>::Error> {
         T::try_from(self)
     }
 }

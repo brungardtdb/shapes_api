@@ -4,14 +4,14 @@ use std::convert::TryFrom;
 #[derive(Debug)]
 #[allow(dead_code)]
 /// A struct that models the data for misc. beam (M) steel profiles
-pub struct MiscBeam<'std_nom, 'aisc_label> {
+pub struct MiscBeam {
     /// The shape designation according to the AISC Naming Convention
     /// for Structural Steel Products for Use in Electronic Data Interchange (EDI), June 25, 2001.
     /// This information is intended solely for the use of software developers to facilitate the electronic
     /// labeling of shape-specific data and electronic transfer of that data.
-    pub edi_std_nomenclature: &'std_nom str,
+    pub edi_std_nomenclature: String,
     /// The shape designation as seen in the AISC Steel Construction Manual, 16th Edition.
-    pub aisc_manual_label: &'aisc_label str,
+    pub aisc_manual_label: String,
     /// Boolean variable that indicates whether there is a special note for that shape.
     pub t_f: Option<bool>,
     /// (W) Nominal weight, lb/ft (kg/m)
@@ -100,22 +100,18 @@ pub struct MiscBeam<'std_nom, 'aisc_label> {
     pub wgi: Option<f64>,
 }
 
-impl<'std_nom, 'aisc_label> TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>
-    for MiscBeam<'std_nom, 'aisc_label>
-{
+impl TryFrom<ShapeBuilder> for MiscBeam {
     type Error = MissingPropertyError;
-    fn try_from(
-        builder: ShapeBuilder<'std_nom, 'aisc_label>,
-    ) -> Result<Self, MissingPropertyError> {
+    fn try_from(builder: ShapeBuilder) -> Result<Self, MissingPropertyError> {
         Ok(MiscBeam {
             edi_std_nomenclature: match &builder.edi_std_nomenclature {
-                Some(nom) => *nom,
+                Some(nom) => nom.to_owned(),
                 None => {
                     return Err(MissingPropertyError::from("EDI Std Nomenclature"));
                 }
             },
             aisc_manual_label: match &builder.aisc_manual_label {
-                Some(label) => *label,
+                Some(label) => label.to_owned(),
                 None => {
                     return Err(MissingPropertyError::from("AISC Manual Label"));
                 }
@@ -328,8 +324,8 @@ mod tests {
     #[test]
     fn builder_happy_path_works() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -372,8 +368,8 @@ mod tests {
 
         assert!(shape_result.is_ok());
         let shape = shape_result.unwrap();
-        assert_eq!("M12X10", shape.edi_std_nomenclature);
-        assert_eq!("M12X10", shape.aisc_manual_label);
+        assert_eq!(String::from("M12X10"), shape.edi_std_nomenclature);
+        assert_eq!(String::from("M12X10"), shape.aisc_manual_label);
         assert!(!shape.t_f.unwrap());
         assert_eq!(10.0, shape.w_upper);
         assert_eq!(2.95, shape.a_upper);
@@ -417,7 +413,7 @@ mod tests {
     #[test]
     fn missing_edi_std_nom_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_aisc_manual_label("M12X10")
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -470,7 +466,7 @@ mod tests {
     #[test]
     fn missing_aisc_man_lbl_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -523,8 +519,8 @@ mod tests {
     #[test]
     fn missing_w_upper_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_a_upper(2.95)
             .with_d_lower(12.0)
@@ -576,8 +572,8 @@ mod tests {
     #[test]
     fn missing_a_upper_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_d_lower(12.0)
@@ -629,8 +625,8 @@ mod tests {
     #[test]
     fn missing_d_lower_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -682,8 +678,8 @@ mod tests {
     #[test]
     fn missing_ddet_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -735,8 +731,8 @@ mod tests {
     #[test]
     fn missing_bf_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -788,8 +784,8 @@ mod tests {
     #[test]
     fn missing_bfdet_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -841,8 +837,8 @@ mod tests {
     #[test]
     fn missing_tw_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -894,8 +890,8 @@ mod tests {
     #[test]
     fn missing_twdet_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -947,8 +943,8 @@ mod tests {
     #[test]
     fn missing_twdet_2_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1001,8 +997,8 @@ mod tests {
     #[test]
     fn missing_tf_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1054,8 +1050,8 @@ mod tests {
     #[test]
     fn missing_tfdet_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1107,8 +1103,8 @@ mod tests {
     #[test]
     fn missing_kdes_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1160,8 +1156,8 @@ mod tests {
     #[test]
     fn missing_kdet_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1213,8 +1209,8 @@ mod tests {
     #[test]
     fn missing_k1_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1266,8 +1262,8 @@ mod tests {
     #[test]
     fn missing_bf_2tf_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1319,8 +1315,8 @@ mod tests {
     #[test]
     fn missing_h_tw_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1372,8 +1368,8 @@ mod tests {
     #[test]
     fn missing_ix_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1425,8 +1421,8 @@ mod tests {
     #[test]
     fn missing_zx_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1478,8 +1474,8 @@ mod tests {
     #[test]
     fn missing_sx_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1531,8 +1527,8 @@ mod tests {
     #[test]
     fn missing_rx_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1584,8 +1580,8 @@ mod tests {
     #[test]
     fn missing_iy_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1637,8 +1633,8 @@ mod tests {
     #[test]
     fn missing_zy_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1690,8 +1686,8 @@ mod tests {
     #[test]
     fn missing_sy_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1743,8 +1739,8 @@ mod tests {
     #[test]
     fn missing_ry_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1796,8 +1792,8 @@ mod tests {
     #[test]
     fn missing_j_upper_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1849,8 +1845,8 @@ mod tests {
     #[test]
     fn missing_cw_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1902,8 +1898,8 @@ mod tests {
     #[test]
     fn missing_wno_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -1955,8 +1951,8 @@ mod tests {
     #[test]
     fn missing_sw1_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -2008,8 +2004,8 @@ mod tests {
     #[test]
     fn missing_qf_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -2061,8 +2057,8 @@ mod tests {
     #[test]
     fn missing_qw_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -2114,8 +2110,8 @@ mod tests {
     #[test]
     fn missing_rts_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -2167,8 +2163,8 @@ mod tests {
     #[test]
     fn missing_ho_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -2220,8 +2216,8 @@ mod tests {
     #[test]
     fn missing_pa_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -2273,8 +2269,8 @@ mod tests {
     #[test]
     fn missing_pb_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -2326,8 +2322,8 @@ mod tests {
     #[test]
     fn missing_pc_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -2379,8 +2375,8 @@ mod tests {
     #[test]
     fn missing_pd_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)
@@ -2432,8 +2428,8 @@ mod tests {
     #[test]
     fn missing_t_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("M12X10")
-            .with_aisc_manual_label("M12X10")
+            .with_edi_std_nomenclature(String::from("M12X10"))
+            .with_aisc_manual_label(String::from("M12X10"))
             .with_t_f(false)
             .with_w_upper(10.0)
             .with_a_upper(2.95)

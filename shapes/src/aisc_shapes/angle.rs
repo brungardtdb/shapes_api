@@ -4,14 +4,14 @@ use std::convert::TryFrom;
 #[derive(Debug)]
 #[allow(dead_code)]
 /// A struct that models the data for angle (L) steel profiles
-pub struct Angle<'std_nom, 'aisc_label> {
+pub struct Angle {
     /// The shape designation according to the AISC Naming Convention
     /// for Structural Steel Products for Use in Electronic Data Interchange (EDI), June 25, 2001.
     /// This information is intended solely for the use of software developers to facilitate the electronic
     /// labeling of shape-specific data and electronic transfer of that data.
-    pub edi_std_nomenclature: &'std_nom str,
+    pub edi_std_nomenclature: String,
     /// The shape designation as seen in the AISC Steel Construction Manual, 16th Edition.
-    pub aisc_manual_label: &'aisc_label str,
+    pub aisc_manual_label: String,
     /// (W) Nominal weight, lb/ft (kg/m)
     pub w_upper: f64,
     /// (A) Cross-sectional area, in.2 (mm2)
@@ -118,22 +118,18 @@ pub struct Angle<'std_nom, 'aisc_label> {
     pub pb: f64,
 }
 
-impl<'std_nom, 'aisc_label> TryFrom<ShapeBuilder<'std_nom, 'aisc_label>>
-    for Angle<'std_nom, 'aisc_label>
-{
+impl TryFrom<ShapeBuilder> for Angle {
     type Error = MissingPropertyError;
-    fn try_from(
-        builder: ShapeBuilder<'std_nom, 'aisc_label>,
-    ) -> Result<Self, MissingPropertyError> {
+    fn try_from(builder: ShapeBuilder) -> Result<Self, MissingPropertyError> {
         Ok(Angle {
             edi_std_nomenclature: match &builder.edi_std_nomenclature {
-                Some(nom) => *nom,
+                Some(nom) => nom.to_owned(),
                 None => {
                     return Err(MissingPropertyError::from("EDI Std Nomenclature"));
                 }
             },
             aisc_manual_label: match &builder.aisc_manual_label {
-                Some(label) => *label,
+                Some(label) => label.to_owned(),
                 None => {
                     return Err(MissingPropertyError::from("AISC Manual Label"));
                 }
@@ -388,8 +384,8 @@ mod tests {
     #[test]
     fn builder_happy_path_works() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -437,8 +433,8 @@ mod tests {
 
         assert!(shape_result.is_ok());
         let shape = shape_result.unwrap();
-        assert_eq!("L8X6X1/2", shape.edi_std_nomenclature);
-        assert_eq!("L8X6X1/2", shape.aisc_manual_label);
+        assert_eq!(String::from("L8X6X1/2"), shape.edi_std_nomenclature);
+        assert_eq!(String::from("L8X6X1/2"), shape.aisc_manual_label);
         assert_eq!(23.0, shape.w_upper);
         assert_eq!(6.8, shape.a_upper);
         assert_eq!(6.0, shape.d_lower);
@@ -484,7 +480,7 @@ mod tests {
     #[test]
     fn missing_edi_std_nom_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -542,7 +538,7 @@ mod tests {
     #[test]
     fn missing_aisc_man_lbl_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -600,8 +596,8 @@ mod tests {
     #[test]
     fn missing_w_upper_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_a_upper(6.8)
             .with_d_lower(6.0)
             .with_b_lower(8.0)
@@ -658,8 +654,8 @@ mod tests {
     #[test]
     fn missing_a_upper_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_d_lower(6.0)
             .with_b_lower(8.0)
@@ -716,8 +712,8 @@ mod tests {
     #[test]
     fn missing_d_lower_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_b_lower(8.0)
@@ -774,8 +770,8 @@ mod tests {
     #[test]
     fn missing_b_lower_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -832,8 +828,8 @@ mod tests {
     #[test]
     fn missing_t_lower_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -890,8 +886,8 @@ mod tests {
     #[test]
     fn missing_kdes_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -948,8 +944,8 @@ mod tests {
     #[test]
     fn missing_kdet_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1006,8 +1002,8 @@ mod tests {
     #[test]
     fn missing_x_lower_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1064,8 +1060,8 @@ mod tests {
     #[test]
     fn missing_y_lower_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1122,8 +1118,8 @@ mod tests {
     #[test]
     fn missing_xp_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1180,8 +1176,8 @@ mod tests {
     #[test]
     fn missing_yp_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1239,8 +1235,8 @@ mod tests {
     #[test]
     fn missing_b_t_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1297,8 +1293,8 @@ mod tests {
     #[test]
     fn missing_ix_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1355,8 +1351,8 @@ mod tests {
     #[test]
     fn missing_zx_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1413,8 +1409,8 @@ mod tests {
     #[test]
     fn missing_sx_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1471,8 +1467,8 @@ mod tests {
     #[test]
     fn missing_rx_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1529,8 +1525,8 @@ mod tests {
     #[test]
     fn missing_iy_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1587,8 +1583,8 @@ mod tests {
     #[test]
     fn missing_zy_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1645,8 +1641,8 @@ mod tests {
     #[test]
     fn missing_sy_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1703,8 +1699,8 @@ mod tests {
     #[test]
     fn missing_ry_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1761,8 +1757,8 @@ mod tests {
     #[test]
     fn missing_iz_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1819,8 +1815,8 @@ mod tests {
     #[test]
     fn missing_rz_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1877,8 +1873,8 @@ mod tests {
     #[test]
     fn missing_sz_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1935,8 +1931,8 @@ mod tests {
     #[test]
     fn missing_j_upper_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -1993,8 +1989,8 @@ mod tests {
     #[test]
     fn missing_cw_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2051,8 +2047,8 @@ mod tests {
     #[test]
     fn missing_ro_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2109,8 +2105,8 @@ mod tests {
     #[test]
     fn missing_tan_a_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2168,8 +2164,8 @@ mod tests {
     #[test]
     fn missing_iw_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2226,8 +2222,8 @@ mod tests {
     #[test]
     fn missing_za_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2284,8 +2280,8 @@ mod tests {
     #[test]
     fn missing_zb_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2342,8 +2338,8 @@ mod tests {
     #[test]
     fn missing_zc_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2400,8 +2396,8 @@ mod tests {
     #[test]
     fn missing_wa_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2458,8 +2454,8 @@ mod tests {
     #[test]
     fn missing_wb_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2516,8 +2512,8 @@ mod tests {
     #[test]
     fn missing_wc_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2574,8 +2570,8 @@ mod tests {
     #[test]
     fn missing_swa_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2632,8 +2628,8 @@ mod tests {
     #[test]
     fn missing_swc_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2690,8 +2686,8 @@ mod tests {
     #[test]
     fn missing_sza_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2748,8 +2744,8 @@ mod tests {
     #[test]
     fn missing_szb_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2806,8 +2802,8 @@ mod tests {
     #[test]
     fn missing_szc_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2864,8 +2860,8 @@ mod tests {
     #[test]
     fn missing_pa_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2922,8 +2918,8 @@ mod tests {
     #[test]
     fn missing_pa_2_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
@@ -2980,8 +2976,8 @@ mod tests {
     #[test]
     fn missing_pb_returns_error() {
         let shape_result = ShapeBuilder::new()
-            .with_edi_std_nomenclature("L8X6X1/2")
-            .with_aisc_manual_label("L8X6X1/2")
+            .with_edi_std_nomenclature(String::from("L8X6X1/2"))
+            .with_aisc_manual_label(String::from("L8X6X1/2"))
             .with_w_upper(23.0)
             .with_a_upper(6.8)
             .with_d_lower(6.0)
