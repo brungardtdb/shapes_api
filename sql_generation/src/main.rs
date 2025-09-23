@@ -22,6 +22,8 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
         "There are {} structural beams",
         &structural_beam_shapes.len()
     );
+    let h_pile_shapes = get_shapes::<HPile>(|r| r[TYPE_INDEX].eq("HP"), parse_h_pile);
+    println!("There are {} h-piles", &h_pile_shapes.len());
     let angles = get_shapes::<Angle>(|r| r[TYPE_INDEX].eq("L"), parse_angles);
     println!("There are {} angles", &angles.len());
     Ok(())
@@ -48,6 +50,53 @@ fn get_shapes<T>(
 }
 
 // parse one shape from one csv string record
+fn parse_h_pile(
+    record: &csv::StringRecord,
+) -> Result<aisc_shapes::HPile, aisc_shapes::errors::MissingPropertyError> {
+    ShapeBuilder::new()
+        .with_edi_std_nomenclature(String::from(&record[EDI_NOM]))
+        .with_aisc_manual_label(String::from(&record[AISC_MAN_LBL]))
+        .with_w_upper(maybe_float(&record[W_UPPER]).unwrap())
+        .with_a_upper(maybe_float(&record[A_UPPER]).unwrap())
+        .with_d_lower(maybe_float(&record[D_LOWER]).unwrap())
+        .with_ddet(maybe_float(&record[DDET]).unwrap())
+        .with_bf(maybe_float(&record[BF]).unwrap())
+        .with_bfdet(maybe_float(&record[BFDET]).unwrap())
+        .with_tw(maybe_float(&record[TW]).unwrap())
+        .with_twdet(maybe_float(&record[TWDET]).unwrap())
+        .with_twdet_2(maybe_float(&record[TWDET_2]).unwrap())
+        .with_tf(maybe_float(&record[TF]).unwrap())
+        .with_tfdet(maybe_float(&record[TFDET]).unwrap())
+        .with_kdes(maybe_float(&record[K_DES]).unwrap())
+        .with_kdet(maybe_float(&record[K_DET]).unwrap())
+        .with_k1(maybe_float(&record[K1]).unwrap())
+        .with_bf_2tf(maybe_float(&record[BF_2TF]).unwrap())
+        .with_h_tw(maybe_float(&record[H_TW]).unwrap())
+        .with_ix(maybe_float(&record[IX]).unwrap())
+        .with_zx(maybe_float(&record[ZX]).unwrap())
+        .with_sx(maybe_float(&record[SX]).unwrap())
+        .with_rx(maybe_float(&record[RX]).unwrap())
+        .with_iy(maybe_float(&record[IY]).unwrap())
+        .with_zy(maybe_float(&record[ZY]).unwrap())
+        .with_sy(maybe_float(&record[SY]).unwrap())
+        .with_ry(maybe_float(&record[RY]).unwrap())
+        .with_j_upper(maybe_float(&record[J_UPPER]).unwrap())
+        .with_cw(maybe_float(&record[CW]).unwrap())
+        .with_wno(maybe_float(&record[WNO]).unwrap())
+        .with_sw1(maybe_float(&record[SW1]).unwrap())
+        .with_qf(maybe_float(&record[QF]).unwrap())
+        .with_qw(maybe_float(&record[QW]).unwrap())
+        .with_rts(maybe_float(&record[RTS]).unwrap())
+        .with_ho(maybe_float(&record[HO]).unwrap())
+        .with_pa(maybe_float(&record[PA]).unwrap())
+        .with_pb(maybe_float(&record[PB]).unwrap())
+        .with_pc(maybe_float(&record[PC]).unwrap())
+        .with_pd(maybe_float(&record[PD]).unwrap())
+        .with_t(maybe_float(&record[T]).unwrap())
+        .with_wgi(maybe_float(&record[WGI]).unwrap())
+        .try_build::<HPile>()
+}
+
 fn parse_structural_beam(
     record: &csv::StringRecord,
 ) -> Result<aisc_shapes::StructuralBeam, aisc_shapes::errors::MissingPropertyError> {
