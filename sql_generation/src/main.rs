@@ -10,81 +10,40 @@ fn main() {
         }
     }
 }
-//aisc-shapes-database-v16.0.csv
+
 fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
-    let wide_flange_shapes = get_wide_flange_shapes();
+    let wide_flange_shapes = get_shapes::<WideFlange>(|r| r[TYPE_INDEX].eq("W"), parse_wide_flange);
     println!("There are {} wide flange beams", &wide_flange_shapes.len());
-    let misc_beam_shapes = get_misc_beam_shapes();
+    let misc_beam_shapes = get_shapes::<MiscBeam>(|r| r[TYPE_INDEX].eq("M"), parse_misc_beam);
     println!("There are {} misc beams", &misc_beam_shapes.len());
-    let structural_beam_shapes = get_structural_beam_shapes();
+    let structural_beam_shapes =
+        get_shapes::<StructuralBeam>(|r| r[TYPE_INDEX].eq("S"), parse_structural_beam);
     println!(
         "There are {} structural beams",
         &structural_beam_shapes.len()
     );
-    let angles = get_angle_shapes();
+    let angles = get_shapes::<Angle>(|r| r[TYPE_INDEX].eq("L"), parse_angles);
     println!("There are {} angles", &angles.len());
     Ok(())
 }
 
-// higher level functions to extract a type of shape from the
-// csv file and map them all to their corresponding shapes
-fn get_structural_beam_shapes() -> Vec<StructuralBeam> {
+// higher level function to extract shapes of a given type from the
+// csv file and map the data to a list of the corresponding shape
+fn get_shapes<T>(
+    condition: fn(&csv::StringRecord) -> bool,
+    parse: fn(&csv::StringRecord) -> Result<T, MissingPropertyError>,
+) -> Vec<T> {
     let mut rdr = get_csv_reader();
-    let struct_beam_records = &rdr
+    let records = &rdr
         .records()
         .filter(|r: &Result<csv::StringRecord, csv::Error>| r.is_ok())
-        .filter(|r| *&r.as_ref().unwrap()[TYPE_INDEX].eq("S"))
+        .filter(|r| condition(*&r.as_ref().unwrap()))
         .map(|r| r.unwrap())
         .collect::<Vec<_>>();
 
-    struct_beam_records
+    records
         .iter()
-        .map(|r| parse_structural_beam(r).unwrap())
-        .collect::<Vec<_>>()
-}
-
-fn get_misc_beam_shapes() -> Vec<MiscBeam> {
-    let mut rdr = get_csv_reader();
-    let misc_beam_records = &rdr
-        .records()
-        .filter(|r: &Result<csv::StringRecord, csv::Error>| r.is_ok())
-        .filter(|r| *&r.as_ref().unwrap()[TYPE_INDEX].eq("M"))
-        .map(|r| r.unwrap())
-        .collect::<Vec<_>>();
-
-    misc_beam_records
-        .iter()
-        .map(|r| parse_misc_beam(r).unwrap())
-        .collect::<Vec<_>>()
-}
-
-fn get_angle_shapes() -> Vec<Angle> {
-    let mut rdr = get_csv_reader();
-    let angle_records = &rdr
-        .records()
-        .filter(|r: &Result<csv::StringRecord, csv::Error>| r.is_ok())
-        .filter(|r| *&r.as_ref().unwrap()[TYPE_INDEX].eq("L"))
-        .map(|r| r.unwrap())
-        .collect::<Vec<_>>();
-
-    angle_records
-        .iter()
-        .map(|r| parse_angles(r).unwrap())
-        .collect::<Vec<_>>()
-}
-
-fn get_wide_flange_shapes() -> Vec<WideFlange> {
-    let mut rdr = get_csv_reader();
-    let w_records = &rdr
-        .records()
-        .filter(|r: &Result<csv::StringRecord, csv::Error>| r.is_ok())
-        .filter(|r| *&r.as_ref().unwrap()[TYPE_INDEX].eq("W"))
-        .map(|r| r.unwrap())
-        .collect::<Vec<_>>();
-
-    w_records
-        .iter()
-        .map(|r| parse_wide_flange(r).unwrap())
+        .map(|r| parse(r).unwrap())
         .collect::<Vec<_>>()
 }
 
