@@ -26,6 +26,8 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
     println!("There are {} h-piles", &h_pile_shapes.len());
     let c_channels = get_shapes::<CeeChannel>(|r| r[TYPE_INDEX].eq("C"), parse_cee_channel);
     println!("There are {} cee channels", &c_channels.len());
+    let misc_channels = get_shapes::<MiscChannel>(|r| r[TYPE_INDEX].eq("MC"), parse_misc_channel);
+    println!("There are {} misc. channels", &misc_channels.len());
     let angles = get_shapes::<Angle>(|r| r[TYPE_INDEX].eq("L"), parse_angles);
     println!("There are {} angles", &angles.len());
     Ok(())
@@ -52,64 +54,120 @@ fn get_shapes<T>(
 }
 
 // parse one shape from one csv string record
+fn parse_misc_channel(
+    record: &csv::StringRecord,
+) -> Result<aisc_shapes::MiscChannel, aisc_shapes::errors::MissingPropertyError> {
+    let maybe_wgi = maybe_float(&record[WGI]);
+
+    let builder = ShapeBuilder::new()
+        .with_edi_std_nomenclature(String::from(&record[EDI_NOM]))
+        .with_aisc_manual_label(String::from(&record[AISC_MAN_LBL]))
+        .with_w_upper(maybe_float(&record[W_UPPER]).unwrap())
+        .with_a_upper(maybe_float(&record[A_UPPER]).unwrap())
+        .with_d_lower(maybe_float(&record[D_LOWER]).unwrap())
+        .with_ddet(maybe_float(&record[DDET]).unwrap())
+        .with_bf(maybe_float(&record[BF]).unwrap())
+        .with_bfdet(maybe_float(&record[BFDET]).unwrap())
+        .with_tw(maybe_float(&record[TW]).unwrap())
+        .with_twdet(maybe_float(&record[TWDET]).unwrap())
+        .with_twdet_2(maybe_float(&record[TWDET_2]).unwrap())
+        .with_tf(maybe_float(&record[TF]).unwrap())
+        .with_tfdet(maybe_float(&record[TFDET]).unwrap())
+        .with_kdes(maybe_float(&record[K_DES]).unwrap())
+        .with_kdet(maybe_float(&record[K_DET]).unwrap())
+        .with_x_lower(maybe_float(&record[X_LOWER]).unwrap())
+        .with_eo(maybe_float(&record[EO]).unwrap())
+        .with_xp(maybe_float(&record[XP]).unwrap())
+        .with_b_t(maybe_float(&record[B_T]).unwrap())
+        .with_h_tw(maybe_float(&record[H_TW]).unwrap())
+        .with_ix(maybe_float(&record[IX]).unwrap())
+        .with_zx(maybe_float(&record[ZX]).unwrap())
+        .with_sx(maybe_float(&record[SX]).unwrap())
+        .with_rx(maybe_float(&record[RX]).unwrap())
+        .with_iy(maybe_float(&record[IY]).unwrap())
+        .with_zy(maybe_float(&record[ZY]).unwrap())
+        .with_sy(maybe_float(&record[SY]).unwrap())
+        .with_ry(maybe_float(&record[RY]).unwrap())
+        .with_j_upper(maybe_float(&record[J_UPPER]).unwrap())
+        .with_cw(maybe_float(&record[CW]).unwrap())
+        .with_wno(maybe_float(&record[WNO]).unwrap())
+        .with_sw1(maybe_float(&record[SW1]).unwrap())
+        .with_sw2(maybe_float(&record[SW2]).unwrap())
+        .with_sw3(maybe_float(&record[SW3]).unwrap())
+        .with_qf(maybe_float(&record[QF]).unwrap())
+        .with_qw(maybe_float(&record[QW]).unwrap())
+        .with_ro(maybe_float(&record[RO]).unwrap())
+        .with_h_upper(maybe_float(&record[H_UPPER]).unwrap())
+        .with_rts(maybe_float(&record[RTS]).unwrap())
+        .with_ho(maybe_float(&record[HO]).unwrap())
+        .with_pa(maybe_float(&record[PA]).unwrap())
+        .with_pb(maybe_float(&record[PB]).unwrap())
+        .with_pc(maybe_float(&record[PC]).unwrap())
+        .with_pd(maybe_float(&record[PD]).unwrap())
+        .with_t(maybe_float(&record[T]).unwrap());
+
+    if let Some(wgi) = maybe_wgi {
+        return builder.with_wgi(wgi).try_into();
+    }
+    builder.try_into()
+}
+
 fn parse_cee_channel(
     record: &csv::StringRecord,
 ) -> Result<aisc_shapes::CeeChannel, aisc_shapes::errors::MissingPropertyError> {
     let maybe_wgi = maybe_float(&record[WGI]);
     let builder = ShapeBuilder::new()
-            .with_edi_std_nomenclature(String::from(&record[EDI_NOM]))
-            .with_aisc_manual_label(String::from(&record[AISC_MAN_LBL]))
-            .with_w_upper(maybe_float(&record[W_UPPER]).unwrap())
-            .with_a_upper(maybe_float(&record[A_UPPER]).unwrap())
-            .with_d_lower(maybe_float(&record[D_LOWER]).unwrap())
-            .with_ddet(maybe_float(&record[DDET]).unwrap())
-            .with_bf(maybe_float(&record[BF]).unwrap())
-            .with_bfdet(maybe_float(&record[BFDET]).unwrap())
-            .with_tw(maybe_float(&record[TW]).unwrap())
-            .with_twdet(maybe_float(&record[TWDET]).unwrap())
-            .with_twdet_2(maybe_float(&record[TWDET_2]).unwrap())
-            .with_tf(maybe_float(&record[TF]).unwrap())
-            .with_tfdet(maybe_float(&record[TFDET]).unwrap())
-            .with_kdes(maybe_float(&record[K_DES]).unwrap())
-            .with_kdet(maybe_float(&record[K_DET]).unwrap())
-            .with_x_lower(maybe_float(&record[X_LOWER]).unwrap())
-            .with_eo(maybe_float(&record[EO]).unwrap())
-            .with_xp(maybe_float(&record[XP]).unwrap())
-            .with_b_t(maybe_float(&record[B_T]).unwrap())
-            .with_h_tw(maybe_float(&record[H_TW]).unwrap())
-            .with_ix(maybe_float(&record[IX]).unwrap())
-            .with_zx(maybe_float(&record[ZX]).unwrap())
-            .with_sx(maybe_float(&record[SX]).unwrap())
-            .with_rx(maybe_float(&record[RX]).unwrap())
-            .with_iy(maybe_float(&record[IY]).unwrap())
-            .with_zy(maybe_float(&record[ZY]).unwrap())
-            .with_sy(maybe_float(&record[SY]).unwrap())
-            .with_ry(maybe_float(&record[RY]).unwrap())
-            .with_j_upper(maybe_float(&record[J_UPPER]).unwrap())
-            .with_cw(maybe_float(&record[CW]).unwrap())
-            .with_wno(maybe_float(&record[WNO]).unwrap())
-            .with_sw1(maybe_float(&record[SW1]).unwrap())
-            .with_sw2(maybe_float(&record[SW2]).unwrap())
-            .with_sw3(maybe_float(&record[SW3]).unwrap())
-            .with_qf(maybe_float(&record[QF]).unwrap())
-            .with_qw(maybe_float(&record[QW]).unwrap())
-            .with_ro(maybe_float(&record[RO]).unwrap())
-            .with_h_upper(maybe_float(&record[H_UPPER]).unwrap())
-            .with_rts(maybe_float(&record[RTS]).unwrap())
-            .with_ho(maybe_float(&record[HO]).unwrap())
-            .with_pa(maybe_float(&record[PA]).unwrap())
-            .with_pb(maybe_float(&record[PB]).unwrap())
-            .with_pc(maybe_float(&record[PC]).unwrap())
-            .with_pd(maybe_float(&record[PD]).unwrap())
-            .with_t(maybe_float(&record[T]).unwrap());
+        .with_edi_std_nomenclature(String::from(&record[EDI_NOM]))
+        .with_aisc_manual_label(String::from(&record[AISC_MAN_LBL]))
+        .with_w_upper(maybe_float(&record[W_UPPER]).unwrap())
+        .with_a_upper(maybe_float(&record[A_UPPER]).unwrap())
+        .with_d_lower(maybe_float(&record[D_LOWER]).unwrap())
+        .with_ddet(maybe_float(&record[DDET]).unwrap())
+        .with_bf(maybe_float(&record[BF]).unwrap())
+        .with_bfdet(maybe_float(&record[BFDET]).unwrap())
+        .with_tw(maybe_float(&record[TW]).unwrap())
+        .with_twdet(maybe_float(&record[TWDET]).unwrap())
+        .with_twdet_2(maybe_float(&record[TWDET_2]).unwrap())
+        .with_tf(maybe_float(&record[TF]).unwrap())
+        .with_tfdet(maybe_float(&record[TFDET]).unwrap())
+        .with_kdes(maybe_float(&record[K_DES]).unwrap())
+        .with_kdet(maybe_float(&record[K_DET]).unwrap())
+        .with_x_lower(maybe_float(&record[X_LOWER]).unwrap())
+        .with_eo(maybe_float(&record[EO]).unwrap())
+        .with_xp(maybe_float(&record[XP]).unwrap())
+        .with_b_t(maybe_float(&record[B_T]).unwrap())
+        .with_h_tw(maybe_float(&record[H_TW]).unwrap())
+        .with_ix(maybe_float(&record[IX]).unwrap())
+        .with_zx(maybe_float(&record[ZX]).unwrap())
+        .with_sx(maybe_float(&record[SX]).unwrap())
+        .with_rx(maybe_float(&record[RX]).unwrap())
+        .with_iy(maybe_float(&record[IY]).unwrap())
+        .with_zy(maybe_float(&record[ZY]).unwrap())
+        .with_sy(maybe_float(&record[SY]).unwrap())
+        .with_ry(maybe_float(&record[RY]).unwrap())
+        .with_j_upper(maybe_float(&record[J_UPPER]).unwrap())
+        .with_cw(maybe_float(&record[CW]).unwrap())
+        .with_wno(maybe_float(&record[WNO]).unwrap())
+        .with_sw1(maybe_float(&record[SW1]).unwrap())
+        .with_sw2(maybe_float(&record[SW2]).unwrap())
+        .with_sw3(maybe_float(&record[SW3]).unwrap())
+        .with_qf(maybe_float(&record[QF]).unwrap())
+        .with_qw(maybe_float(&record[QW]).unwrap())
+        .with_ro(maybe_float(&record[RO]).unwrap())
+        .with_h_upper(maybe_float(&record[H_UPPER]).unwrap())
+        .with_rts(maybe_float(&record[RTS]).unwrap())
+        .with_ho(maybe_float(&record[HO]).unwrap())
+        .with_pa(maybe_float(&record[PA]).unwrap())
+        .with_pb(maybe_float(&record[PB]).unwrap())
+        .with_pc(maybe_float(&record[PC]).unwrap())
+        .with_pd(maybe_float(&record[PD]).unwrap())
+        .with_t(maybe_float(&record[T]).unwrap());
 
-        if let Some(wgi) = maybe_wgi {
-            return builder
-            .with_wgi(wgi)
-            .try_build()
-        }
-        builder.try_build()
+    if let Some(wgi) = maybe_wgi {
+        return builder.with_wgi(wgi).try_into();
     }
+    builder.try_into()
+}
 
 fn parse_h_pile(
     record: &csv::StringRecord,
@@ -155,7 +213,7 @@ fn parse_h_pile(
         .with_pd(maybe_float(&record[PD]).unwrap())
         .with_t(maybe_float(&record[T]).unwrap())
         .with_wgi(maybe_float(&record[WGI]).unwrap())
-        .try_build()
+        .try_into()
 }
 
 fn parse_structural_beam(
@@ -204,9 +262,9 @@ fn parse_structural_beam(
         .with_t(maybe_float(&record[T]).unwrap());
 
     if let Some(wgi) = maybe_wgi {
-        return builder.with_wgi(wgi).try_build();
+        return builder.with_wgi(wgi).try_into();
     }
-    builder.try_build()
+    builder.try_into()
 }
 
 fn parse_misc_beam(
@@ -261,16 +319,16 @@ fn parse_misc_beam(
             return builder
                 .with_wgi(maybe_wgi.unwrap())
                 .with_t_f(maybe_t_f.unwrap())
-                .try_build();
+                .try_into();
         }
         (true, false) => {
-            return builder.with_wgi(maybe_wgi.unwrap()).try_build();
+            return builder.with_wgi(maybe_wgi.unwrap()).try_into();
         }
         (false, true) => {
-            return builder.with_t_f(maybe_t_f.unwrap()).try_build();
+            return builder.with_t_f(maybe_t_f.unwrap()).try_into();
         }
         (false, false) => {
-            return builder.try_build();
+            return builder.try_into();
         }
     }
 }
@@ -331,10 +389,10 @@ fn parse_angles(
         (true, true) => builder
             .with_h_upper(maybe_h_upper.unwrap())
             .with_swb(maybe_swb.unwrap())
-            .try_build(),
-        (true, false) => builder.with_h_upper(maybe_h_upper.unwrap()).try_build(),
-        (false, true) => builder.with_swb(maybe_swb.unwrap()).try_build(),
-        (false, false) => builder.try_build(),
+            .try_into(),
+        (true, false) => builder.with_h_upper(maybe_h_upper.unwrap()).try_into(),
+        (false, true) => builder.with_swb(maybe_swb.unwrap()).try_into(),
+        (false, false) => builder.try_into(),
     }
 }
 
@@ -385,9 +443,9 @@ fn parse_wide_flange(
         .with_wgi(maybe_float(&record[WGI]).unwrap());
 
     if let Some(num) = maybe_float(&record[WGO]) {
-        return builder.with_wgo(num).try_build::<WideFlange>();
+        return builder.with_wgo(num).try_into();
     }
-    builder.try_build::<WideFlange>()
+    builder.try_into()
 }
 
 // helper functions
