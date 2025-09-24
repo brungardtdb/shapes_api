@@ -1,5 +1,5 @@
 use shapes::aisc_shapes::{self, *};
-use std::{error::Error, fs::File};
+use std::{error::Error, fs::File, io::Write};
 
 fn main() {
     let result = parse_csv_to_sql();
@@ -70,7 +70,129 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
         parse_hss_round,
     );
     println!("There are {} HSS round shapes", &hss_round_shapes.len());
+    let wide_flange_sql = sql_from_wide_flange(wide_flange_shapes);
+    write_sql_to_file(String::from("wide_flanges.sql"), wide_flange_sql)?;
     Ok(())
+}
+
+fn write_sql_to_file(file_name: String, sql: String) -> Result<(), std::io::Error> {
+    let mut file = File::create(file_name)?;
+    file.write_all(sql.as_bytes())?;
+    Ok(())
+}
+
+fn nullable_sql_string<T: std::fmt::Display>(maybe_value: Option<T>) -> String {
+    match maybe_value {
+        Some(val) => String::from(format!("{}", val)),
+        None => String::from("NULL"),
+    }
+}
+
+// sql generation methods
+fn sql_from_wide_flange(shapes: Vec<WideFlange>) -> String {
+    let mut sql = String::new();
+    sql.push_str(
+        "INSERT INTO wide_flanges (
+    edi_std_nomenclature,
+    aisc_manual_label,
+    t_f,
+    w_upper,
+    a_upper,
+    d_lower,
+    ddet,
+    bf,
+    bfdet,
+    tw,
+    twdet,
+    twdet_2,
+    tf,
+    tfdet,
+    kdes,
+    kdet,
+    k1,
+    bf_2tf,
+    h_tw,
+    ix,
+    zx,
+    sx,
+    rx,
+    iy
+    zy,
+    sy,
+    ry,
+    j_upper,
+    cw,
+    wno,
+    sw1,
+    qf,
+    qw,
+    rts,
+    ho,
+    pa,
+    pb,
+    pc,
+    pd,
+    t,
+    wgi,
+    wgo,
+    ) \nVALUES \n",
+    );
+    let rows = shapes
+        .iter()
+        .map(|w| wide_flange_to_row(w))
+        .collect::<Vec<_>>();
+    let row_string = rows.join(", \n");
+    sql.push_str(&row_string);
+    sql.push_str(";");
+    sql
+}
+
+fn wide_flange_to_row(wide_flange: &WideFlange) -> String {
+    String::from(format!(
+        "('{}','{}',{},{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        wide_flange.edi_std_nomenclature,
+        wide_flange.aisc_manual_label,
+        wide_flange.t_f,
+        wide_flange.w_upper,
+        wide_flange.a_upper,
+        wide_flange.d_lower,
+        wide_flange.ddet,
+        wide_flange.bf,
+        wide_flange.bfdet,
+        wide_flange.tw,
+        wide_flange.twdet,
+        wide_flange.twdet_2,
+        wide_flange.tf,
+        wide_flange.tfdet,
+        wide_flange.kdes,
+        wide_flange.kdet,
+        wide_flange.k1,
+        wide_flange.bf_2tf,
+        wide_flange.h_tw,
+        wide_flange.ix,
+        wide_flange.zx,
+        wide_flange.sx,
+        wide_flange.rx,
+        wide_flange.iy,
+        wide_flange.zy,
+        wide_flange.sy,
+        wide_flange.ry,
+        wide_flange.j_upper,
+        wide_flange.cw,
+        wide_flange.wno,
+        wide_flange.sw1,
+        wide_flange.qf,
+        wide_flange.qw,
+        wide_flange.rts,
+        wide_flange.ho,
+        wide_flange.pa,
+        wide_flange.pb,
+        wide_flange.pc,
+        wide_flange.pd,
+        wide_flange.t,
+        wide_flange.wgi,
+        nullable_sql_string(wide_flange.wgo)
+    ))
 }
 
 // higher level function to extract shapes of a given type from the
