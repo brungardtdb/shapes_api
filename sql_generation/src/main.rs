@@ -60,6 +60,16 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
         parse_sq_rec_hss,
     );
     println!("There are {} HSS shapes", &hss_shapes.len());
+    let hss_round_shapes = get_shapes(
+        |r| {
+            let shape_type = r[TYPE_INDEX].to_owned();
+            let edi_nom = r[EDI_NOM].to_owned();
+            return shape_type.eq("HSS")
+                && edi_nom.chars().filter(|c| c.eq(&'X')).count() == (1 as usize);
+        },
+        parse_hss_round,
+    );
+    println!("There are {} HSS round shapes", &hss_round_shapes.len());
     Ok(())
 }
 
@@ -84,6 +94,31 @@ fn get_shapes<T>(
 }
 
 // parse one shape from one csv string record
+fn parse_hss_round(
+    record: &csv::StringRecord,
+) -> Result<aisc_shapes::RoundHollowStructuralSection, aisc_shapes::errors::MissingPropertyError> {
+    ShapeBuilder::new()
+        .with_edi_std_nomenclature(String::from(&record[EDI_NOM]))
+        .with_aisc_manual_label(String::from(&record[AISC_MAN_LBL]))
+        .with_w_upper(maybe_float(&record[W_UPPER]).unwrap())
+        .with_a_upper(maybe_float(&record[A_UPPER]).unwrap())
+        .with_od(maybe_float(&record[OD]).unwrap())
+        .with_t_nom(maybe_float(&record[T_NOM]).unwrap())
+        .with_tdes(maybe_float(&record[T_DES]).unwrap())
+        .with_d_t(maybe_float(&record[D_T]).unwrap())
+        .with_ix(maybe_float(&record[IX]).unwrap())
+        .with_zx(maybe_float(&record[ZX]).unwrap())
+        .with_sx(maybe_float(&record[SX]).unwrap())
+        .with_rx(maybe_float(&record[RX]).unwrap())
+        .with_iy(maybe_float(&record[IY]).unwrap())
+        .with_zy(maybe_float(&record[ZY]).unwrap())
+        .with_sy(maybe_float(&record[SY]).unwrap())
+        .with_ry(maybe_float(&record[RY]).unwrap())
+        .with_j_upper(maybe_float(&record[J_UPPER]).unwrap())
+        .with_c_upper(maybe_float(&record[C_UPPER]).unwrap())
+        .try_into()
+}
+
 fn parse_sq_rec_hss(
     record: &csv::StringRecord,
 ) -> Result<aisc_shapes::HollowStructuralSection, aisc_shapes::errors::MissingPropertyError> {
