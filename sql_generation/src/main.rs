@@ -72,6 +72,8 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
     println!("There are {} HSS round shapes", &hss_round_shapes.len());
     let wide_flange_sql = sql_from_wide_flange(wide_flange_shapes);
     write_sql_to_file(String::from("wide_flanges.sql"), wide_flange_sql)?;
+    let misc_beam_sql = sql_from_misc_beam(misc_beam_shapes);
+    write_sql_to_file(String::from("misc_beam.sql"), misc_beam_sql)?;
     Ok(())
 }
 
@@ -89,6 +91,110 @@ fn nullable_sql_string<T: std::fmt::Display>(maybe_value: Option<T>) -> String {
 }
 
 // sql generation methods
+fn sql_from_misc_beam(shapes: Vec<MiscBeam>) -> String {
+    let mut sql = String::new();
+    sql.push_str(
+        "INSERT INTO misc_beams (
+    edi_std_nomenclature,
+    aisc_manual_label,
+    t_f,
+    w_upper,
+    a_upper,
+    d_lower,
+    ddet,
+    bf,
+    bfdet,
+    tw,
+    twdet,
+    twdet_2,
+    tf,
+    tfdet,
+    kdes,
+    kdet,
+    k1,
+    bf_2tf,
+    h_tw,
+    ix,
+    zx,
+    sx,
+    rx,
+    iy
+    zy,
+    sy,
+    ry,
+    j_upper,
+    cw,
+    wno,
+    sw1,
+    qf,
+    qw,
+    rts,
+    ho,
+    pa,
+    pb,
+    pc,
+    pd,
+    t,
+    wgi,
+    ) \nVALUES \n",
+    );
+    let rows = shapes
+        .iter()
+        .map(|m| misc_beam_to_row(m))
+        .collect::<Vec<_>>();
+    let row_string = rows.join(", \n");
+    sql.push_str(&row_string);
+    sql.push_str(";");
+    sql
+}
+
+fn misc_beam_to_row(misc_beam: &MiscBeam) -> String {
+    String::from(format!(
+        "('{}','{}',{},{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        misc_beam.edi_std_nomenclature,
+        misc_beam.aisc_manual_label,
+        nullable_sql_string(misc_beam.t_f),
+        misc_beam.w_upper,
+        misc_beam.a_upper,
+        misc_beam.d_lower,
+        misc_beam.ddet,
+        misc_beam.bf,
+        misc_beam.bfdet,
+        misc_beam.tw,
+        misc_beam.twdet,
+        misc_beam.twdet_2,
+        misc_beam.tf,
+        misc_beam.tfdet,
+        misc_beam.kdes,
+        misc_beam.kdet,
+        misc_beam.k1,
+        misc_beam.bf_2tf,
+        misc_beam.h_tw,
+        misc_beam.ix,
+        misc_beam.zx,
+        misc_beam.sx,
+        misc_beam.rx,
+        misc_beam.iy,
+        misc_beam.zy,
+        misc_beam.sy,
+        misc_beam.ry,
+        misc_beam.j_upper,
+        misc_beam.cw,
+        misc_beam.wno,
+        misc_beam.sw1,
+        misc_beam.qf,
+        misc_beam.qw,
+        misc_beam.rts,
+        misc_beam.ho,
+        misc_beam.pa,
+        misc_beam.pb,
+        misc_beam.pc,
+        misc_beam.pd,
+        misc_beam.t,
+        nullable_sql_string(misc_beam.wgi)
+    ))
+}
+
 fn sql_from_wide_flange(shapes: Vec<WideFlange>) -> String {
     let mut sql = String::new();
     sql.push_str(
