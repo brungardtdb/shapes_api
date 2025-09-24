@@ -38,6 +38,12 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
     );
     let misc_tee_shapes = get_shapes::<MiscTee>(|r| r[TYPE_INDEX].eq("MT"), parse_misc_tee);
     println!("There are {} misc. tee shapes", &misc_tee_shapes.len());
+    let structural_tee_shapes =
+        get_shapes::<StructuralTee>(|r| r[TYPE_INDEX].eq("ST"), parse_structural_tee);
+    println!(
+        "There are {} structural tee shapes",
+        &structural_tee_shapes.len()
+    );
     Ok(())
 }
 
@@ -62,6 +68,50 @@ fn get_shapes<T>(
 }
 
 // parse one shape from one csv string record
+fn parse_structural_tee(
+    record: &csv::StringRecord,
+) -> Result<aisc_shapes::StructuralTee, aisc_shapes::errors::MissingPropertyError> {
+    let maybe_wgi = maybe_float(&record[WGI]);
+
+    let builder = ShapeBuilder::new()
+        .with_edi_std_nomenclature(String::from(&record[EDI_NOM]))
+        .with_aisc_manual_label(String::from(&record[AISC_MAN_LBL]))
+        .with_w_upper(maybe_float(&record[W_UPPER]).unwrap())
+        .with_a_upper(maybe_float(&record[A_UPPER]).unwrap())
+        .with_d_lower(maybe_float(&record[D_LOWER]).unwrap())
+        .with_ddet(maybe_float(&record[DDET]).unwrap())
+        .with_bf(maybe_float(&record[BF]).unwrap())
+        .with_bfdet(maybe_float(&record[BFDET]).unwrap())
+        .with_tw(maybe_float(&record[TW]).unwrap())
+        .with_twdet(maybe_float(&record[TWDET]).unwrap())
+        .with_twdet_2(maybe_float(&record[TWDET_2]).unwrap())
+        .with_tf(maybe_float(&record[TF]).unwrap())
+        .with_tfdet(maybe_float(&record[TFDET]).unwrap())
+        .with_kdes(maybe_float(&record[K_DES]).unwrap())
+        .with_kdet(maybe_float(&record[K_DET]).unwrap())
+        .with_y_lower(maybe_float(&record[Y_LOWER]).unwrap())
+        .with_yp(maybe_float(&record[YP]).unwrap())
+        .with_bf_2tf(maybe_float(&record[BF_2TF]).unwrap())
+        .with_d_t(maybe_float(&record[D_T]).unwrap())
+        .with_ix(maybe_float(&record[IX]).unwrap())
+        .with_zx(maybe_float(&record[ZX]).unwrap())
+        .with_sx(maybe_float(&record[SX]).unwrap())
+        .with_rx(maybe_float(&record[RX]).unwrap())
+        .with_iy(maybe_float(&record[IY]).unwrap())
+        .with_zy(maybe_float(&record[ZY]).unwrap())
+        .with_sy(maybe_float(&record[SY]).unwrap())
+        .with_ry(maybe_float(&record[RY]).unwrap())
+        .with_j_upper(maybe_float(&record[J_UPPER]).unwrap())
+        .with_cw(maybe_float(&record[CW]).unwrap())
+        .with_ro(maybe_float(&record[RO]).unwrap())
+        .with_h_upper(maybe_float(&record[H_UPPER]).unwrap());
+
+    if let Some(wgi) = maybe_wgi {
+        return builder.with_wgi(wgi).try_into();
+    }
+    builder.try_into()
+}
+
 fn parse_misc_tee(
     record: &csv::StringRecord,
 ) -> Result<aisc_shapes::MiscTee, aisc_shapes::errors::MissingPropertyError> {
