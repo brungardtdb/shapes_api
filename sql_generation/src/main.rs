@@ -73,7 +73,9 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
     let wide_flange_sql = sql_from_wide_flange(wide_flange_shapes);
     write_sql_to_file(String::from("wide_flanges.sql"), wide_flange_sql)?;
     let misc_beam_sql = sql_from_misc_beam(misc_beam_shapes);
-    write_sql_to_file(String::from("misc_beam.sql"), misc_beam_sql)?;
+    write_sql_to_file(String::from("misc_beams.sql"), misc_beam_sql)?;
+    let struct_beam_sql = sql_from_structural_beam(structural_beam_shapes);
+    write_sql_to_file(String::from("structural_beams.sql"), struct_beam_sql)?;
     Ok(())
 }
 
@@ -91,6 +93,107 @@ fn nullable_sql_string<T: std::fmt::Display>(maybe_value: Option<T>) -> String {
 }
 
 // sql generation methods
+fn sql_from_structural_beam(shapes: Vec<StructuralBeam>) -> String {
+    let mut sql = String::new();
+    sql.push_str(
+        "INSERT INTO misc_beams (
+    edi_std_nomenclature,
+    aisc_manual_label,
+    w_upper,
+    a_upper,
+    d_lower,
+    ddet,
+    bf,
+    bfdet,
+    tw,
+    twdet,
+    twdet_2,
+    tf,
+    tfdet,
+    kdes,
+    kdet,
+    k1,
+    bf_2tf,
+    h_tw,
+    ix,
+    zx,
+    sx,
+    rx,
+    iy
+    zy,
+    sy,
+    ry,
+    j_upper,
+    cw,
+    wno,
+    sw1,
+    qf,
+    qw,
+    rts,
+    ho,
+    pa,
+    pb,
+    pc,
+    pd,
+    t,
+    wgi,
+    ) \nVALUES \n",
+    );
+    let rows = shapes
+        .iter()
+        .map(|s| structural_beam_to_row(s))
+        .collect::<Vec<_>>();
+    let row_string = rows.join(", \n");
+    sql.push_str(&row_string);
+    sql.push_str(";");
+    sql
+}
+
+fn structural_beam_to_row(struct_beam: &StructuralBeam) -> String {
+    String::from(format!(
+        "('{}','{}',{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        struct_beam.edi_std_nomenclature,
+        struct_beam.aisc_manual_label,
+        struct_beam.w_upper,
+        struct_beam.a_upper,
+        struct_beam.d_lower,
+        struct_beam.ddet,
+        struct_beam.bf,
+        struct_beam.bfdet,
+        struct_beam.tw,
+        struct_beam.twdet,
+        struct_beam.twdet_2,
+        struct_beam.tf,
+        struct_beam.tfdet,
+        struct_beam.kdes,
+        struct_beam.kdet,
+        struct_beam.bf_2tf,
+        struct_beam.h_tw,
+        struct_beam.ix,
+        struct_beam.zx,
+        struct_beam.sx,
+        struct_beam.rx,
+        struct_beam.iy,
+        struct_beam.zy,
+        struct_beam.sy,
+        struct_beam.ry,
+        struct_beam.j_upper,
+        struct_beam.cw,
+        struct_beam.wno,
+        struct_beam.sw1,
+        struct_beam.qf,
+        struct_beam.qw,
+        struct_beam.rts,
+        struct_beam.ho,
+        struct_beam.pa,
+        struct_beam.pb,
+        struct_beam.pc,
+        struct_beam.pd,
+        struct_beam.t,
+        nullable_sql_string(struct_beam.wgi)
+    ))
+}
+
 fn sql_from_misc_beam(shapes: Vec<MiscBeam>) -> String {
     let mut sql = String::new();
     sql.push_str(
