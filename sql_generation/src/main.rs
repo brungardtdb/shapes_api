@@ -24,8 +24,8 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
     );
     let h_pile_shapes = get_shapes::<HPile>(|r| r[TYPE_INDEX].eq("HP"), parse_h_pile);
     println!("There are {} h-piles", &h_pile_shapes.len());
-    let c_channels = get_shapes::<CeeChannel>(|r| r[TYPE_INDEX].eq("C"), parse_cee_channel);
-    println!("There are {} cee channels", &c_channels.len());
+    let cee_channels = get_shapes::<CeeChannel>(|r| r[TYPE_INDEX].eq("C"), parse_cee_channel);
+    println!("There are {} cee channels", &cee_channels.len());
     let misc_channels = get_shapes::<MiscChannel>(|r| r[TYPE_INDEX].eq("MC"), parse_misc_channel);
     println!("There are {} misc. channels", &misc_channels.len());
     let angles = get_shapes::<Angle>(|r| r[TYPE_INDEX].eq("L"), parse_angles);
@@ -78,6 +78,8 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
     write_sql_to_file(String::from("structural_beams.sql"), structural_beam_sql)?;
     let h_pile_sql = sql_from_h_piles(h_pile_shapes);
     write_sql_to_file(String::from("h_piles.sql"), h_pile_sql)?;
+    let cee_channel_sql = sql_from_cee_channels(cee_channels);
+    write_sql_to_file(String::from("cee_channels.sql"), cee_channel_sql)?;
     Ok(())
 }
 
@@ -95,6 +97,120 @@ fn nullable_sql_string<T: std::fmt::Display>(maybe_value: Option<T>) -> String {
 }
 
 // sql generation methods
+fn sql_from_cee_channels(shapes: Vec<CeeChannel>) -> String {
+    let mut sql = String::new();
+    sql.push_str(
+        "INSERT INTO misc_beams (
+    edi_std_nomenclature,
+    aisc_manual_label,
+    w_upper,
+    a_upper,
+    d_lower,
+    ddet,
+    bf,
+    bfdet,
+    tw,
+    twdet,
+    twdet_2,
+    tf,
+    tfdet,
+    kdes,
+    kdet,
+    x_lower,
+    eo,
+    xp,
+    b_t,
+    h_tw,
+    ix,
+    zx,
+    sx,
+    rx,
+    iy
+    zy,
+    sy,
+    ry,
+    j_upper,
+    cw,
+    wno,
+    sw1,
+    sw2,
+    sw3,
+    qf,
+    qw,
+    ro,
+    h_upper
+    rts,
+    ho,
+    pa,
+    pb,
+    pc,
+    pd,
+    t,
+    wgi,
+    ) \nVALUES \n",
+    );
+    let rows = shapes
+        .iter()
+        .map(|c| cee_channel_to_row(c))
+        .collect::<Vec<_>>();
+    let row_string = rows.join(", \n");
+    sql.push_str(&row_string);
+    sql.push_str(";");
+    sql
+}
+
+fn cee_channel_to_row(shape: &CeeChannel) -> String {
+    String::from(format!(
+        "('{}','{}',{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        shape.edi_std_nomenclature,
+        shape.aisc_manual_label,
+        shape.w_upper,
+        shape.a_upper,
+        shape.d_lower,
+        shape.ddet,
+        shape.bf,
+        shape.bfdet,
+        shape.tw,
+        shape.twdet,
+        shape.twdet_2,
+        shape.tf,
+        shape.tfdet,
+        shape.kdes,
+        shape.kdet,
+        shape.x_lower,
+        shape.eo,
+        shape.xp,
+        shape.b_t,
+        shape.h_tw,
+        shape.ix,
+        shape.zx,
+        shape.sx,
+        shape.rx,
+        shape.iy,
+        shape.zy,
+        shape.sy,
+        shape.ry,
+        shape.j_upper,
+        shape.cw,
+        shape.wno,
+        shape.sw1,
+        shape.sw2,
+        shape.sw3,
+        shape.qf,
+        shape.qw,
+        shape.ro,
+        shape.h_upper,
+        shape.rts,
+        shape.ho,
+        shape.pa,
+        shape.pb,
+        shape.pc,
+        shape.pd,
+        shape.t,
+        nullable_sql_string(shape.wgi)
+    ))
+}
+
 fn sql_from_h_piles(shapes: Vec<HPile>) -> String {
     let mut sql = String::new();
     sql.push_str(
