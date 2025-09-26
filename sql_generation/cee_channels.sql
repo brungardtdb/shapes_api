@@ -1,4 +1,4 @@
-INSERT INTO misc_beams (
+INSERT INTO cee_channels (
     edi_std_nomenclature,
     aisc_manual_label,
     w_upper,

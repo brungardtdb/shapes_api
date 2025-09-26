@@ -1,4 +1,4 @@
-INSERT INTO misc_beams (
+INSERT INTO structural_beams (
     edi_std_nomenclature,
     aisc_manual_label,
     w_upper,

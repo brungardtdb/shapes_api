@@ -1,4 +1,4 @@
-INSERT INTO misc_beams (
+INSERT INTO h_piles (
     edi_std_nomenclature,
     aisc_manual_label,
     w_upper,
