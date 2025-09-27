@@ -84,6 +84,8 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
     write_sql_to_file(String::from("misc_channels.sql"), misc_channel_sql)?;
     let angle_sql = sql_from_angles(angles);
     write_sql_to_file(String::from("angles.sql"), angle_sql)?;
+    let wide_flange_tee_sql = sql_from_wide_flange_tees(wide_flange_tee_shapes);
+    write_sql_to_file(String::from("wide_flange_tees.sql"), wide_flange_tee_sql)?;
     Ok(())
 }
 
@@ -101,6 +103,103 @@ fn nullable_sql_string<T: std::fmt::Display>(maybe_value: Option<T>) -> String {
 }
 
 // sql generation methods
+fn sql_from_wide_flange_tees(shapes: Vec<WideFlangeTee>) -> String {
+    let mut sql = String::new();
+    sql.push_str(
+        "INSERT INTO wide_flanges (
+    edi_std_nomenclature,
+    aisc_manual_label,
+    t_f,
+    w_upper,
+    a_upper,
+    d_lower,
+    ddet,
+    bf,
+    bfdet,
+    tw,
+    twdet,
+    twdet_2,
+    tf,
+    tfdet,
+    kdes,
+    kdet,
+    y_lower,
+    yp,
+    bf_2tf,
+    d_t,
+    ix,
+    zx,
+    sx,
+    rx,
+    iy
+    zy,
+    sy,
+    ry,
+    j_upper,
+    cw,
+    ro,
+    h_upper,
+    pa,
+    pb,
+    pc,
+    pd,
+    wgi,
+    wgo,
+    ) \nVALUES \n",
+    );
+    let rows = shapes
+        .iter()
+        .map(|w| wide_flange_tee_to_row(w))
+        .collect::<Vec<_>>();
+    let row_string = rows.join(", \n");
+    sql.push_str(&row_string);
+    sql.push_str(";");
+    sql
+}
+
+fn wide_flange_tee_to_row(shape: &WideFlangeTee) -> String {
+    String::from(format!(
+        "('{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        shape.edi_std_nomenclature,
+        shape.aisc_manual_label,
+        shape.t_f,
+        shape.w_upper,
+        shape.a_upper,
+        shape.d_lower,
+        shape.ddet,
+        shape.bf,
+        shape.bfdet,
+        shape.tw,
+        shape.twdet,
+        shape.twdet_2,
+        shape.tf,
+        shape.tfdet,
+        shape.kdes,
+        shape.kdet,
+        shape.y_lower,
+        shape.yp,
+        shape.bf_2tf,
+        shape.d_t,
+        shape.ix,
+        shape.zx,
+        shape.sx,
+        shape.rx,
+        shape.iy,
+        shape.zy,
+        shape.sy,
+        shape.ry,
+        shape.j_upper,
+        shape.cw,
+        shape.ro,
+        shape.h_upper,
+        shape.pa,
+        shape.pb,
+        shape.pc,
+        shape.wgi,
+        nullable_sql_string(shape.wgo)
+    ))
+}
+
 fn sql_from_angles(shapes: Vec<Angle>) -> String {
     let mut sql = String::new();
     sql.push_str(
