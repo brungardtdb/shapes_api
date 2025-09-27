@@ -92,6 +92,8 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
     write_sql_to_file(String::from("structural_tees.sql"), structural_tee_sql)?;
     let double_angle_sql = sql_from_double_angles(double_angle_shapes);
     write_sql_to_file(String::from("double_angles.sql"), double_angle_sql)?;
+    let hss_sql = sql_from_hss(hss_shapes);
+    write_sql_to_file(String::from("hollow_structural_sections.sql"), hss_sql)?;
     Ok(())
 }
 
@@ -109,6 +111,70 @@ fn nullable_sql_string<T: std::fmt::Display>(maybe_value: Option<T>) -> String {
 }
 
 // sql generation methods
+fn sql_from_hss(shapes: Vec<HollowStructuralSection>) -> String {
+    let mut sql = String::new();
+    sql.push_str(
+        "INSERT INTO angles (
+    edi_std_nomenclature,
+    aisc_manual_label,
+    w_upper,
+    a_upper,
+    ht,
+    h,
+    b_upper,
+    b_lower,
+    t_nom,
+    tdes,
+    b_tdes,
+    h_tdes,
+    ix,
+    zx,
+    sx,
+    rx,
+    iy
+    zy,
+    sy,
+    ry,
+    ro,
+    j_upper,
+    c_upper
+    ) \nVALUES \n",
+    );
+    let rows = shapes.iter().map(|h| hss_to_row(h)).collect::<Vec<_>>();
+    let row_string = rows.join(", \n");
+    sql.push_str(&row_string);
+    sql.push_str(";");
+    sql
+}
+
+fn hss_to_row(shape: &HollowStructuralSection) -> String {
+    String::from(format!(
+        "('{}','{}',{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        shape.edi_std_nomenclature,
+        shape.aisc_manual_label,
+        shape.w_upper,
+        shape.a_upper,
+        shape.ht,
+        shape.h,
+        shape.b_upper,
+        shape.b_lower,
+        shape.t_nom,
+        shape.tdes,
+        shape.b_tdes,
+        shape.h_tdes,
+        shape.ix,
+        shape.zx,
+        shape.sx,
+        shape.rx,
+        shape.iy,
+        shape.zy,
+        shape.sy,
+        shape.ry,
+        shape.j_upper,
+        shape.c_upper
+    ))
+}
+
 fn sql_from_double_angles(shapes: Vec<DoubleAngle>) -> String {
     let mut sql = String::new();
     sql.push_str(
