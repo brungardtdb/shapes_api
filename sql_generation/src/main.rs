@@ -90,6 +90,8 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
     write_sql_to_file(String::from("misc_tees.sql"), misc_tee_sql)?;
     let structural_tee_sql = sql_from_structural_tees(structural_tee_shapes);
     write_sql_to_file(String::from("structural_tees.sql"), structural_tee_sql)?;
+    let double_angle_sql = sql_from_double_angles(double_angle_shapes);
+    write_sql_to_file(String::from("double_angles.sql"), double_angle_sql)?;
     Ok(())
 }
 
@@ -107,6 +109,68 @@ fn nullable_sql_string<T: std::fmt::Display>(maybe_value: Option<T>) -> String {
 }
 
 // sql generation methods
+fn sql_from_double_angles(shapes: Vec<DoubleAngle>) -> String {
+    let mut sql = String::new();
+    sql.push_str(
+        "INSERT INTO angles (
+    edi_std_nomenclature,
+    aisc_manual_label,
+    w_upper,
+    a_upper,
+    d_lower,
+    b_lower,
+    t_lower,
+    y_lower,
+    yp,
+    b_t,
+    ix,
+    zx,
+    sx,
+    rx,
+    iy
+    zy,
+    sy,
+    ry,
+    ro,
+    h_upper,
+    ) \nVALUES \n",
+    );
+    let rows = shapes
+        .iter()
+        .map(|a| double_angle_to_row(a))
+        .collect::<Vec<_>>();
+    let row_string = rows.join(", \n");
+    sql.push_str(&row_string);
+    sql.push_str(";");
+    sql
+}
+
+fn double_angle_to_row(shape: &DoubleAngle) -> String {
+    String::from(format!(
+        "('{}','{}',{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        shape.edi_std_nomenclature,
+        shape.aisc_manual_label,
+        shape.w_upper,
+        shape.a_upper,
+        shape.d_lower,
+        shape.b_lower,
+        shape.t_lower,
+        shape.y_lower,
+        shape.yp,
+        shape.b_t,
+        shape.ix,
+        shape.zx,
+        shape.sx,
+        shape.rx,
+        shape.iy,
+        shape.zy,
+        shape.sy,
+        shape.ry,
+        shape.ro,
+        shape.h_upper,
+    ))
+}
+
 fn sql_from_structural_tees(shapes: Vec<StructuralTee>) -> String {
     let mut sql = String::new();
     sql.push_str(

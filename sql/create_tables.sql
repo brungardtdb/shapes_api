@@ -477,7 +477,7 @@ CREATE TABLE double_angles (
     sy DOUBLE PRECISION NOT NULL,
     ry DOUBLE PRECISION NOT NULL,
     ro DOUBLE PRECISION NOT NULL,
-    h_upper DOUBLE PRECISION,
+    h_upper DOUBLE PRECISION NOT NULL,
 );
 
 CREATE TABLE hollow_structural_sections (
