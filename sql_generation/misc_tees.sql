@@ -1,4 +1,4 @@
-INSERT INTO wide_flanges (
+INSERT INTO misc_tees (
     edi_std_nomenclature,
     aisc_manual_label,
     t_f,
@@ -23,7 +23,7 @@ INSERT INTO wide_flanges (
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
@@ -31,7 +31,7 @@ INSERT INTO wide_flanges (
     cw,
     ro,
     h_upper,
-    wgi,
+    wgi
     ) 
 VALUES 
 ('MT6.25X6.2','MT6.25X6.2',false,6.2,1.82,6.27,6.25,3.75,3.75,0.155,0.125,0.0625,0.228,0.25,0.563,0.5625,1.74,0.372,8.22,40.4,7.29,2.92,1.61,2.01,1,0.839,0.536,0.746,0.0246,0.0284,2.69,0.634,NULL), 

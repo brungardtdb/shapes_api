@@ -1,4 +1,4 @@
-INSERT INTO wide_flanges (
+INSERT INTO structural_tees (
     edi_std_nomenclature,
     aisc_manual_label,
     w_upper,
@@ -22,7 +22,7 @@ INSERT INTO wide_flanges (
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
@@ -30,7 +30,7 @@ INSERT INTO wide_flanges (
     cw,
     ro,
     h_upper,
-    wgi,
+    wgi
     ) 
 VALUES 
 ('ST12X60.5','ST12X60.5',60.5,17.8,12.3,12.25,8.05,8,0.8,0.8125,0.4375,1.09,1.0625,2,2,3.63,1.26,3.69,15.4,259,54.5,30.1,3.82,41.5,18.1,10.3,1.53,6.38,27.5,5.14,0.64,4), 

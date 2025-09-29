@@ -119,7 +119,7 @@ fn nullable_sql_string<T: std::fmt::Display>(maybe_value: Option<T>) -> String {
 fn sql_from_hss_round(shapes: Vec<RoundHollowStructuralSection>) -> String {
     let mut sql = String::new();
     sql.push_str(
-        "INSERT INTO angles (
+        "INSERT INTO round_hollow_structural_sections (
     edi_std_nomenclature,
     aisc_manual_label,
     w_upper,
@@ -132,7 +132,7 @@ fn sql_from_hss_round(shapes: Vec<RoundHollowStructuralSection>) -> String {
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
@@ -177,7 +177,7 @@ fn hss_round_to_row(shape: &RoundHollowStructuralSection) -> String {
 fn sql_from_hss(shapes: Vec<HollowStructuralSection>) -> String {
     let mut sql = String::new();
     sql.push_str(
-        "INSERT INTO angles (
+        "INSERT INTO hollow_structural_sections (
     edi_std_nomenclature,
     aisc_manual_label,
     w_upper,
@@ -194,11 +194,10 @@ fn sql_from_hss(shapes: Vec<HollowStructuralSection>) -> String {
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
-    ro,
     j_upper,
     c_upper
     ) \nVALUES \n",
@@ -241,7 +240,7 @@ fn hss_to_row(shape: &HollowStructuralSection) -> String {
 fn sql_from_double_angles(shapes: Vec<DoubleAngle>) -> String {
     let mut sql = String::new();
     sql.push_str(
-        "INSERT INTO angles (
+        "INSERT INTO double_angles (
     edi_std_nomenclature,
     aisc_manual_label,
     w_upper,
@@ -256,12 +255,12 @@ fn sql_from_double_angles(shapes: Vec<DoubleAngle>) -> String {
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
     ro,
-    h_upper,
+    h_upper
     ) \nVALUES \n",
     );
     let rows = shapes
@@ -276,7 +275,7 @@ fn sql_from_double_angles(shapes: Vec<DoubleAngle>) -> String {
 
 fn double_angle_to_row(shape: &DoubleAngle) -> String {
     String::from(format!(
-        "('{}','{}',{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        "('{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
         shape.edi_std_nomenclature,
         shape.aisc_manual_label,
         shape.w_upper,
@@ -303,7 +302,7 @@ fn double_angle_to_row(shape: &DoubleAngle) -> String {
 fn sql_from_structural_tees(shapes: Vec<StructuralTee>) -> String {
     let mut sql = String::new();
     sql.push_str(
-        "INSERT INTO wide_flanges (
+        "INSERT INTO structural_tees (
     edi_std_nomenclature,
     aisc_manual_label,
     w_upper,
@@ -327,7 +326,7 @@ fn sql_from_structural_tees(shapes: Vec<StructuralTee>) -> String {
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
@@ -335,7 +334,7 @@ fn sql_from_structural_tees(shapes: Vec<StructuralTee>) -> String {
     cw,
     ro,
     h_upper,
-    wgi,
+    wgi
     ) \nVALUES \n",
     );
     let rows = shapes
@@ -389,7 +388,7 @@ fn structural_tee_to_row(shape: &StructuralTee) -> String {
 fn sql_from_misc_tees(shapes: Vec<MiscTee>) -> String {
     let mut sql = String::new();
     sql.push_str(
-        "INSERT INTO wide_flanges (
+        "INSERT INTO misc_tees (
     edi_std_nomenclature,
     aisc_manual_label,
     t_f,
@@ -414,7 +413,7 @@ fn sql_from_misc_tees(shapes: Vec<MiscTee>) -> String {
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
@@ -422,7 +421,7 @@ fn sql_from_misc_tees(shapes: Vec<MiscTee>) -> String {
     cw,
     ro,
     h_upper,
-    wgi,
+    wgi
     ) \nVALUES \n",
     );
     let rows = shapes
@@ -477,7 +476,7 @@ fn misc_tee_to_row(shape: &MiscTee) -> String {
 fn sql_from_wide_flange_tees(shapes: Vec<WideFlangeTee>) -> String {
     let mut sql = String::new();
     sql.push_str(
-        "INSERT INTO wide_flanges (
+        "INSERT INTO wide_flange_tees (
     edi_std_nomenclature,
     aisc_manual_label,
     t_f,
@@ -502,7 +501,7 @@ fn sql_from_wide_flange_tees(shapes: Vec<WideFlangeTee>) -> String {
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
@@ -515,7 +514,7 @@ fn sql_from_wide_flange_tees(shapes: Vec<WideFlangeTee>) -> String {
     pc,
     pd,
     wgi,
-    wgo,
+    wgo
     ) \nVALUES \n",
     );
     let rows = shapes
@@ -530,7 +529,7 @@ fn sql_from_wide_flange_tees(shapes: Vec<WideFlangeTee>) -> String {
 
 fn wide_flange_tee_to_row(shape: &WideFlangeTee) -> String {
     String::from(format!(
-        "('{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        "('{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
         shape.edi_std_nomenclature,
         shape.aisc_manual_label,
         shape.t_f,
@@ -566,6 +565,7 @@ fn wide_flange_tee_to_row(shape: &WideFlangeTee) -> String {
         shape.pa,
         shape.pb,
         shape.pc,
+        shape.pd,
         shape.wgi,
         nullable_sql_string(shape.wgo)
     ))
@@ -593,7 +593,7 @@ fn sql_from_angles(shapes: Vec<Angle>) -> String {
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
@@ -620,7 +620,7 @@ fn sql_from_angles(shapes: Vec<Angle>) -> String {
     szc,
     pa,
     pa_2,
-    pb,
+    pb
     ) \nVALUES \n",
     );
     let rows = shapes.iter().map(|c| angle_to_row(c)).collect::<Vec<_>>();
@@ -632,7 +632,7 @@ fn sql_from_angles(shapes: Vec<Angle>) -> String {
 
 fn angle_to_row(shape: &Angle) -> String {
     String::from(format!(
-        "('{}','{}',{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        "('{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
         shape.edi_std_nomenclature,
         shape.aisc_manual_label,
         shape.w_upper,
@@ -710,7 +710,7 @@ fn sql_from_misc_channels(shapes: Vec<MiscChannel>) -> String {
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
@@ -723,7 +723,7 @@ fn sql_from_misc_channels(shapes: Vec<MiscChannel>) -> String {
     qf,
     qw,
     ro,
-    h_upper
+    h_upper,
     rts,
     ho,
     pa,
@@ -731,7 +731,7 @@ fn sql_from_misc_channels(shapes: Vec<MiscChannel>) -> String {
     pc,
     pd,
     t,
-    wgi,
+    wgi
     ) \nVALUES \n",
     );
     let rows = shapes
@@ -746,7 +746,7 @@ fn sql_from_misc_channels(shapes: Vec<MiscChannel>) -> String {
 
 fn misc_channel_to_row(shape: &MiscChannel) -> String {
     String::from(format!(
-        "('{}','{}',{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        "('{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
         shape.edi_std_nomenclature,
         shape.aisc_manual_label,
         shape.w_upper,
@@ -824,7 +824,7 @@ fn sql_from_cee_channels(shapes: Vec<CeeChannel>) -> String {
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
@@ -837,7 +837,7 @@ fn sql_from_cee_channels(shapes: Vec<CeeChannel>) -> String {
     qf,
     qw,
     ro,
-    h_upper
+    h_upper,
     rts,
     ho,
     pa,
@@ -845,7 +845,7 @@ fn sql_from_cee_channels(shapes: Vec<CeeChannel>) -> String {
     pc,
     pd,
     t,
-    wgi,
+    wgi
     ) \nVALUES \n",
     );
     let rows = shapes
@@ -860,7 +860,7 @@ fn sql_from_cee_channels(shapes: Vec<CeeChannel>) -> String {
 
 fn cee_channel_to_row(shape: &CeeChannel) -> String {
     String::from(format!(
-        "('{}','{}',{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        "('{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
         shape.edi_std_nomenclature,
         shape.aisc_manual_label,
         shape.w_upper,
@@ -936,7 +936,7 @@ fn sql_from_h_piles(shapes: Vec<HPile>) -> String {
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
@@ -953,7 +953,7 @@ fn sql_from_h_piles(shapes: Vec<HPile>) -> String {
     pc,
     pd,
     t,
-    wgi,
+    wgi
     ) \nVALUES \n",
     );
     let rows = shapes.iter().map(|h| h_pile_to_row(h)).collect::<Vec<_>>();
@@ -965,7 +965,7 @@ fn sql_from_h_piles(shapes: Vec<HPile>) -> String {
 
 fn h_pile_to_row(shape: &HPile) -> String {
     String::from(format!(
-        "('{}','{}',{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        "('{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
         shape.edi_std_nomenclature,
         shape.aisc_manual_label,
         shape.w_upper,
@@ -1028,14 +1028,13 @@ fn sql_from_structural_beam(shapes: Vec<StructuralBeam>) -> String {
     tfdet,
     kdes,
     kdet,
-    k1,
     bf_2tf,
     h_tw,
     ix,
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
@@ -1052,7 +1051,7 @@ fn sql_from_structural_beam(shapes: Vec<StructuralBeam>) -> String {
     pc,
     pd,
     t,
-    wgi,
+    wgi
     ) \nVALUES \n",
     );
     let rows = shapes
@@ -1067,7 +1066,7 @@ fn sql_from_structural_beam(shapes: Vec<StructuralBeam>) -> String {
 
 fn structural_beam_to_row(shape: &StructuralBeam) -> String {
     String::from(format!(
-        "('{}','{}',{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        "('{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
         shape.edi_std_nomenclature,
         shape.aisc_manual_label,
         shape.w_upper,
@@ -1137,7 +1136,7 @@ fn sql_from_misc_beam(shapes: Vec<MiscBeam>) -> String {
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
@@ -1154,7 +1153,7 @@ fn sql_from_misc_beam(shapes: Vec<MiscBeam>) -> String {
     pc,
     pd,
     t,
-    wgi,
+    wgi
     ) \nVALUES \n",
     );
     let rows = shapes
@@ -1169,7 +1168,7 @@ fn sql_from_misc_beam(shapes: Vec<MiscBeam>) -> String {
 
 fn misc_beam_to_row(misc_beam: &MiscBeam) -> String {
     String::from(format!(
-        "('{}','{}',{},{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        "('{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
         misc_beam.edi_std_nomenclature,
         misc_beam.aisc_manual_label,
         nullable_sql_string(misc_beam.t_f),
@@ -1241,7 +1240,7 @@ fn sql_from_wide_flange(shapes: Vec<WideFlange>) -> String {
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
@@ -1259,7 +1258,7 @@ fn sql_from_wide_flange(shapes: Vec<WideFlange>) -> String {
     pd,
     t,
     wgi,
-    wgo,
+    wgo
     ) \nVALUES \n",
     );
     let rows = shapes
@@ -1274,7 +1273,7 @@ fn sql_from_wide_flange(shapes: Vec<WideFlange>) -> String {
 
 fn wide_flange_to_row(wide_flange: &WideFlange) -> String {
     String::from(format!(
-        "('{}','{}',{},{},{}{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        "('{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
         wide_flange.edi_std_nomenclature,
         wide_flange.aisc_manual_label,
         wide_flange.t_f,

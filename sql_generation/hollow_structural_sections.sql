@@ -1,4 +1,4 @@
-INSERT INTO angles (
+INSERT INTO hollow_structural_sections (
     edi_std_nomenclature,
     aisc_manual_label,
     w_upper,
@@ -15,11 +15,10 @@ INSERT INTO angles (
     zx,
     sx,
     rx,
-    iy
+    iy,
     zy,
     sy,
     ry,
-    ro,
     j_upper,
     c_upper
     ) 
