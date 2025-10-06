@@ -144,10 +144,7 @@ fn sql_from_pipe(shapes: Vec<Pipe>) -> String {
     j_upper
     ) \nVALUES \n",
     );
-    let rows = shapes
-        .iter()
-        .map(|h| pipe_to_row(h))
-        .collect::<Vec<_>>();
+    let rows = shapes.iter().map(|h| pipe_to_row(h)).collect::<Vec<_>>();
     let row_string = rows.join(", \n");
     sql.push_str(&row_string);
     sql.push_str(";");
