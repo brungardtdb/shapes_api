@@ -70,6 +70,8 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
         parse_hss_round,
     );
     println!("There are {} HSS round shapes", &hss_round_shapes.len());
+    let pipe_shapes = get_shapes(|p| p[TYPE_INDEX].eq("PIPE"), parse_pipe);
+    println!("There are {} Pipe shapes", &pipe_shapes.len());
     let wide_flange_sql = sql_from_wide_flange(wide_flange_shapes);
     write_sql_to_file(String::from("wide_flanges.sql"), wide_flange_sql)?;
     let misc_beam_sql = sql_from_misc_beam(misc_beam_shapes);
@@ -99,6 +101,8 @@ fn parse_csv_to_sql() -> Result<(), Box<dyn Error>> {
         String::from("round_hollow_structural_sections.sql"),
         hss_round_sql,
     )?;
+    let pipe_sql = sql_from_pipe(pipe_shapes);
+    write_sql_to_file(String::from("pipes.sql"), pipe_sql)?;
     Ok(())
 }
 
@@ -116,6 +120,64 @@ fn nullable_sql_string<T: std::fmt::Display>(maybe_value: Option<T>) -> String {
 }
 
 // sql generation methods
+fn sql_from_pipe(shapes: Vec<Pipe>) -> String {
+    let mut sql = String::new();
+    sql.push_str(
+        "INSERT INTO pipes (
+    edi_std_nomenclature,
+    aisc_manual_label,
+    w_upper,
+    a_upper,
+    od,
+    id,
+    t_nom,
+    tdes,
+    d_t,
+    ix,
+    zx,
+    sx,
+    rx,
+    iy,
+    zy,
+    sy,
+    ry,
+    j_upper
+    ) \nVALUES \n",
+    );
+    let rows = shapes
+        .iter()
+        .map(|h| pipe_to_row(h))
+        .collect::<Vec<_>>();
+    let row_string = rows.join(", \n");
+    sql.push_str(&row_string);
+    sql.push_str(";");
+    sql
+}
+
+fn pipe_to_row(shape: &Pipe) -> String {
+    String::from(format!(
+        "('{}','{}',{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+        shape.edi_std_nomenclature,
+        shape.aisc_manual_label,
+        shape.w_upper,
+        shape.a_upper,
+        shape.od,
+        shape.id,
+        shape.t_nom,
+        shape.tdes,
+        shape.d_t,
+        shape.ix,
+        shape.zx,
+        shape.sx,
+        shape.rx,
+        shape.iy,
+        shape.zy,
+        shape.sy,
+        shape.ry,
+        shape.j_upper,
+    ))
+}
+
 fn sql_from_hss_round(shapes: Vec<RoundHollowStructuralSection>) -> String {
     let mut sql = String::new();
     sql.push_str(
@@ -1340,6 +1402,31 @@ fn get_shapes<T>(
 }
 
 // parse one shape from one csv string record
+fn parse_pipe(
+    record: &csv::StringRecord,
+) -> Result<aisc_shapes::Pipe, aisc_shapes::errors::MissingPropertyError> {
+    ShapeBuilder::new()
+        .with_edi_std_nomenclature(String::from(&record[EDI_NOM]))
+        .with_aisc_manual_label(String::from(&record[AISC_MAN_LBL]))
+        .with_w_upper(maybe_float(&record[W_UPPER]).unwrap())
+        .with_a_upper(maybe_float(&record[A_UPPER]).unwrap())
+        .with_od(maybe_float(&record[OD]).unwrap())
+        .with_id(maybe_float(&record[ID]).unwrap())
+        .with_t_nom(maybe_float(&record[T_NOM]).unwrap())
+        .with_tdes(maybe_float(&record[T_DES]).unwrap())
+        .with_d_t(maybe_float(&record[D_T]).unwrap())
+        .with_ix(maybe_float(&record[IX]).unwrap())
+        .with_zx(maybe_float(&record[ZX]).unwrap())
+        .with_sx(maybe_float(&record[SX]).unwrap())
+        .with_rx(maybe_float(&record[RX]).unwrap())
+        .with_iy(maybe_float(&record[IY]).unwrap())
+        .with_zy(maybe_float(&record[ZY]).unwrap())
+        .with_sy(maybe_float(&record[SY]).unwrap())
+        .with_ry(maybe_float(&record[RY]).unwrap())
+        .with_j_upper(maybe_float(&record[J_UPPER]).unwrap())
+        .try_into()
+}
+
 fn parse_hss_round(
     record: &csv::StringRecord,
 ) -> Result<aisc_shapes::RoundHollowStructuralSection, aisc_shapes::errors::MissingPropertyError> {
