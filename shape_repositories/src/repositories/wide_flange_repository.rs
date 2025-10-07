@@ -1,20 +1,23 @@
 use shapes::aisc_shapes::{ShapeBuilder, ShapeRepository, WideFlange};
-use sqlx::Row;
 use sqlx::postgres::{PgPool, PgRow};
+use sqlx::{Row};
 use std::error::Error;
 use std::sync::Arc;
 
-pub struct WideFlangeProvider {
+/// Repository that manages data access for all wide flange shapes
+pub struct WideFlangeRepository {
     pool: Arc<PgPool>,
 }
 
-impl WideFlangeProvider {
+impl WideFlangeRepository {
+    /// Creates a new instance of WideFlangeRepository type
+    /// Takes a pool containing the Postgres database connection
     pub fn new(pool: Arc<PgPool>) -> Self {
-        WideFlangeProvider { pool }
+        WideFlangeRepository { pool }
     }
 }
 
-impl ShapeRepository<WideFlange> for WideFlangeProvider {
+impl ShapeRepository<WideFlange> for WideFlangeRepository {
     async fn all(&self) -> Result<Vec<WideFlange>, Box<dyn Error>> {
         let rows = sqlx::query(
             "SELECT 
@@ -88,22 +91,260 @@ impl ShapeRepository<WideFlange> for WideFlangeProvider {
         &self,
         edi_std_nomenclature: String,
     ) -> Result<WideFlange, Box<dyn Error>> {
-        todo!("Get wide flange shape with matching edi std nomenclature");
+        let row = sqlx::query(
+            "SELECT 
+    edi_std_nomenclature,
+    aisc_manual_label,
+    t_f,
+    w_upper,
+    a_upper,
+    d_lower,
+    ddet,
+    bf,
+    bfdet,
+    tw,
+    twdet,
+    twdet_2,
+    tf,
+    tfdet,
+    kdes,
+    kdet,
+    k1,
+    bf_2tf,
+    h_tw,
+    ix,
+    zx,
+    sx,
+    rx,
+    iy,
+    zy,
+    sy,
+    ry,
+    j_upper,
+    cw,
+    wno,
+    sw1,
+    qf,
+    qw,
+    rts,
+    ho,
+    pa,
+    pb,
+    pc,
+    pd,
+    t,
+    wgi,
+    wgo
+	FROM wide_flanges
+	WHERE edi_std_nomenclature = $1
+	LIMIT 1;",
+        )
+        .bind(edi_std_nomenclature)
+        .fetch_one(&*self.pool)
+        .await?;
+
+        wide_flange_from_row(row)
     }
 
     async fn shape_with_aisc_manual_label(
         &self,
         aisc_manual_label: String,
     ) -> Result<WideFlange, Box<dyn Error>> {
-        todo!("Get wide flange shape with matching aisc manual label");
+        let row = sqlx::query(
+            "SELECT 
+    edi_std_nomenclature,
+    aisc_manual_label,
+    t_f,
+    w_upper,
+    a_upper,
+    d_lower,
+    ddet,
+    bf,
+    bfdet,
+    tw,
+    twdet,
+    twdet_2,
+    tf,
+    tfdet,
+    kdes,
+    kdet,
+    k1,
+    bf_2tf,
+    h_tw,
+    ix,
+    zx,
+    sx,
+    rx,
+    iy,
+    zy,
+    sy,
+    ry,
+    j_upper,
+    cw,
+    wno,
+    sw1,
+    qf,
+    qw,
+    rts,
+    ho,
+    pa,
+    pb,
+    pc,
+    pd,
+    t,
+    wgi,
+    wgo
+	FROM wide_flanges
+	WHERE aisc_manual_label = $1
+	LIMIT 1;",
+        )
+        .bind(aisc_manual_label)
+        .fetch_one(&*self.pool)
+        .await?;
+
+        wide_flange_from_row(row)
     }
 
     async fn shapes_with_depth(&self, depth: f64) -> Result<Vec<WideFlange>, Box<dyn Error>> {
-        todo!("Get all wide flange shapes with matching depth");
+        let rows = sqlx::query(
+            "SELECT 
+    edi_std_nomenclature,
+    aisc_manual_label,
+    t_f,
+    w_upper,
+    a_upper,
+    d_lower,
+    ddet,
+    bf,
+    bfdet,
+    tw,
+    twdet,
+    twdet_2,
+    tf,
+    tfdet,
+    kdes,
+    kdet,
+    k1,
+    bf_2tf,
+    h_tw,
+    ix,
+    zx,
+    sx,
+    rx,
+    iy,
+    zy,
+    sy,
+    ry,
+    j_upper,
+    cw,
+    wno,
+    sw1,
+    qf,
+    qw,
+    rts,
+    ho,
+    pa,
+    pb,
+    pc,
+    pd,
+    t,
+    wgi,
+    wgo
+	FROM wide_flanges
+    WHERE d_lower = $1;",
+        )
+        .bind(depth)
+        .fetch_all(&*self.pool)
+        .await?;
+
+        let wf_results = rows
+            .into_iter()
+            .map(|r| wide_flange_from_row(r))
+            .collect::<Vec<_>>();
+        if wf_results.iter().any(|r| r.is_err()) {
+            for result in wf_results.into_iter() {
+                if let Err(err) = result {
+                    return Err(err);
+                }
+            }
+            unreachable!()
+        } else {
+            Ok(wf_results
+                .into_iter()
+                .map(|wf| wf.unwrap())
+                .collect::<Vec<_>>())
+        }
     }
 
     async fn shapes_with_width(&self, width: f64) -> Result<Vec<WideFlange>, Box<dyn Error>> {
-        todo!("Get all wide flange shapes with matching width")
+        let rows = sqlx::query(
+            "SELECT 
+    edi_std_nomenclature,
+    aisc_manual_label,
+    t_f,
+    w_upper,
+    a_upper,
+    d_lower,
+    ddet,
+    bf,
+    bfdet,
+    tw,
+    twdet,
+    twdet_2,
+    tf,
+    tfdet,
+    kdes,
+    kdet,
+    k1,
+    bf_2tf,
+    h_tw,
+    ix,
+    zx,
+    sx,
+    rx,
+    iy,
+    zy,
+    sy,
+    ry,
+    j_upper,
+    cw,
+    wno,
+    sw1,
+    qf,
+    qw,
+    rts,
+    ho,
+    pa,
+    pb,
+    pc,
+    pd,
+    t,
+    wgi,
+    wgo
+	FROM wide_flanges
+    WHERE bf = $1;",
+        )
+        .bind(width)
+        .fetch_all(&*self.pool)
+        .await?;
+
+        let wf_results = rows
+            .into_iter()
+            .map(|r| wide_flange_from_row(r))
+            .collect::<Vec<_>>();
+        if wf_results.iter().any(|r| r.is_err()) {
+            for result in wf_results.into_iter() {
+                if let Err(err) = result {
+                    return Err(err);
+                }
+            }
+            unreachable!()
+        } else {
+            Ok(wf_results
+                .into_iter()
+                .map(|wf| wf.unwrap())
+                .collect::<Vec<_>>())
+        }
     }
 }
 
@@ -163,11 +404,7 @@ fn wide_flange_from_row(row: PgRow) -> Result<WideFlange, Box<dyn Error>> {
 
 fn add_optional_wgo(builder: ShapeBuilder, maybe_wgo: Option<f64>) -> ShapeBuilder {
     match maybe_wgo {
-        Some(wgo) => {
-            builder.with_wgo(wgo)
-        },
-        None => {
-            builder
-        }
+        Some(wgo) => builder.with_wgo(wgo),
+        None => builder,
     }
 }

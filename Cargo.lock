@@ -1216,7 +1216,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "shape_provider"
+name = "shape_repositories"
 version = "0.1.0"
 dependencies = [
  "shapes",
@@ -1231,7 +1231,7 @@ version = "0.1.0"
 name = "shapes_api"
 version = "0.1.0"
 dependencies = [
- "shape_provider",
+ "shape_repositories",
  "shapes",
  "sqlx",
  "tokio",
