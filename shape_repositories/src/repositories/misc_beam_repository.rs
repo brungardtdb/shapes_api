@@ -1,24 +1,24 @@
-use shapes::aisc_shapes::{ShapeBuilder, ShapeRepository, WideFlange};
+use shapes::aisc_shapes::{MiscBeam, ShapeBuilder, ShapeRepository};
 use sqlx::Row;
 use sqlx::postgres::{PgPool, PgRow};
 use std::error::Error;
 use std::sync::Arc;
 
-/// Repository that manages data access for all wide flange shapes
-pub struct WideFlangeRepository {
+/// Repository that manages data access for all misc. beam shapes
+pub struct MiscBeamRepository {
     pool: Arc<PgPool>,
 }
 
-impl WideFlangeRepository {
-    /// Creates a new instance of WideFlangeRepository type
+impl MiscBeamRepository {
+    /// Creates a new instance of MiscBeamRepository type
     /// Takes a pool containing the Postgres database connection
     pub fn new(pool: Arc<PgPool>) -> Self {
-        WideFlangeRepository { pool }
+        MiscBeamRepository { pool }
     }
 }
 
-impl ShapeRepository<WideFlange> for WideFlangeRepository {
-    async fn all(&self) -> Result<Vec<WideFlange>, Box<dyn Error>> {
+impl ShapeRepository<MiscBeam> for MiscBeamRepository {
+    async fn all(&self) -> Result<Vec<MiscBeam>, Box<dyn Error>> {
         let rows = sqlx::query(
             "SELECT 
     edi_std_nomenclature,
@@ -61,36 +61,32 @@ impl ShapeRepository<WideFlange> for WideFlangeRepository {
     pc,
     pd,
     t,
-    wgi,
-    wgo
-	FROM wide_flanges;",
+    wgi
+    FROM misc_beams;",
         )
         .fetch_all(&*self.pool)
         .await?;
 
-        let wf_results = rows
+        let results = rows
             .into_iter()
-            .map(|r| wide_flange_from_row(r))
+            .map(|r| misc_beam_from_row(r))
             .collect::<Vec<_>>();
-        if wf_results.iter().any(|r| r.is_err()) {
-            for result in wf_results.into_iter() {
+        if results.iter().any(|r| r.is_err()) {
+            for result in results.into_iter() {
                 if let Err(err) = result {
                     return Err(err);
                 }
             }
             unreachable!()
         } else {
-            Ok(wf_results
-                .into_iter()
-                .map(|wf| wf.unwrap())
-                .collect::<Vec<_>>())
+            Ok(results.into_iter().map(|r| r.unwrap()).collect::<Vec<_>>())
         }
     }
 
     async fn shape_with_edi_std_nomenclature(
         &self,
         edi_std_nomenclature: String,
-    ) -> Result<WideFlange, Box<dyn Error>> {
+    ) -> Result<MiscBeam, Box<dyn Error>> {
         let row = sqlx::query(
             "SELECT 
     edi_std_nomenclature,
@@ -133,9 +129,8 @@ impl ShapeRepository<WideFlange> for WideFlangeRepository {
     pc,
     pd,
     t,
-    wgi,
-    wgo
-	FROM wide_flanges
+    wgi
+    FROM misc_beams
 	WHERE edi_std_nomenclature = $1
 	LIMIT 1;",
         )
@@ -143,13 +138,13 @@ impl ShapeRepository<WideFlange> for WideFlangeRepository {
         .fetch_one(&*self.pool)
         .await?;
 
-        wide_flange_from_row(row)
+        misc_beam_from_row(row)
     }
 
     async fn shape_with_aisc_manual_label(
         &self,
         aisc_manual_label: String,
-    ) -> Result<WideFlange, Box<dyn Error>> {
+    ) -> Result<MiscBeam, Box<dyn Error>> {
         let row = sqlx::query(
             "SELECT 
     edi_std_nomenclature,
@@ -192,9 +187,8 @@ impl ShapeRepository<WideFlange> for WideFlangeRepository {
     pc,
     pd,
     t,
-    wgi,
-    wgo
-	FROM wide_flanges
+    wgi
+    FROM misc_beams
 	WHERE aisc_manual_label = $1
 	LIMIT 1;",
         )
@@ -202,10 +196,10 @@ impl ShapeRepository<WideFlange> for WideFlangeRepository {
         .fetch_one(&*self.pool)
         .await?;
 
-        wide_flange_from_row(row)
+        misc_beam_from_row(row)
     }
 
-    async fn shapes_with_depth(&self, depth: f64) -> Result<Vec<WideFlange>, Box<dyn Error>> {
+    async fn shapes_with_depth(&self, depth: f64) -> Result<Vec<MiscBeam>, Box<dyn Error>> {
         let rows = sqlx::query(
             "SELECT 
     edi_std_nomenclature,
@@ -248,35 +242,31 @@ impl ShapeRepository<WideFlange> for WideFlangeRepository {
     pc,
     pd,
     t,
-    wgi,
-    wgo
-	FROM wide_flanges
+    wgi
+    FROM misc_beams
     WHERE d_lower = $1;",
         )
         .bind(depth)
         .fetch_all(&*self.pool)
         .await?;
 
-        let wf_results = rows
+        let results = rows
             .into_iter()
-            .map(|r| wide_flange_from_row(r))
+            .map(|r| misc_beam_from_row(r))
             .collect::<Vec<_>>();
-        if wf_results.iter().any(|r| r.is_err()) {
-            for result in wf_results.into_iter() {
+        if results.iter().any(|r| r.is_err()) {
+            for result in results.into_iter() {
                 if let Err(err) = result {
                     return Err(err);
                 }
             }
             unreachable!()
         } else {
-            Ok(wf_results
-                .into_iter()
-                .map(|wf| wf.unwrap())
-                .collect::<Vec<_>>())
+            Ok(results.into_iter().map(|r| r.unwrap()).collect::<Vec<_>>())
         }
     }
 
-    async fn shapes_with_width(&self, width: f64) -> Result<Vec<WideFlange>, Box<dyn Error>> {
+    async fn shapes_with_width(&self, width: f64) -> Result<Vec<MiscBeam>, Box<dyn Error>> {
         let rows = sqlx::query(
             "SELECT 
     edi_std_nomenclature,
@@ -319,42 +309,39 @@ impl ShapeRepository<WideFlange> for WideFlangeRepository {
     pc,
     pd,
     t,
-    wgi,
-    wgo
-	FROM wide_flanges
+    wgi
+    FROM misc_beams
     WHERE bf = $1;",
         )
         .bind(width)
         .fetch_all(&*self.pool)
         .await?;
 
-        let wf_results = rows
+        let results = rows
             .into_iter()
-            .map(|r| wide_flange_from_row(r))
+            .map(|r| misc_beam_from_row(r))
             .collect::<Vec<_>>();
-        if wf_results.iter().any(|r| r.is_err()) {
-            for result in wf_results.into_iter() {
+        if results.iter().any(|r| r.is_err()) {
+            for result in results.into_iter() {
                 if let Err(err) = result {
                     return Err(err);
                 }
             }
             unreachable!()
         } else {
-            Ok(wf_results
-                .into_iter()
-                .map(|wf| wf.unwrap())
-                .collect::<Vec<_>>())
+            Ok(results.into_iter().map(|r| r.unwrap()).collect::<Vec<_>>())
         }
     }
 }
 
 // Helper Functions
-fn wide_flange_from_row(row: PgRow) -> Result<WideFlange, Box<dyn Error>> {
-    let maybe_wgo: Option<f64> = row.try_get("wgo")?;
+fn misc_beam_from_row(row: PgRow) -> Result<MiscBeam, Box<dyn Error>> {
+    let maybe_t_f: Option<bool> = row.try_get("t_f")?;
+    let maybe_wgi: Option<f64> = row.try_get("wgi")?;
+
     let builder = ShapeBuilder::new()
         .with_edi_std_nomenclature(row.try_get("edi_std_nomenclature")?)
         .with_aisc_manual_label(row.try_get("aisc_manual_label")?)
-        .with_t_f(row.try_get("t_f")?)
         .with_w_upper(row.try_get("w_upper")?)
         .with_a_upper(row.try_get("a_upper")?)
         .with_d_lower(row.try_get("d_lower")?)
@@ -391,20 +378,27 @@ fn wide_flange_from_row(row: PgRow) -> Result<WideFlange, Box<dyn Error>> {
         .with_pb(row.try_get("pb")?)
         .with_pc(row.try_get("pc")?)
         .with_pd(row.try_get("pd")?)
-        .with_t(row.try_get("t")?)
-        .with_wgi(row.try_get("wgi")?);
+        .with_t(row.try_get("t")?);
 
-    let builder = add_optional_wgo(builder, maybe_wgo);
-    let maybe_wf = builder.try_build::<WideFlange>();
-    match maybe_wf {
-        Ok(wf) => Ok(wf),
+    let builder = add_optional_t_f(builder, maybe_t_f);
+    let builder = add_optional_wgi(builder, maybe_wgi);
+    let maybe_mb = builder.try_build::<MiscBeam>();
+    match maybe_mb {
+        Ok(mb) => Ok(mb),
         Err(err) => Err(Box::new(err)),
     }
 }
 
-fn add_optional_wgo(builder: ShapeBuilder, maybe_wgo: Option<f64>) -> ShapeBuilder {
-    match maybe_wgo {
-        Some(wgo) => builder.with_wgo(wgo),
+fn add_optional_wgi(builder: ShapeBuilder, maybe_wgi: Option<f64>) -> ShapeBuilder {
+    match maybe_wgi {
+        Some(wgi) => builder.with_wgi(wgi),
+        None => builder,
+    }
+}
+
+fn add_optional_t_f(builder: ShapeBuilder, maybe_t_f: Option<bool>) -> ShapeBuilder {
+    match maybe_t_f {
+        Some(t_f) => builder.with_t_f(t_f),
         None => builder,
     }
 }
