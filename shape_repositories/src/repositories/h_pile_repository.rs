@@ -1,24 +1,24 @@
-use shapes::aisc_shapes::{ShapeBuilder, ShapeRepository, StructuralBeam};
+use shapes::aisc_shapes::{HPile, ShapeBuilder, ShapeRepository};
 use sqlx::Row;
 use sqlx::postgres::{PgPool, PgRow};
 use std::error::Error;
 use std::sync::Arc;
 
 /// Repository that manages data access for all misc. beam shapes
-pub struct StructuralBeamRepository {
+pub struct HPileRepository {
     pool: Arc<PgPool>,
 }
 
-impl StructuralBeamRepository {
-    /// Creates a new instance of StructuralBeamRepository type
+impl HPileRepository {
+    /// Creates a new instance of HPileRepository type
     /// Takes a pool containing the Postgres database connection
     pub fn new(pool: Arc<PgPool>) -> Self {
-        StructuralBeamRepository { pool }
+        HPileRepository { pool }
     }
 }
 
-impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
-    async fn all(&self) -> Result<Vec<StructuralBeam>, Box<dyn Error>> {
+impl ShapeRepository<HPile> for HPileRepository {
+    async fn all(&self) -> Result<Vec<HPile>, Box<dyn Error>> {
         let rows = sqlx::query(
             "SELECT 
     edi_std_nomenclature,
@@ -36,6 +36,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     tfdet,
     kdes,
     kdet,
+    k1,
     bf_2tf,
     h_tw,
     ix,
@@ -60,14 +61,14 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     pd,
     t,
     wgi
-    FROM structural_beams;",
+    FROM h_piles;",
         )
         .fetch_all(&*self.pool)
         .await?;
 
         let results = rows
             .into_iter()
-            .map(|r| structural_beam_from_row(r))
+            .map(|r| h_pile_from_row(r))
             .collect::<Vec<_>>();
         if results.iter().any(|r| r.is_err()) {
             for result in results.into_iter() {
@@ -84,7 +85,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     async fn shape_with_edi_std_nomenclature(
         &self,
         edi_std_nomenclature: String,
-    ) -> Result<StructuralBeam, Box<dyn Error>> {
+    ) -> Result<HPile, Box<dyn Error>> {
         let row = sqlx::query(
             "SELECT 
     edi_std_nomenclature,
@@ -102,6 +103,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     tfdet,
     kdes,
     kdet,
+    k1,
     bf_2tf,
     h_tw,
     ix,
@@ -126,7 +128,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     pd,
     t,
     wgi
-    FROM structural_beams
+    FROM h_piles
 	WHERE edi_std_nomenclature = $1
 	LIMIT 1;",
         )
@@ -134,13 +136,13 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
         .fetch_one(&*self.pool)
         .await?;
 
-        structural_beam_from_row(row)
+        h_pile_from_row(row)
     }
 
     async fn shape_with_aisc_manual_label(
         &self,
         aisc_manual_label: String,
-    ) -> Result<StructuralBeam, Box<dyn Error>> {
+    ) -> Result<HPile, Box<dyn Error>> {
         let row = sqlx::query(
             "SELECT 
     edi_std_nomenclature,
@@ -158,6 +160,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     tfdet,
     kdes,
     kdet,
+    k1,
     bf_2tf,
     h_tw,
     ix,
@@ -182,7 +185,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     pd,
     t,
     wgi
-    FROM structural_beams
+    FROM h_piles
 	WHERE aisc_manual_label = $1
 	LIMIT 1;",
         )
@@ -190,10 +193,10 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
         .fetch_one(&*self.pool)
         .await?;
 
-        structural_beam_from_row(row)
+        h_pile_from_row(row)
     }
 
-    async fn shapes_with_depth(&self, depth: f64) -> Result<Vec<StructuralBeam>, Box<dyn Error>> {
+    async fn shapes_with_depth(&self, depth: f64) -> Result<Vec<HPile>, Box<dyn Error>> {
         let rows = sqlx::query(
             "SELECT 
     edi_std_nomenclature,
@@ -211,6 +214,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     tfdet,
     kdes,
     kdet,
+    k1,
     bf_2tf,
     h_tw,
     ix,
@@ -235,7 +239,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     pd,
     t,
     wgi
-    FROM structural_beams
+    FROM h_piles
     WHERE d_lower = $1;",
         )
         .bind(depth)
@@ -244,7 +248,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
 
         let results = rows
             .into_iter()
-            .map(|r| structural_beam_from_row(r))
+            .map(|r| h_pile_from_row(r))
             .collect::<Vec<_>>();
         if results.iter().any(|r| r.is_err()) {
             for result in results.into_iter() {
@@ -258,7 +262,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
         }
     }
 
-    async fn shapes_with_width(&self, width: f64) -> Result<Vec<StructuralBeam>, Box<dyn Error>> {
+    async fn shapes_with_width(&self, width: f64) -> Result<Vec<HPile>, Box<dyn Error>> {
         let rows = sqlx::query(
             "SELECT 
     edi_std_nomenclature,
@@ -276,6 +280,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     tfdet,
     kdes,
     kdet,
+    k1,
     bf_2tf,
     h_tw,
     ix,
@@ -300,7 +305,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     pd,
     t,
     wgi
-    FROM structural_beams
+    FROM h_piles
     WHERE bf = $1;",
         )
         .bind(width)
@@ -309,7 +314,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
 
         let results = rows
             .into_iter()
-            .map(|r| structural_beam_from_row(r))
+            .map(|r| h_pile_from_row(r))
             .collect::<Vec<_>>();
         if results.iter().any(|r| r.is_err()) {
             for result in results.into_iter() {
@@ -325,10 +330,8 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
 }
 
 // Helper Functions
-fn structural_beam_from_row(row: PgRow) -> Result<StructuralBeam, Box<dyn Error>> {
-    let maybe_wgi: Option<f64> = row.try_get("wgi")?;
-
-    let builder = ShapeBuilder::new()
+fn h_pile_from_row(row: PgRow) -> Result<HPile, Box<dyn Error>> {
+    let maybe_hp = ShapeBuilder::new()
         .with_edi_std_nomenclature(row.try_get("edi_std_nomenclature")?)
         .with_aisc_manual_label(row.try_get("aisc_manual_label")?)
         .with_w_upper(row.try_get("w_upper")?)
@@ -344,6 +347,7 @@ fn structural_beam_from_row(row: PgRow) -> Result<StructuralBeam, Box<dyn Error>
         .with_tfdet(row.try_get("tfdet")?)
         .with_kdes(row.try_get("kdes")?)
         .with_kdet(row.try_get("kdet")?)
+        .with_k1(row.try_get("k1")?)
         .with_bf_2tf(row.try_get("bf_2tf")?)
         .with_h_tw(row.try_get("h_tw")?)
         .with_ix(row.try_get("ix")?)
@@ -366,19 +370,12 @@ fn structural_beam_from_row(row: PgRow) -> Result<StructuralBeam, Box<dyn Error>
         .with_pb(row.try_get("pb")?)
         .with_pc(row.try_get("pc")?)
         .with_pd(row.try_get("pd")?)
-        .with_t(row.try_get("t")?);
+        .with_t(row.try_get("t")?)
+        .with_wgi(row.try_get("wgi")?)
+        .try_build::<HPile>();
 
-    let builder = add_optional_wgi(builder, maybe_wgi);
-    let maybe_sb = builder.try_build::<StructuralBeam>();
-    match maybe_sb {
-        Ok(sb) => Ok(sb),
+    match maybe_hp {
+        Ok(hp) => Ok(hp),
         Err(err) => Err(Box::new(err)),
-    }
-}
-
-fn add_optional_wgi(builder: ShapeBuilder, maybe_wgi: Option<f64>) -> ShapeBuilder {
-    match maybe_wgi {
-        Some(wgi) => builder.with_wgi(wgi),
-        None => builder,
     }
 }
