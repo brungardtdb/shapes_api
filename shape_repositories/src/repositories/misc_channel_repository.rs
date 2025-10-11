@@ -4,7 +4,7 @@ use sqlx::postgres::{PgPool, PgRow};
 use std::error::Error;
 use std::sync::Arc;
 
-/// Repository that manages data access for all h pile shapes
+/// Repository that manages data access for all misc. channel shapes
 pub struct MiscChannelRepository {
     pool: Arc<PgPool>,
 }

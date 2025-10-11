@@ -2,6 +2,9 @@
 //! managing data access for shapes
 
 /// The repository responsible for
+/// managing data access for angle shapes
+pub mod angle_repository;
+/// The repository responsible for
 /// managing data access for cee channel shapes
 pub mod cee_channel_repository;
 /// The repository responsible for
@@ -20,6 +23,7 @@ pub mod structural_beam_repository;
 /// managing data access for wide flange shapes
 pub mod wide_flange_repository;
 
+pub use angle_repository::AngleRepository;
 pub use cee_channel_repository::CeeChannelRepository;
 pub use h_pile_repository::HPileRepository;
 pub use misc_beam_repository::MiscBeamRepository;
