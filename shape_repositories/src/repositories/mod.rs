@@ -17,6 +17,9 @@ pub mod misc_beam_repository;
 /// managing data access for misc. channels
 pub mod misc_channel_repository;
 /// The repository responsible for
+/// managing data access for misc. tee shapes
+pub mod misc_tee_repository;
+/// The repository responsible for
 /// managing data access for structural beam shapes
 pub mod structural_beam_repository;
 /// The repository responsible for
@@ -31,6 +34,7 @@ pub use cee_channel_repository::CeeChannelRepository;
 pub use h_pile_repository::HPileRepository;
 pub use misc_beam_repository::MiscBeamRepository;
 pub use misc_channel_repository::MiscChannelRepository;
+pub use misc_tee_repository::MiscTeeRepository;
 pub use structural_beam_repository::StructuralBeamRepository;
 pub use wide_flange_repository::WideFlangeRepository;
 pub use wide_flange_tee_repository::WideFlangeTeeRepository;
