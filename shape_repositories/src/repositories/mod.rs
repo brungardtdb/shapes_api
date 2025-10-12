@@ -23,6 +23,9 @@ pub mod misc_tee_repository;
 /// managing data access for structural beam shapes
 pub mod structural_beam_repository;
 /// The repository responsible for
+/// managing data access for structural tee shapes
+pub mod structural_tee_repository;
+/// The repository responsible for
 /// managing data access for wide flange shapes
 pub mod wide_flange_repository;
 /// The repository responsible for
@@ -36,5 +39,6 @@ pub use misc_beam_repository::MiscBeamRepository;
 pub use misc_channel_repository::MiscChannelRepository;
 pub use misc_tee_repository::MiscTeeRepository;
 pub use structural_beam_repository::StructuralBeamRepository;
+pub use structural_tee_repository::StructuralTeeRepository;
 pub use wide_flange_repository::WideFlangeRepository;
 pub use wide_flange_tee_repository::WideFlangeTeeRepository;
