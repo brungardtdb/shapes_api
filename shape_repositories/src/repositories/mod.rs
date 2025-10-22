@@ -14,6 +14,9 @@ pub mod double_angle_repository;
 /// managing data access for h pile shapes
 pub mod h_pile_repository;
 /// The repository responsible for
+/// managing data access for hollow structural section (HSS) shapes
+pub mod hollow_structural_section_repository;
+/// The repository responsible for
 /// managing data access for misc. beam shapes
 pub mod misc_beam_repository;
 /// The repository responsible for
@@ -39,6 +42,7 @@ pub use angle_repository::AngleRepository;
 pub use cee_channel_repository::CeeChannelRepository;
 pub use double_angle_repository::DoubleAngleRepository;
 pub use h_pile_repository::HPileRepository;
+pub use hollow_structural_section_repository::HollowStructuralSectionRepository;
 pub use misc_beam_repository::MiscBeamRepository;
 pub use misc_channel_repository::MiscChannelRepository;
 pub use misc_tee_repository::MiscTeeRepository;

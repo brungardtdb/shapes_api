@@ -1,4 +1,4 @@
-use shape_repositories::repositories::DoubleAngleRepository;
+use shape_repositories::repositories::HollowStructuralSectionRepository;
 use shapes::aisc_shapes::shape_repository::ShapeRepository;
 use std::sync::Arc;
 
@@ -8,7 +8,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         std::env::var("DATABASE_URL").expect("Env var DATABASE_URL is required for this example.");
     let pool = sqlx::PgPool::connect(&conn_str).await?;
     let conx = Arc::new(pool);
-    let repo = DoubleAngleRepository::new(Arc::clone(&conx));
+    let repo = HollowStructuralSectionRepository::new(Arc::clone(&conx));
     let all_shapes_result = repo.all().await;
     match all_shapes_result {
         Ok(shapes) => println!("There are {} structural tees", shapes.len()),
@@ -16,14 +16,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let edi_result = repo
-        .shape_with_edi_std_nomenclature(String::from("2L2X2X5/16"))
+        .shape_with_edi_std_nomenclature(String::from("HSS6X4X.500"))
         .await;
     match edi_result {
         Ok(shape) => println!("{}", shape.edi_std_nomenclature),
         Err(err) => println!("{}", err),
     }
     let lbl_result = repo
-        .shape_with_aisc_manual_label(String::from("2L2X2X5/16"))
+        .shape_with_aisc_manual_label(String::from("HSS6X4X1/2"))
         .await;
     match lbl_result {
         Ok(shape) => println!("{}", shape.aisc_manual_label),
@@ -40,7 +40,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Err(err) => println!("{}", err),
     }
-    let width = 6.0;
+    let width = 4.0;
     println!("Width: {}", &width);
     let shapes_result = repo.shapes_with_width(width).await;
     match shapes_result {
