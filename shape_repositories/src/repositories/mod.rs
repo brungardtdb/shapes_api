@@ -26,6 +26,9 @@ pub mod misc_channel_repository;
 /// managing data access for misc. tee shapes
 pub mod misc_tee_repository;
 /// The repository responsible for
+/// managing data access for round hollow structural section (HSS) shapes
+pub mod round_hollow_structural_section_repository;
+/// The repository responsible for
 /// managing data access for structural beam shapes
 pub mod structural_beam_repository;
 /// The repository responsible for
@@ -46,6 +49,7 @@ pub use hollow_structural_section_repository::HollowStructuralSectionRepository;
 pub use misc_beam_repository::MiscBeamRepository;
 pub use misc_channel_repository::MiscChannelRepository;
 pub use misc_tee_repository::MiscTeeRepository;
+pub use round_hollow_structural_section_repository::RoundHollowStructuralSectionRepository;
 pub use structural_beam_repository::StructuralBeamRepository;
 pub use structural_tee_repository::StructuralTeeRepository;
 pub use wide_flange_repository::WideFlangeRepository;

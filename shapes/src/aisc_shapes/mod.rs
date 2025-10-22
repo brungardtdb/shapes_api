@@ -25,7 +25,7 @@ pub mod pipe;
 pub mod round_hollow_structural_section;
 /// Manages the construction of steel shapes
 pub mod shape_builder;
-/// Trait for repository pattern
+/// Trait for retrieving shapes from the database
 pub mod shape_repository;
 /// Models structural beams or "s" steel profiles
 pub mod structural_beam;
@@ -48,6 +48,7 @@ pub use self::misc_tee::MiscTee;
 pub use self::pipe::Pipe;
 pub use self::round_hollow_structural_section::RoundHollowStructuralSection;
 pub use self::shape_builder::ShapeBuilder;
+pub use self::shape_repository::RoundShapeRepository;
 pub use self::shape_repository::ShapeRepository;
 pub use self::structural_beam::StructuralBeam;
 pub use self::structural_tee::StructuralTee;
