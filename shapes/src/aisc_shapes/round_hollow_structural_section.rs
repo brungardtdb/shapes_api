@@ -4,7 +4,7 @@ use std::convert::TryFrom;
 #[derive(Debug)]
 #[allow(dead_code)]
 
-/// A struct that models the data for square and rectangular HSS steel profiles
+/// A struct that models the data for round HSS steel profiles
 pub struct RoundHollowStructuralSection {
     /// The shape designation according to the AISC Naming Convention
     /// for Structural Steel Products for Use in Electronic Data Interchange (EDI), June 25, 2001.
