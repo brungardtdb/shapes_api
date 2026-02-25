@@ -3,6 +3,8 @@ use shapes::aisc_shapes::*;
 use sqlx::PgPool;
 use std::sync::Arc;
 
+/// Manages the application state
+/// Holds all AISC shape repositories and all things stateful
 pub struct AppState<
     AR: ShapeRepository<Angle>,
     CR: ShapeRepository<CeeChannel>,
@@ -19,19 +21,33 @@ pub struct AppState<
     WF: ShapeRepository<WideFlange>,
     WT: ShapeRepository<WideFlangeTee>,
 > {
+    /// The AISC angle repository
     pub angle_repo: Arc<AR>,
+    /// The AISC chanel repository
     pub channel_repo: Arc<CR>,
+    /// The AISC double angle repository
     pub double_angle_repo: Arc<DAR>,
+    /// The AISC H-Pile repository
     pub h_pile_repo: Arc<HR>,
+    /// The AISC HSS repository
     pub hss_repo: Arc<HSS>,
+    /// The AISC HSS round repository
     pub hss_round_repo: Arc<HSSR>,
+    /// The AISC misc. beam repository
     pub misc_beam_repo: Arc<MR>,
+    /// The AISC misc. channel repository
     pub misc_channel_repo: Arc<MCH>,
+    /// The AISC misc. tee repository
     pub misc_tee_repo: Arc<MT>,
+    /// The AISC pipe repository
     pub pipe_repo: Arc<PIPE>,
+    /// The AISC structural beam repository
     pub structural_beam_repo: Arc<SB>,
+    /// The AISC structural tee repository
     pub structural_tee_repo: Arc<ST>,
+    /// The AISC wide-flange repository
     pub wide_flange_repo: Arc<WF>,
+    /// The AISC wide-flange tee repository
     pub wide_flange_tee_repo: Arc<WT>,
 }
 
@@ -53,6 +69,7 @@ impl
         WideFlangeTeeRepository,
     >
 {
+    /// Creates a new instance if AppState given Postgres AISC shape repositories
     pub fn new(pool: Arc<PgPool>) -> Self {
         AppState {
             angle_repo: Arc::new(AngleRepository::new(Arc::clone(&pool))),
