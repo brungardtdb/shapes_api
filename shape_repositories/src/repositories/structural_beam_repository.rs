@@ -2,17 +2,16 @@ use shapes::aisc_shapes::{ShapeBuilder, ShapeRepository, StructuralBeam};
 use sqlx::Row;
 use sqlx::postgres::{PgPool, PgRow};
 use std::error::Error;
-use std::sync::Arc;
 
 /// Repository that manages data access for all structural beam shapes
 pub struct StructuralBeamRepository {
-    pool: Arc<PgPool>,
+    pool: PgPool,
 }
 
 impl StructuralBeamRepository {
     /// Creates a new instance of StructuralBeamRepository type
     /// Takes a pool containing the Postgres database connection
-    pub fn new(pool: Arc<PgPool>) -> Self {
+    pub fn new(pool: PgPool) -> Self {
         StructuralBeamRepository { pool }
     }
 }
@@ -62,13 +61,14 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     wgi
     FROM structural_beams;",
         )
-        .fetch_all(&*self.pool)
+        .fetch_all(&self.pool)
         .await?;
 
         let results = rows
             .into_iter()
-            .map(|r| structural_beam_from_row(r))
+            .map(|r|structural_beam_from_row(r))
             .collect::<Vec<_>>();
+        
         if results.iter().any(|r| r.is_err()) {
             for result in results.into_iter() {
                 if let Err(err) = result {
@@ -77,7 +77,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
             }
             unreachable!()
         } else {
-            Ok(results.into_iter().map(|r| r.unwrap()).collect::<Vec<_>>())
+            Ok(results.into_iter().map(|b| b.unwrap()).collect::<Vec<_>>())
         }
     }
 
@@ -131,7 +131,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
 	LIMIT 1;",
         )
         .bind(edi_std_nomenclature)
-        .fetch_one(&*self.pool)
+        .fetch_one(&self.pool)
         .await?;
 
         structural_beam_from_row(row)
@@ -187,7 +187,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
 	LIMIT 1;",
         )
         .bind(aisc_manual_label)
-        .fetch_one(&*self.pool)
+        .fetch_one(&self.pool)
         .await?;
 
         structural_beam_from_row(row)
@@ -239,7 +239,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     WHERE d_lower = $1;",
         )
         .bind(depth)
-        .fetch_all(&*self.pool)
+        .fetch_all(&self.pool)
         .await?;
 
         let results = rows
@@ -304,7 +304,7 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     WHERE bf = $1;",
         )
         .bind(width)
-        .fetch_all(&*self.pool)
+        .fetch_all(&self.pool)
         .await?;
 
         let results = rows

@@ -1,8 +1,8 @@
 use std::error::Error;
 /// Trait to manage retrieving shapes from a data source
-pub trait ShapeRepository<T> {
+pub trait ShapeRepository<T>: Send + Sync + 'static {
     /// Retrieves all shapes
-    fn all(&self) -> impl Future<Output = Result<Vec<T>, Box<dyn Error>>> + Send;
+    fn all(&self) -> impl Future<Output=Result<Vec<T>, Box<dyn Error>>> + Send;
     /// Retrieves a shape based on it's EDI Std Nomenclature
     fn shape_with_edi_std_nomenclature(
         &self,
@@ -26,7 +26,7 @@ pub trait ShapeRepository<T> {
 }
 
 /// Trait to manage retrieving round shapes from a data source
-pub trait RoundShapeRepository<T> {
+pub trait RoundShapeRepository<T>: Send + Sync + 'static {
     /// Retrieves all shapes
     fn all(&self) -> impl Future<Output = Result<Vec<T>, Box<dyn Error>>> + Send;
     /// Retrieves a shape based on it's EDI Std Nomenclature
