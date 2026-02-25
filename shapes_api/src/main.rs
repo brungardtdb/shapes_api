@@ -1,5 +1,5 @@
-use shape_repositories::repositories::PipeRepository;
 use shapes::aisc_shapes::shape_repository::RoundShapeRepository;
+use shapes_api::app_state::AppState;
 use std::sync::Arc;
 
 #[tokio::main]
@@ -8,21 +8,23 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         std::env::var("DATABASE_URL").expect("Env var DATABASE_URL is required for this example.");
     let pool = sqlx::PgPool::connect(&conn_str).await?;
     let conx = Arc::new(pool);
-    let repo = PipeRepository::new(Arc::clone(&conx));
-    let all_shapes_result = repo.all().await;
+    let app_state = AppState::new(Arc::clone(&conx));
+    let all_shapes_result = &app_state.pipe_repo.all().await;
     match all_shapes_result {
         Ok(shapes) => println!("There are {} pipe shapes", shapes.len()),
         Err(err) => println!("{}", err),
     }
 
-    let edi_result = repo
+    let edi_result = &app_state
+        .pipe_repo
         .shape_with_edi_std_nomenclature(String::from("Pipe2SCH40"))
         .await;
     match edi_result {
         Ok(shape) => println!("{}", shape.edi_std_nomenclature),
         Err(err) => println!("{}", err),
     }
-    let lbl_result = repo
+    let lbl_result = &app_state
+        .pipe_repo
         .shape_with_aisc_manual_label(String::from("Pipe2STD"))
         .await;
     match lbl_result {
@@ -31,7 +33,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     let diameter = 4.5;
     println!("Diameter: {}", &diameter);
-    let depth_result = repo.shapes_with_diameter(diameter).await;
+    let depth_result = &app_state.pipe_repo.shapes_with_diameter(diameter).await;
     match depth_result {
         Ok(shapes) => {
             for shape in shapes {
