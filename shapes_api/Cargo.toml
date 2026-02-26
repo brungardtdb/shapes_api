@@ -8,3 +8,4 @@ shapes = { path = "../shapes" }
 shape_repositories = {path = "../shape_repositories"}
 sqlx = { version = "0.8", features = [ "runtime-tokio", "tls-native-tls", "postgres" ] }
 tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0.228", features = ["derive"]  }
