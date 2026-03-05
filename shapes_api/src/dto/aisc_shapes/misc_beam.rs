@@ -1,4 +1,5 @@
 use serde::Serialize;
+use shapes::aisc_shapes::MiscBeam as AISCMiscBeam;
 
 /// A data transfer object for misc. beam (M) steel profiles
 #[derive(Debug, Clone, Serialize)]
@@ -96,4 +97,52 @@ pub struct MiscBeam {
     /// The actual size, combination, and orientation of fastener components should be compared with the geometry of the cross section to ensure compatibility.
     /// See AISC Manual Part 1 for additional information, in. (mm)
     pub wgi: Option<f64>,
+}
+
+impl From<&AISCMiscBeam> for MiscBeam {
+    fn from(misc_beam: &AISCMiscBeam) -> Self {
+        MiscBeam {
+            edi_std_nomenclature: misc_beam.edi_std_nomenclature.clone(),
+            aisc_manual_label: misc_beam.aisc_manual_label.clone(),
+            t_f: misc_beam.t_f,
+            w_upper: misc_beam.w_upper,
+            a_upper: misc_beam.a_upper,
+            d_lower: misc_beam.d_lower,
+            ddet: misc_beam.ddet,
+            bf: misc_beam.bf,
+            bfdet: misc_beam.bfdet,
+            tw: misc_beam.tw,
+            twdet: misc_beam.twdet,
+            twdet_2: misc_beam.twdet_2,
+            tf: misc_beam.tf,
+            tfdet: misc_beam.tfdet,
+            kdes: misc_beam.kdes,
+            kdet: misc_beam.kdet,
+            k1: misc_beam.k1,
+            bf_2tf: misc_beam.bf_2tf,
+            h_tw: misc_beam.h_tw,
+            ix: misc_beam.ix,
+            zx: misc_beam.zx,
+            sx: misc_beam.sx,
+            rx: misc_beam.rx,
+            iy: misc_beam.iy,
+            zy: misc_beam.zy,
+            sy: misc_beam.sy,
+            ry: misc_beam.ry,
+            j_upper: misc_beam.j_upper,
+            cw: misc_beam.cw,
+            wno: misc_beam.wno,
+            sw1: misc_beam.sw1,
+            qf: misc_beam.qf,
+            qw: misc_beam.qw,
+            rts: misc_beam.rts,
+            ho: misc_beam.ho,
+            pa: misc_beam.pa,
+            pb: misc_beam.pb,
+            pc: misc_beam.pc,
+            pd: misc_beam.pd,
+            t: misc_beam.t,
+            wgi: misc_beam.wgi,
+        }
+    }
 }

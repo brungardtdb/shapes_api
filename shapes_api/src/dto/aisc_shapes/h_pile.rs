@@ -1,4 +1,5 @@
 use serde::Serialize;
+use shapes::aisc_shapes::HPile as AISCHPile;
 
 /// A data transfer object for h-pile beam (HP) steel profiles
 #[derive(Debug, Clone, Serialize)]
@@ -94,4 +95,51 @@ pub struct HPile {
     /// The actual size, combination, and orientation of fastener components should be compared with the geometry of the cross section to ensure compatibility.
     /// See AISC Manual Part 1 for additional information, in. (mm)
     pub wgi: f64,
+}
+
+impl From<&AISCHPile> for HPile {
+    fn from(hpile: &AISCHPile) -> Self {
+        HPile {
+            edi_std_nomenclature: hpile.edi_std_nomenclature.clone(),
+            aisc_manual_label: hpile.aisc_manual_label.clone(),
+            w_upper: hpile.w_upper,
+            a_upper: hpile.a_upper,
+            d_lower: hpile.d_lower,
+            ddet: hpile.ddet,
+            bf: hpile.bf,
+            bfdet: hpile.bfdet,
+            tw: hpile.tw,
+            twdet: hpile.twdet,
+            twdet_2: hpile.twdet_2,
+            tf: hpile.tf,
+            tfdet: hpile.tfdet,
+            kdes: hpile.kdes,
+            kdet: hpile.kdet,
+            k1: hpile.k1,
+            bf_2tf: hpile.bf_2tf,
+            h_tw: hpile.h_tw,
+            ix: hpile.ix,
+            zx: hpile.zx,
+            sx: hpile.sx,
+            rx: hpile.rx,
+            iy: hpile.iy,
+            zy: hpile.zy,
+            sy: hpile.sy,
+            ry: hpile.ry,
+            j_upper: hpile.j_upper,
+            cw: hpile.cw,
+            wno: hpile.wno,
+            sw1: hpile.sw1,
+            qf: hpile.qf,
+            qw: hpile.qw,
+            rts: hpile.rts,
+            ho: hpile.ho,
+            pa: hpile.pa,
+            pb: hpile.pb,
+            pc: hpile.pc,
+            pd: hpile.pd,
+            t: hpile.t,
+            wgi: hpile.wgi,
+        }
+    }
 }

@@ -1,4 +1,5 @@
 use serde::Serialize;
+use shapes::aisc_shapes::Pipe as AISCPipe;
 
 /// A data transfer object for pipe steel profiles
 #[derive(Debug, Clone, Serialize)]
@@ -42,4 +43,29 @@ pub struct Pipe {
     pub ry: f64,
     /// (J) Torsional constant, in.4 (´103 mm4)
     pub j_upper: f64,
+}
+
+impl From<&AISCPipe> for Pipe {
+    fn from(pipe: &AISCPipe) -> Self {
+        Pipe {
+            edi_std_nomenclature: pipe.edi_std_nomenclature.clone(),
+            aisc_manual_label: pipe.aisc_manual_label.clone(),
+            w_upper: pipe.w_upper,
+            a_upper: pipe.a_upper,
+            od: pipe.od,
+            id: pipe.id,
+            t_nom: pipe.t_nom,
+            tdes: pipe.tdes,
+            d_t: pipe.d_t,
+            ix: pipe.ix,
+            zx: pipe.zx,
+            sx: pipe.sx,
+            rx: pipe.rx,
+            iy: pipe.iy,
+            zy: pipe.zy,
+            sy: pipe.sy,
+            ry: pipe.ry,
+            j_upper: pipe.j_upper,
+        }
+    }
 }

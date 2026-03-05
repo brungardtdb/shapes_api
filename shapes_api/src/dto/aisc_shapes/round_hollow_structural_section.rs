@@ -1,4 +1,5 @@
 use serde::Serialize;
+use shapes::aisc_shapes::RoundHollowStructuralSection as HSS;
 
 /// A data transfer object for round HSS steel profiles
 #[derive(Debug, Clone, Serialize)]
@@ -42,4 +43,29 @@ pub struct RoundHollowStructuralSection {
     pub j_upper: f64,
     /// (C) HSS torsional constant, in.3 (´103 mm3)
     pub c_upper: f64,
+}
+
+impl From<&HSS> for RoundHollowStructuralSection {
+    fn from(hss: &HSS) -> Self {
+        RoundHollowStructuralSection {
+            edi_std_nomenclature: hss.edi_std_nomenclature.clone(),
+            aisc_manual_label: hss.aisc_manual_label.clone(),
+            w_upper: hss.w_upper,
+            a_upper: hss.a_upper,
+            od: hss.od,
+            t_nom: hss.t_nom,
+            tdes: hss.tdes,
+            d_t: hss.d_t,
+            ix: hss.ix,
+            zx: hss.zx,
+            sx: hss.sx,
+            rx: hss.rx,
+            iy: hss.iy,
+            zy: hss.zy,
+            sy: hss.sy,
+            ry: hss.ry,
+            j_upper: hss.j_upper,
+            c_upper: hss.c_upper,
+        }
+    }
 }

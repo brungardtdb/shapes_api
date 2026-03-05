@@ -1,4 +1,5 @@
 use serde::Serialize;
+use shapes::aisc_shapes::DoubleAngle as AISCDoubleAngle;
 
 /// A data transfer object for double angle (2L) steel profiles
 #[derive(Debug, Clone, Serialize)]
@@ -55,4 +56,31 @@ pub struct DoubleAngle {
     pub ro: f64,
     /// (H) Flexural constant
     pub h_upper: f64,
+}
+
+impl From<&AISCDoubleAngle> for DoubleAngle {
+    fn from(double_angle: &AISCDoubleAngle) -> Self {
+        DoubleAngle {
+            edi_std_nomenclature: double_angle.edi_std_nomenclature.clone(),
+            aisc_manual_label: double_angle.aisc_manual_label.clone(),
+            w_upper: double_angle.w_upper,
+            a_upper: double_angle.a_upper,
+            d_lower: double_angle.d_lower,
+            b_lower: double_angle.b_lower,
+            t_lower: double_angle.t_lower,
+            y_lower: double_angle.y_lower,
+            yp: double_angle.yp,
+            b_t: double_angle.b_t,
+            ix: double_angle.ix,
+            zx: double_angle.zx,
+            sx: double_angle.sx,
+            rx: double_angle.rx,
+            iy: double_angle.iy,
+            zy: double_angle.zy,
+            sy: double_angle.sy,
+            ry: double_angle.ry,
+            ro: double_angle.ro,
+            h_upper: double_angle.h_upper,
+        }
+    }
 }

@@ -1,4 +1,5 @@
 use serde::Serialize;
+use shapes::aisc_shapes::StructuralBeam as SBeam;
 
 /// A data transfer object for structural beams (S) steel profiles
 #[derive(Debug, Clone, Serialize)]
@@ -92,4 +93,50 @@ pub struct StructuralBeam {
     /// The actual size, combination, and orientation of fastener components should be compared with the geometry of the cross section to ensure compatibility.
     /// See AISC Manual Part 1 for additional information, in. (mm)
     pub wgi: Option<f64>,
+}
+
+impl From<SBeam> for StructuralBeam {
+    fn from(sbeam: SBeam) -> Self {
+        StructuralBeam {
+            edi_std_nomenclature: sbeam.edi_std_nomenclature.clone(),
+            aisc_manual_label: sbeam.aisc_manual_label.clone(),
+            w_upper: sbeam.w_upper,
+            a_upper: sbeam.a_upper,
+            d_lower: sbeam.d_lower,
+            ddet: sbeam.ddet,
+            bf: sbeam.bf,
+            bfdet: sbeam.bfdet,
+            tw: sbeam.tw,
+            twdet: sbeam.twdet,
+            twdet_2: sbeam.twdet_2,
+            tf: sbeam.tf,
+            tfdet: sbeam.tfdet,
+            kdes: sbeam.kdes,
+            kdet: sbeam.kdet,
+            bf_2tf: sbeam.bf_2tf,
+            h_tw: sbeam.h_tw,
+            ix: sbeam.ix,
+            zx: sbeam.zx,
+            sx: sbeam.sx,
+            rx: sbeam.rx,
+            iy: sbeam.iy,
+            zy: sbeam.zy,
+            sy: sbeam.sy,
+            ry: sbeam.ry,
+            j_upper: sbeam.j_upper,
+            cw: sbeam.cw,
+            wno: sbeam.wno,
+            sw1: sbeam.sw1,
+            qf: sbeam.qf,
+            qw: sbeam.qw,
+            rts: sbeam.rts,
+            ho: sbeam.ho,
+            pa: sbeam.pa,
+            pb: sbeam.pb,
+            pc: sbeam.pc,
+            pd: sbeam.pd,
+            t: sbeam.t,
+            wgi: sbeam.wgi,
+        }
+    }
 }

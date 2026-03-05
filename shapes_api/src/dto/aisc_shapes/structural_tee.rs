@@ -1,4 +1,5 @@
 use serde::Serialize;
+use shapes::aisc_shapes::StructuralTee as STee;
 
 /// A data transfer object for structural tee (ST) steel profiles
 #[derive(Debug, Clone, Serialize)]
@@ -78,4 +79,43 @@ pub struct StructuralTee {
     /// The actual size, combination, and orientation of fastener components should be compared with the geometry of the cross section to ensure compatibility.
     /// See AISC Manual Part 1 for additional information, in. (mm)
     pub wgi: Option<f64>,
+}
+
+impl From<STee> for StructuralTee {
+    fn from(st: STee) -> Self {
+        StructuralTee {
+            edi_std_nomenclature: st.edi_std_nomenclature.clone(),
+            aisc_manual_label: st.aisc_manual_label.clone(),
+            w_upper: st.w_upper,
+            a_upper: st.a_upper,
+            d_lower: st.d_lower,
+            ddet: st.ddet,
+            bf: st.bf,
+            bfdet: st.bfdet,
+            tw: st.tw,
+            twdet: st.twdet,
+            twdet_2: st.twdet_2,
+            tf: st.tf,
+            tfdet: st.tfdet,
+            kdes: st.kdes,
+            kdet: st.kdet,
+            y_lower: st.y_lower,
+            yp: st.yp,
+            bf_2tf: st.bf_2tf,
+            d_t: st.d_t,
+            ix: st.ix,
+            zx: st.zx,
+            sx: st.sx,
+            rx: st.rx,
+            iy: st.iy,
+            zy: st.zy,
+            sy: st.sy,
+            ry: st.ry,
+            j_upper: st.j_upper,
+            cw: st.cw,
+            ro: st.ro,
+            h_upper: st.h_upper,
+            wgi: st.wgi,
+        }
+    }
 }

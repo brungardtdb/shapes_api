@@ -1,4 +1,5 @@
 use serde::Serialize;
+use shapes::aisc_shapes::WideFlange as WF;
 
 /// A data transfer object for wide flange steel profiles
 #[derive(Debug, Clone, Serialize)]
@@ -98,4 +99,53 @@ pub struct WideFlange {
     pub wgi: f64,
     /// (WGo) The bolt spacing between inner and outer fastener holes when the workable gage is compatible with four holes across the flange. See AISC Manual Part 1 for additional information, in. (mm)
     pub wgo: Option<f64>,
+}
+
+impl From<&WF> for WideFlange {
+    fn from(wf: &WF) -> Self {
+        WideFlange {
+            edi_std_nomenclature: wf.edi_std_nomenclature.clone(),
+            aisc_manual_label: wf.aisc_manual_label.clone(),
+            t_f: wf.t_f,
+            w_upper: wf.w_upper,
+            a_upper: wf.a_upper,
+            d_lower: wf.d_lower,
+            ddet: wf.ddet,
+            bf: wf.bf,
+            bfdet: wf.bfdet,
+            tw: wf.tw,
+            twdet: wf.twdet,
+            twdet_2: wf.twdet_2,
+            tf: wf.tf,
+            tfdet: wf.tfdet,
+            kdes: wf.kdes,
+            kdet: wf.kdet,
+            k1: wf.k1,
+            bf_2tf: wf.bf_2tf,
+            h_tw: wf.h_tw,
+            ix: wf.ix,
+            zx: wf.zx,
+            sx: wf.sx,
+            rx: wf.rx,
+            iy: wf.iy,
+            zy: wf.zy,
+            sy: wf.sy,
+            ry: wf.ry,
+            j_upper: wf.j_upper,
+            cw: wf.cw,
+            wno: wf.wno,
+            sw1: wf.sw1,
+            qf: wf.qf,
+            qw: wf.qw,
+            rts: wf.rts,
+            ho: wf.ho,
+            pa: wf.pa,
+            pb: wf.pb,
+            pc: wf.pc,
+            pd: wf.pd,
+            t: wf.t,
+            wgi: wf.wgi,
+            wgo: wf.wgo,
+        }
+    }
 }

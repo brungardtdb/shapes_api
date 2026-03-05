@@ -1,4 +1,5 @@
 use serde::Serialize;
+use shapes::aisc_shapes::MiscChannel as AISCMiscChannel;
 
 /// A data transfer object for misc channel (MC) steel profiles
 #[derive(Debug, Clone, Serialize)]
@@ -114,4 +115,57 @@ pub struct MiscChannel {
     /// The actual size, combination, and orientation of fastener components should be compared with the geometry of the cross section to ensure compatibility.
     /// See AISC Manual Part 1 for additional information, in. (mm)
     pub wgi: Option<f64>,
+}
+
+impl From<&AISCMiscChannel> for MiscChannel {
+    fn from(misc_channel: &AISCMiscChannel) -> Self {
+        MiscChannel {
+            edi_std_nomenclature: misc_channel.edi_std_nomenclature.clone(),
+            aisc_manual_label: misc_channel.aisc_manual_label.clone(),
+            w_upper: misc_channel.w_upper,
+            a_upper: misc_channel.a_upper,
+            d_lower: misc_channel.d_lower,
+            ddet: misc_channel.ddet,
+            bf: misc_channel.bf,
+            bfdet: misc_channel.bfdet,
+            tw: misc_channel.tw,
+            twdet: misc_channel.twdet,
+            twdet_2: misc_channel.twdet_2,
+            tf: misc_channel.tf,
+            tfdet: misc_channel.tfdet,
+            kdes: misc_channel.kdes,
+            kdet: misc_channel.kdet,
+            x_lower: misc_channel.x_lower,
+            eo: misc_channel.eo,
+            xp: misc_channel.xp,
+            b_t: misc_channel.b_t,
+            h_tw: misc_channel.h_tw,
+            ix: misc_channel.ix,
+            zx: misc_channel.zx,
+            sx: misc_channel.sx,
+            rx: misc_channel.rx,
+            iy: misc_channel.iy,
+            zy: misc_channel.zy,
+            sy: misc_channel.sy,
+            ry: misc_channel.ry,
+            j_upper: misc_channel.j_upper,
+            cw: misc_channel.cw,
+            wno: misc_channel.wno,
+            sw1: misc_channel.sw1,
+            sw2: misc_channel.sw2,
+            sw3: misc_channel.sw3,
+            qf: misc_channel.qf,
+            qw: misc_channel.qw,
+            ro: misc_channel.ro,
+            h_upper: misc_channel.h_upper,
+            rts: misc_channel.rts,
+            ho: misc_channel.ho,
+            pa: misc_channel.pa,
+            pb: misc_channel.pb,
+            pc: misc_channel.pc,
+            pd: misc_channel.pd,
+            t: misc_channel.t,
+            wgi: misc_channel.wgi,
+        }
+    }
 }

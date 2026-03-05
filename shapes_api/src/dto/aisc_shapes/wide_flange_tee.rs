@@ -1,4 +1,5 @@
 use serde::Serialize;
+use shapes::aisc_shapes::WideFlangeTee as WFTee;
 
 /// A data transfer object for wide flange tee (WT) steel profiles
 #[derive(Debug, Clone, Serialize)]
@@ -91,4 +92,49 @@ pub struct WideFlangeTee {
     pub wgi: f64,
     /// (WGo) The bolt spacing between inner and outer fastener holes when the workable gage is compatible with four holes across the flange. See AISC Manual Part 1 for additional information, in. (mm)
     pub wgo: Option<f64>,
+}
+
+impl From<&WFTee> for WideFlangeTee {
+    fn from(wt: &WFTee) -> Self {
+        WideFlangeTee {
+            edi_std_nomenclature: wt.edi_std_nomenclature.clone(),
+            aisc_manual_label: wt.aisc_manual_label.clone(),
+            t_f: wt.t_f,
+            w_upper: wt.w_upper,
+            a_upper: wt.a_upper,
+            d_lower: wt.d_lower,
+            ddet: wt.ddet,
+            bf: wt.bf,
+            bfdet: wt.bfdet,
+            tw: wt.tw,
+            twdet: wt.twdet,
+            twdet_2: wt.twdet_2,
+            tf: wt.tf,
+            tfdet: wt.tfdet,
+            kdes: wt.kdes,
+            kdet: wt.kdet,
+            y_lower: wt.y_lower,
+            yp: wt.yp,
+            bf_2tf: wt.bf_2tf,
+            d_t: wt.d_t,
+            ix: wt.ix,
+            zx: wt.zx,
+            sx: wt.sx,
+            rx: wt.rx,
+            iy: wt.iy,
+            zy: wt.zy,
+            sy: wt.sy,
+            ry: wt.ry,
+            j_upper: wt.j_upper,
+            cw: wt.cw,
+            ro: wt.ro,
+            h_upper: wt.h_upper,
+            pa: wt.pa,
+            pb: wt.pb,
+            pc: wt.pc,
+            pd: wt.pd,
+            wgi: wt.wgi,
+            wgo: wt.wgo,
+        }
+    }
 }

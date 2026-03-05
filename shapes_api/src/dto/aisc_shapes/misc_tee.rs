@@ -1,4 +1,5 @@
 use serde::Serialize;
+use shapes::aisc_shapes::MiscTee as AISCMiscTee;
 
 /// A data transfer object for misc. tee (MT) steel profiles
 #[derive(Debug, Clone, Serialize)]
@@ -80,4 +81,44 @@ pub struct MiscTee {
     /// The actual size, combination, and orientation of fastener components should be compared with the geometry of the cross section to ensure compatibility.
     /// See AISC Manual Part 1 for additional information, in. (mm)
     pub wgi: Option<f64>,
+}
+
+impl From<&AISCMiscTee> for MiscTee {
+    fn from(misc_tee: &AISCMiscTee) -> Self {
+        MiscTee {
+            edi_std_nomenclature: misc_tee.edi_std_nomenclature.clone(),
+            aisc_manual_label: misc_tee.aisc_manual_label.clone(),
+            t_f: misc_tee.t_f,
+            w_upper: misc_tee.w_upper,
+            a_upper: misc_tee.a_upper,
+            d_lower: misc_tee.d_lower,
+            ddet: misc_tee.ddet,
+            bf: misc_tee.bf,
+            bfdet: misc_tee.bfdet,
+            tw: misc_tee.tw,
+            twdet: misc_tee.twdet,
+            twdet_2: misc_tee.twdet_2,
+            tf: misc_tee.tf,
+            tfdet: misc_tee.tfdet,
+            kdes: misc_tee.kdes,
+            kdet: misc_tee.kdet,
+            y_lower: misc_tee.y_lower,
+            yp: misc_tee.yp,
+            bf_2tf: misc_tee.bf_2tf,
+            d_t: misc_tee.d_t,
+            ix: misc_tee.ix,
+            zx: misc_tee.zx,
+            sx: misc_tee.sx,
+            rx: misc_tee.rx,
+            iy: misc_tee.iy,
+            zy: misc_tee.zy,
+            sy: misc_tee.sy,
+            ry: misc_tee.ry,
+            j_upper: misc_tee.j_upper,
+            cw: misc_tee.cw,
+            ro: misc_tee.ro,
+            h_upper: misc_tee.h_upper,
+            wgi: misc_tee.wgi,
+        }
+    }
 }

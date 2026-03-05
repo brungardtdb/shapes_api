@@ -1,4 +1,5 @@
 use serde::Serialize;
+use shapes::aisc_shapes::HollowStructuralSection as HSS;
 
 /// A data transfer object for square and rectangular HSS steel profiles
 #[derive(Debug, Clone, Serialize)]
@@ -53,4 +54,33 @@ pub struct HollowStructuralSection {
     pub j_upper: f64,
     /// (C) HSS torsional constant, in.3 (´103 mm3)
     pub c_upper: f64,
+}
+
+impl From<&HSS> for HollowStructuralSection {
+    fn from(hss: &HSS) -> Self {
+        HollowStructuralSection {
+            edi_std_nomenclature: hss.edi_std_nomenclature.clone(),
+            aisc_manual_label: hss.aisc_manual_label.clone(),
+            w_upper: hss.w_upper,
+            a_upper: hss.a_upper,
+            ht: hss.ht,
+            h: hss.h,
+            b_upper: hss.b_upper,
+            b_lower: hss.b_lower,
+            t_nom: hss.t_nom,
+            tdes: hss.tdes,
+            b_tdes: hss.b_tdes,
+            h_tdes: hss.h_tdes,
+            ix: hss.ix,
+            zx: hss.zx,
+            sx: hss.sx,
+            rx: hss.rx,
+            iy: hss.iy,
+            zy: hss.zy,
+            sy: hss.sy,
+            ry: hss.ry,
+            j_upper: hss.j_upper,
+            c_upper: hss.c_upper,
+        }
+    }
 }

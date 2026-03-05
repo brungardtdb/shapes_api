@@ -2,7 +2,7 @@ use std::error::Error;
 /// Trait to manage retrieving shapes from a data source
 pub trait ShapeRepository<T>: Send + Sync + 'static {
     /// Retrieves all shapes
-    fn all(&self) -> impl Future<Output=Result<Vec<T>, Box<dyn Error>>> + Send;
+    fn all(&self) -> impl Future<Output = Result<Vec<T>, Box<dyn Error>>> + Send;
     /// Retrieves a shape based on it's EDI Std Nomenclature
     fn shape_with_edi_std_nomenclature(
         &self,

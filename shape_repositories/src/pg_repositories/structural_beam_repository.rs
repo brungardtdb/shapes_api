@@ -67,9 +67,9 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
 
         let results = rows
             .into_iter()
-            .map(|r|structural_beam_from_row(r))
+            .map(|r| structural_beam_from_row(r))
             .collect::<Vec<_>>();
-        
+
         if results.iter().any(|r| r.is_err()) {
             for result in results.into_iter() {
                 if let Err(err) = result {
