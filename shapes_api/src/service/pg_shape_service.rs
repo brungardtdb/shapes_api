@@ -127,4 +127,24 @@ impl ShapeService
             misc_beams.into_iter().map(|h| h.into()).collect::<Vec<_>>();
         Ok(dtos)
     }
+
+    async fn misc_channels(
+        &self,
+    ) -> Result<Vec<crate::dto::aisc_shapes::MiscChannel>, Box<dyn std::error::Error>> {
+        let misc_channels: &[MiscChannel] = &*self.state.misc_channel_repo.all().await?;
+        let dtos: Vec<crate::dto::aisc_shapes::MiscChannel> = misc_channels
+            .into_iter()
+            .map(|h| h.into())
+            .collect::<Vec<_>>();
+        Ok(dtos)
+    }
+
+    async fn misc_tees(
+        &self,
+    ) -> Result<Vec<crate::dto::aisc_shapes::MiscTee>, Box<dyn std::error::Error>> {
+        let misc_tees: &[MiscTee] = &*self.state.misc_tee_repo.all().await?;
+        let dtos: Vec<crate::dto::aisc_shapes::MiscTee> =
+            misc_tees.into_iter().map(|h| h.into()).collect::<Vec<_>>();
+        Ok(dtos)
+    }
 }

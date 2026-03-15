@@ -1,5 +1,5 @@
 use crate::dto::aisc_shapes::*;
-use std::{error::Error, process::Output};
+use std::error::Error;
 
 /// Trait for the service that will manage all steel shapes
 pub trait ShapeService: Send + Sync + 'static {
@@ -19,4 +19,10 @@ pub trait ShapeService: Send + Sync + 'static {
     ) -> impl Future<Output = Result<Vec<HollowStructuralSection>, Box<dyn Error>>> + Send;
     /// Gets all misc. beams
     fn misc_beams(&self) -> impl Future<Output = Result<Vec<MiscBeam>, Box<dyn Error>>> + Send;
+    /// Gets all misc. channels
+    fn misc_channels(
+        &self,
+    ) -> impl Future<Output = Result<Vec<MiscChannel>, Box<dyn Error>>> + Send;
+    /// Gets all misc tees
+    fn misc_tees(&self) -> impl Future<Output = Result<Vec<MiscTee>, Box<dyn Error>>> + Send;
 }
