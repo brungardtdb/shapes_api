@@ -17,4 +17,6 @@ pub trait ShapeService: Send + Sync + 'static {
     fn hss(
         &self,
     ) -> impl Future<Output = Result<Vec<HollowStructuralSection>, Box<dyn Error>>> + Send;
+    /// Gets all misc. beams
+    fn misc_beams(&self) -> impl Future<Output = Result<Vec<MiscBeam>, Box<dyn Error>>> + Send;
 }

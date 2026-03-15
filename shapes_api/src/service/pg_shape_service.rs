@@ -118,4 +118,13 @@ impl ShapeService
             hss.into_iter().map(|h| h.into()).collect::<Vec<_>>();
         Ok(dtos)
     }
+
+    async fn misc_beams(
+        &self,
+    ) -> Result<Vec<crate::dto::aisc_shapes::MiscBeam>, Box<dyn std::error::Error>> {
+        let misc_beams: &[MiscBeam] = &*self.state.misc_beam_repo.all().await?;
+        let dtos: Vec<crate::dto::aisc_shapes::MiscBeam> =
+            misc_beams.into_iter().map(|h| h.into()).collect::<Vec<_>>();
+        Ok(dtos)
+    }
 }
