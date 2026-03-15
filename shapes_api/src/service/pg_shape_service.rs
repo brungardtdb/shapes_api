@@ -108,4 +108,14 @@ impl ShapeService
             h_piles.into_iter().map(|h| h.into()).collect::<Vec<_>>();
         Ok(dtos)
     }
+
+    async fn hss(
+        &self,
+    ) -> Result<Vec<crate::dto::aisc_shapes::HollowStructuralSection>, Box<dyn std::error::Error>>
+    {
+        let hss: &[HollowStructuralSection] = &*self.state.hss_repo.all().await?;
+        let dtos: Vec<crate::dto::aisc_shapes::HollowStructuralSection> =
+            hss.into_iter().map(|h| h.into()).collect::<Vec<_>>();
+        Ok(dtos)
+    }
 }

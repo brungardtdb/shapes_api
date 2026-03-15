@@ -10,42 +10,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let conx = Arc::new(pool);
     let app_state = AppState::new(Arc::clone(&conx));
     let svc = PGShapeService::new(app_state);
-    let h_piles = svc.h_piles().await?;
-    for h in h_piles {
+    let hss = svc.hss().await?;
+    for h in hss {
         println!("{}", h.aisc_manual_label);
     }
-    // let all_shapes_result = &app_state.pipe_repo.all().await;
-    // match all_shapes_result {
-    //     Ok(shapes) => println!("There are {} pipe shapes", shapes.len()),
-    //     Err(err) => println!("{}", err),
-    // }
-
-    // let edi_result = &app_state
-    //     .pipe_repo
-    //     .shape_with_edi_std_nomenclature(String::from("Pipe2SCH40"))
-    //     .await;
-    // match edi_result {
-    //     Ok(shape) => println!("{}", shape.edi_std_nomenclature),
-    //     Err(err) => println!("{}", err),
-    // }
-    // let lbl_result = &app_state
-    //     .pipe_repo
-    //     .shape_with_aisc_manual_label(String::from("Pipe2STD"))
-    //     .await;
-    // match lbl_result {
-    //     Ok(shape) => println!("{}", shape.aisc_manual_label),
-    //     Err(err) => println!("{}", err),
-    // }
-    // let diameter = 4.5;
-    // println!("Diameter: {}", &diameter);
-    // let depth_result = &app_state.pipe_repo.shapes_with_diameter(diameter).await;
-    // match depth_result {
-    //     Ok(shapes) => {
-    //         for shape in shapes {
-    //             println!("{}", shape.aisc_manual_label);
-    //         }
-    //     }
-    //     Err(err) => println!("{}", err),
-    // }
     Ok(())
 }

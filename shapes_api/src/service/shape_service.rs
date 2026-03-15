@@ -13,4 +13,8 @@ pub trait ShapeService: Send + Sync + 'static {
     ) -> impl Future<Output = Result<Vec<DoubleAngle>, Box<dyn Error>>> + Send;
     /// Gets all h-pile profiles
     fn h_piles(&self) -> impl Future<Output = Result<Vec<HPile>, Box<dyn Error>>> + Send;
+    /// Gets all HSS profiles
+    fn hss(
+        &self,
+    ) -> impl Future<Output = Result<Vec<HollowStructuralSection>, Box<dyn Error>>> + Send;
 }
