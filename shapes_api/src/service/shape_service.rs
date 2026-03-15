@@ -25,4 +25,6 @@ pub trait ShapeService: Send + Sync + 'static {
     ) -> impl Future<Output = Result<Vec<MiscChannel>, Box<dyn Error>>> + Send;
     /// Gets all misc tees
     fn misc_tees(&self) -> impl Future<Output = Result<Vec<MiscTee>, Box<dyn Error>>> + Send;
+    /// Gets all pipes
+    fn pipes(&self) -> impl Future<Output = Result<Vec<Pipe>, Box<dyn Error>>> + Send;
 }

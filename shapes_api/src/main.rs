@@ -10,9 +10,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let conx = Arc::new(pool);
     let app_state = AppState::new(Arc::clone(&conx));
     let svc = PGShapeService::new(app_state);
-    let misc = svc.misc_tees().await?;
-    for m in misc {
-        println!("{}", m.aisc_manual_label);
+    let pipes = svc.pipes().await?;
+    for p in pipes {
+        println!("{}", p.aisc_manual_label);
     }
     Ok(())
 }
