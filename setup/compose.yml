@@ -1,15 +1,15 @@
-version: '3.8'
+version: "3.8"
 
 services:
   db:
-    image: postgres:17.6-trixie
+    image: postgres:18.2-trixie
     restart: always
     environment:
       POSTGRES_DB: shapesdb
       POSTGRES_USER: [USER_NAME]
       POSTGRES_PASSWORD: [PASSWORD]
     volumes:
-      - ./pgdata:/var/lib/postgresql/data
+      - pg-data:/var/lib/postgresql
     ports:
       - "5432:5432"
 
@@ -23,3 +23,7 @@ services:
       - "8080:80"
     depends_on:
       - db
+
+volumes:
+  pg-data:
+    external: false
