@@ -1,3 +1,4 @@
+use crate::dto;
 use crate::{app_state::AppState, service::ShapeService};
 use shape_repositories::pg_repositories::*;
 use shapes::aisc_shapes::ShapeRepository;
@@ -79,6 +80,13 @@ impl ShapeService
         let angles: &[Angle] = &*self.state.angle_repo.all().await?;
         let dtos: Vec<crate::dto::aisc_shapes::Angle> =
             angles.into_iter().map(|a| a.into()).collect::<Vec<_>>();
+        Ok(dtos)
+    }
+
+    async fn channels(&self) -> Result<Vec<crate::dto::aisc_shapes::CeeChannel>, Box<dyn std::error::Error>> {
+        let channels: &[CeeChannel] = &*self.state.channel_repo.all().await?;
+        let dtos: Vec<crate::dto::aisc_shapes::CeeChannel> = 
+            channels.into_iter().map(|c| c.into()).collect::<Vec<_>>();
         Ok(dtos)
     }
 }

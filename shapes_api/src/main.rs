@@ -1,5 +1,5 @@
 use shapes_api::app_state::AppState;
-use shapes_api::service::PGShapeService;
+use shapes_api::service::{PGShapeService, ShapeService};
 use std::sync::Arc;
 
 #[tokio::main]
@@ -9,7 +9,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let pool = sqlx::PgPool::connect(&conn_str).await?;
     let conx = Arc::new(pool);
     let app_state = AppState::new(Arc::clone(&conx));
-    let _svc = PGShapeService::new(app_state);
+    let svc = PGShapeService::new(app_state);
+    let angles = svc.angles().await?;
+    for angle in angles {
+        println!("{}", angle.aisc_manual_label);        
+    }
     // let all_shapes_result = &app_state.pipe_repo.all().await;
     // match all_shapes_result {
     //     Ok(shapes) => println!("There are {} pipe shapes", shapes.len()),
