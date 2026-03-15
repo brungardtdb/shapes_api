@@ -99,4 +99,13 @@ impl ShapeService
             angles.into_iter().map(|d| d.into()).collect::<Vec<_>>();
         Ok(dtos)
     }
+
+    async fn h_piles(
+        &self,
+    ) -> Result<Vec<crate::dto::aisc_shapes::HPile>, Box<dyn std::error::Error>> {
+        let h_piles: &[HPile] = &*self.state.h_pile_repo.all().await?;
+        let dtos: Vec<crate::dto::aisc_shapes::HPile> =
+            h_piles.into_iter().map(|h| h.into()).collect::<Vec<_>>();
+        Ok(dtos)
+    }
 }

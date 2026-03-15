@@ -10,9 +10,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let conx = Arc::new(pool);
     let app_state = AppState::new(Arc::clone(&conx));
     let svc = PGShapeService::new(app_state);
-    let angles = svc.double_angles().await?;
-    for angle in angles {
-        println!("{}", angle.aisc_manual_label);
+    let h_piles = svc.h_piles().await?;
+    for h in h_piles {
+        println!("{}", h.aisc_manual_label);
     }
     // let all_shapes_result = &app_state.pipe_repo.all().await;
     // match all_shapes_result {

@@ -1,5 +1,5 @@
 use crate::dto::aisc_shapes::*;
-use std::error::Error;
+use std::{error::Error, process::Output};
 
 /// Trait for the service that will manage all steel shapes
 pub trait ShapeService: Send + Sync + 'static {
@@ -11,4 +11,6 @@ pub trait ShapeService: Send + Sync + 'static {
     fn double_angles(
         &self,
     ) -> impl Future<Output = Result<Vec<DoubleAngle>, Box<dyn Error>>> + Send;
+    /// Gets all h-pile profiles
+    fn h_piles(&self) -> impl Future<Output = Result<Vec<HPile>, Box<dyn Error>>> + Send;
 }
