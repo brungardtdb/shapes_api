@@ -7,4 +7,8 @@ pub trait ShapeService: Send + Sync + 'static {
     fn angles(&self) -> impl Future<Output = Result<Vec<Angle>, Box<dyn Error>>> + Send;
     /// Gets all cee channel profiles
     fn channels(&self) -> impl Future<Output = Result<Vec<CeeChannel>, Box<dyn Error>>> + Send;
+    /// Gets all double angle profiles
+    fn double_angles(
+        &self,
+    ) -> impl Future<Output = Result<Vec<DoubleAngle>, Box<dyn Error>>> + Send;
 }
