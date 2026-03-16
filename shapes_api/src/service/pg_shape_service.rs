@@ -148,10 +148,60 @@ impl ShapeService
         Ok(dtos)
     }
 
-    async fn pipes(&self) -> Result<Vec<crate::dto::aisc_shapes::Pipe>, Box<dyn std::error::Error>> {
-                let pipes: &[Pipe] = &*self.state.pipe_repo.all().await?;
+    async fn pipes(
+        &self,
+    ) -> Result<Vec<crate::dto::aisc_shapes::Pipe>, Box<dyn std::error::Error>> {
+        let pipes: &[Pipe] = &*self.state.pipe_repo.all().await?;
         let dtos: Vec<crate::dto::aisc_shapes::Pipe> =
             pipes.into_iter().map(|p| p.into()).collect::<Vec<_>>();
+        Ok(dtos)
+    }
+
+    async fn hss_round(
+        &self,
+    ) -> Result<
+        Vec<crate::dto::aisc_shapes::RoundHollowStructuralSection>,
+        Box<dyn std::error::Error>,
+    > {
+        let hss: &[RoundHollowStructuralSection] = &*self.state.hss_round_repo.all().await?;
+        let dtos: Vec<crate::dto::aisc_shapes::RoundHollowStructuralSection> =
+            hss.into_iter().map(|h| h.into()).collect::<Vec<_>>();
+        Ok(dtos)
+    }
+
+    async fn structural_beams(
+        &self,
+    ) -> Result<Vec<crate::dto::aisc_shapes::StructuralBeam>, Box<dyn std::error::Error>> {
+        let s_beams: &[StructuralBeam] = &*self.state.structural_beam_repo.all().await?;
+        let dtos: Vec<crate::dto::aisc_shapes::StructuralBeam> =
+            s_beams.into_iter().map(|s| s.into()).collect::<Vec<_>>();
+        Ok(dtos)
+    }
+
+    async fn structural_tees(
+        &self,
+    ) -> Result<Vec<crate::dto::aisc_shapes::StructuralTee>, Box<dyn std::error::Error>> {
+        let s_tees: &[StructuralTee] = &*self.state.structural_tee_repo.all().await?;
+        let dtos: Vec<crate::dto::aisc_shapes::StructuralTee> =
+            s_tees.into_iter().map(|s| s.into()).collect::<Vec<_>>();
+        Ok(dtos)
+    }
+
+    async fn wide_flange_tees(
+        &self,
+    ) -> Result<Vec<crate::dto::aisc_shapes::WideFlangeTee>, Box<dyn std::error::Error>> {
+        let wf_tees: &[WideFlangeTee] = &*self.state.wide_flange_tee_repo.all().await?;
+        let dtos: Vec<crate::dto::aisc_shapes::WideFlangeTee> =
+            wf_tees.into_iter().map(|w| w.into()).collect::<Vec<_>>();
+        Ok(dtos)
+    }
+
+    async fn wide_flange_beams(
+        &self,
+    ) -> Result<Vec<crate::dto::aisc_shapes::WideFlange>, Box<dyn std::error::Error>> {
+        let beams: &[WideFlange] = &*self.state.wide_flange_repo.all().await?;
+        let dtos: Vec<crate::dto::aisc_shapes::WideFlange> =
+            beams.into_iter().map(|b| b.into()).collect::<Vec<_>>();
         Ok(dtos)
     }
 }

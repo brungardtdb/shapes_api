@@ -27,4 +27,24 @@ pub trait ShapeService: Send + Sync + 'static {
     fn misc_tees(&self) -> impl Future<Output = Result<Vec<MiscTee>, Box<dyn Error>>> + Send;
     /// Gets all pipes
     fn pipes(&self) -> impl Future<Output = Result<Vec<Pipe>, Box<dyn Error>>> + Send;
+    /// Gets all round HSS members
+    fn hss_round(
+        &self,
+    ) -> impl Future<Output = Result<Vec<RoundHollowStructuralSection>, Box<dyn Error>>> + Send;
+    /// Gets all structural beams
+    fn structural_beams(
+        &self,
+    ) -> impl Future<Output = Result<Vec<StructuralBeam>, Box<dyn Error>>> + Send;
+    /// Gets all structural tees
+    fn structural_tees(
+        &self,
+    ) -> impl Future<Output = Result<Vec<StructuralTee>, Box<dyn Error>>> + Send;
+    /// Gets all wide flange tees
+    fn wide_flange_tees(
+        &self,
+    ) -> impl Future<Output = Result<Vec<WideFlangeTee>, Box<dyn Error>>> + Send;
+    /// Gets all wide flange beams
+    fn wide_flange_beams(
+        &self,
+    ) -> impl Future<Output = Result<Vec<WideFlange>, Box<dyn Error>>> + Send;
 }

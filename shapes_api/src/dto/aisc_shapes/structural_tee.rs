@@ -81,8 +81,8 @@ pub struct StructuralTee {
     pub wgi: Option<f64>,
 }
 
-impl From<STee> for StructuralTee {
-    fn from(st: STee) -> Self {
+impl From<&STee> for StructuralTee {
+    fn from(st: &STee) -> Self {
         StructuralTee {
             edi_std_nomenclature: st.edi_std_nomenclature.clone(),
             aisc_manual_label: st.aisc_manual_label.clone(),

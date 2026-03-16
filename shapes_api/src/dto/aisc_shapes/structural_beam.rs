@@ -95,8 +95,8 @@ pub struct StructuralBeam {
     pub wgi: Option<f64>,
 }
 
-impl From<SBeam> for StructuralBeam {
-    fn from(sbeam: SBeam) -> Self {
+impl From<&SBeam> for StructuralBeam {
+    fn from(sbeam: &SBeam) -> Self {
         StructuralBeam {
             edi_std_nomenclature: sbeam.edi_std_nomenclature.clone(),
             aisc_manual_label: sbeam.aisc_manual_label.clone(),
