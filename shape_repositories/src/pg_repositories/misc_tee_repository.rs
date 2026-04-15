@@ -2,6 +2,7 @@ use shapes::aisc_shapes::{MiscTee, ShapeBuilder, ShapeRepository};
 use sqlx::Row;
 use sqlx::postgres::{PgPool, PgRow};
 use std::error::Error;
+use std::pin::Pin;
 use std::sync::Arc;
 
 /// Repository that manages data access for all misc. tee shapes
@@ -18,9 +19,12 @@ impl MiscTeeRepository {
 }
 
 impl ShapeRepository<MiscTee> for MiscTeeRepository {
-    async fn all(&self) -> Result<Vec<MiscTee>, Box<dyn Error>> {
-        let rows = sqlx::query(
-            "SELECT 
+    fn all(
+        &self,
+    ) -> Pin<Box<dyn Future<Output = Result<Vec<MiscTee>, Box<dyn Error>>> + Send + '_>> {
+        Box::pin(async move {
+            let rows = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     t_f,
@@ -55,35 +59,37 @@ impl ShapeRepository<MiscTee> for MiscTeeRepository {
     h_upper,
     wgi
 	FROM misc_tees;",
-        )
-        .fetch_all(&*self.pool)
-        .await?;
+            )
+            .fetch_all(&*self.pool)
+            .await?;
 
-        let wf_results = rows
-            .into_iter()
-            .map(|r| misc_tee_from_row(r))
-            .collect::<Vec<_>>();
-        if wf_results.iter().any(|r| r.is_err()) {
-            for result in wf_results.into_iter() {
-                if let Err(err) = result {
-                    return Err(err);
-                }
-            }
-            unreachable!()
-        } else {
-            Ok(wf_results
+            let wf_results = rows
                 .into_iter()
-                .map(|wf| wf.unwrap())
-                .collect::<Vec<_>>())
-        }
+                .map(|r| misc_tee_from_row(r))
+                .collect::<Vec<_>>();
+            if wf_results.iter().any(|r| r.is_err()) {
+                for result in wf_results.into_iter() {
+                    if let Err(err) = result {
+                        return Err(err);
+                    }
+                }
+                unreachable!()
+            } else {
+                Ok(wf_results
+                    .into_iter()
+                    .map(|wf| wf.unwrap())
+                    .collect::<Vec<_>>())
+            }
+        })
     }
 
-    async fn shape_with_edi_std_nomenclature(
+    fn shape_with_edi_std_nomenclature(
         &self,
         edi_std_nomenclature: String,
-    ) -> Result<MiscTee, Box<dyn Error>> {
-        let row = sqlx::query(
-            "SELECT 
+    ) -> Pin<Box<dyn Future<Output = Result<MiscTee, Box<dyn Error>>> + Send + '_>> {
+        Box::pin(async move {
+            let row = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     t_f,
@@ -120,20 +126,22 @@ impl ShapeRepository<MiscTee> for MiscTeeRepository {
 	FROM misc_tees
 	WHERE edi_std_nomenclature = $1
 	LIMIT 1;",
-        )
-        .bind(edi_std_nomenclature)
-        .fetch_one(&*self.pool)
-        .await?;
+            )
+            .bind(edi_std_nomenclature)
+            .fetch_one(&*self.pool)
+            .await?;
 
-        misc_tee_from_row(row)
+            misc_tee_from_row(row)
+        })
     }
 
-    async fn shape_with_aisc_manual_label(
+    fn shape_with_aisc_manual_label(
         &self,
         aisc_manual_label: String,
-    ) -> Result<MiscTee, Box<dyn Error>> {
-        let row = sqlx::query(
-            "SELECT 
+    ) -> Pin<Box<dyn Future<Output = Result<MiscTee, Box<dyn Error>>> + Send + '_>> {
+        Box::pin(async move {
+            let row = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     t_f,
@@ -170,17 +178,22 @@ impl ShapeRepository<MiscTee> for MiscTeeRepository {
 	FROM misc_tees
 	WHERE aisc_manual_label = $1
 	LIMIT 1;",
-        )
-        .bind(aisc_manual_label)
-        .fetch_one(&*self.pool)
-        .await?;
+            )
+            .bind(aisc_manual_label)
+            .fetch_one(&*self.pool)
+            .await?;
 
-        misc_tee_from_row(row)
+            misc_tee_from_row(row)
+        })
     }
 
-    async fn shapes_with_depth(&self, depth: f64) -> Result<Vec<MiscTee>, Box<dyn Error>> {
-        let rows = sqlx::query(
-            "SELECT 
+    fn shapes_with_depth(
+        &self,
+        depth: f64,
+    ) -> Pin<Box<dyn Future<Output = Result<Vec<MiscTee>, Box<dyn Error>>> + Send + '_>> {
+        Box::pin(async move {
+            let rows = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     t_f,
@@ -216,33 +229,38 @@ impl ShapeRepository<MiscTee> for MiscTeeRepository {
     wgi
 	FROM misc_tees
     WHERE d_lower = $1;",
-        )
-        .bind(depth)
-        .fetch_all(&*self.pool)
-        .await?;
+            )
+            .bind(depth)
+            .fetch_all(&*self.pool)
+            .await?;
 
-        let wf_results = rows
-            .into_iter()
-            .map(|r| misc_tee_from_row(r))
-            .collect::<Vec<_>>();
-        if wf_results.iter().any(|r| r.is_err()) {
-            for result in wf_results.into_iter() {
-                if let Err(err) = result {
-                    return Err(err);
-                }
-            }
-            unreachable!()
-        } else {
-            Ok(wf_results
+            let wf_results = rows
                 .into_iter()
-                .map(|wf| wf.unwrap())
-                .collect::<Vec<_>>())
-        }
+                .map(|r| misc_tee_from_row(r))
+                .collect::<Vec<_>>();
+            if wf_results.iter().any(|r| r.is_err()) {
+                for result in wf_results.into_iter() {
+                    if let Err(err) = result {
+                        return Err(err);
+                    }
+                }
+                unreachable!()
+            } else {
+                Ok(wf_results
+                    .into_iter()
+                    .map(|wf| wf.unwrap())
+                    .collect::<Vec<_>>())
+            }
+        })
     }
 
-    async fn shapes_with_width(&self, width: f64) -> Result<Vec<MiscTee>, Box<dyn Error>> {
-        let rows = sqlx::query(
-            "SELECT 
+    fn shapes_with_width(
+        &self,
+        width: f64,
+    ) -> Pin<Box<dyn Future<Output = Result<Vec<MiscTee>, Box<dyn Error>>> + Send + '_>> {
+        Box::pin(async move {
+            let rows = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     t_f,
@@ -278,28 +296,29 @@ impl ShapeRepository<MiscTee> for MiscTeeRepository {
     wgi
 	FROM misc_tees
     WHERE bf = $1;",
-        )
-        .bind(width)
-        .fetch_all(&*self.pool)
-        .await?;
+            )
+            .bind(width)
+            .fetch_all(&*self.pool)
+            .await?;
 
-        let wf_results = rows
-            .into_iter()
-            .map(|r| misc_tee_from_row(r))
-            .collect::<Vec<_>>();
-        if wf_results.iter().any(|r| r.is_err()) {
-            for result in wf_results.into_iter() {
-                if let Err(err) = result {
-                    return Err(err);
-                }
-            }
-            unreachable!()
-        } else {
-            Ok(wf_results
+            let wf_results = rows
                 .into_iter()
-                .map(|wf| wf.unwrap())
-                .collect::<Vec<_>>())
-        }
+                .map(|r| misc_tee_from_row(r))
+                .collect::<Vec<_>>();
+            if wf_results.iter().any(|r| r.is_err()) {
+                for result in wf_results.into_iter() {
+                    if let Err(err) = result {
+                        return Err(err);
+                    }
+                }
+                unreachable!()
+            } else {
+                Ok(wf_results
+                    .into_iter()
+                    .map(|wf| wf.unwrap())
+                    .collect::<Vec<_>>())
+            }
+        })
     }
 }
 

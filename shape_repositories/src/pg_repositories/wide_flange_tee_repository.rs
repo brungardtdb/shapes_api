@@ -2,6 +2,7 @@ use shapes::aisc_shapes::{ShapeBuilder, ShapeRepository, WideFlangeTee};
 use sqlx::Row;
 use sqlx::postgres::{PgPool, PgRow};
 use std::error::Error;
+use std::pin::Pin;
 use std::sync::Arc;
 
 /// Repository that manages data access for all wide flange tee shapes
@@ -18,9 +19,12 @@ impl WideFlangeTeeRepository {
 }
 
 impl ShapeRepository<WideFlangeTee> for WideFlangeTeeRepository {
-    async fn all(&self) -> Result<Vec<WideFlangeTee>, Box<dyn Error>> {
-        let rows = sqlx::query(
-            "SELECT 
+    fn all(
+        &self,
+    ) -> Pin<Box<dyn Future<Output = Result<Vec<WideFlangeTee>, Box<dyn Error>>> + Send + '_>> {
+        Box::pin(async move {
+            let rows = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     t_f,
@@ -60,35 +64,37 @@ impl ShapeRepository<WideFlangeTee> for WideFlangeTeeRepository {
     wgi,
     wgo
 	FROM wide_flange_tees;",
-        )
-        .fetch_all(&*self.pool)
-        .await?;
+            )
+            .fetch_all(&*self.pool)
+            .await?;
 
-        let wf_results = rows
-            .into_iter()
-            .map(|r| wide_flange_tee_from_row(r))
-            .collect::<Vec<_>>();
-        if wf_results.iter().any(|r| r.is_err()) {
-            for result in wf_results.into_iter() {
-                if let Err(err) = result {
-                    return Err(err);
-                }
-            }
-            unreachable!()
-        } else {
-            Ok(wf_results
+            let wf_results = rows
                 .into_iter()
-                .map(|wf| wf.unwrap())
-                .collect::<Vec<_>>())
-        }
+                .map(|r| wide_flange_tee_from_row(r))
+                .collect::<Vec<_>>();
+            if wf_results.iter().any(|r| r.is_err()) {
+                for result in wf_results.into_iter() {
+                    if let Err(err) = result {
+                        return Err(err);
+                    }
+                }
+                unreachable!()
+            } else {
+                Ok(wf_results
+                    .into_iter()
+                    .map(|wf| wf.unwrap())
+                    .collect::<Vec<_>>())
+            }
+        })
     }
 
-    async fn shape_with_edi_std_nomenclature(
+    fn shape_with_edi_std_nomenclature(
         &self,
         edi_std_nomenclature: String,
-    ) -> Result<WideFlangeTee, Box<dyn Error>> {
-        let row = sqlx::query(
-            "SELECT 
+    ) -> Pin<Box<dyn Future<Output = Result<WideFlangeTee, Box<dyn Error>>> + Send + '_>> {
+        Box::pin(async move {
+            let row = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     t_f,
@@ -130,20 +136,22 @@ impl ShapeRepository<WideFlangeTee> for WideFlangeTeeRepository {
 	FROM wide_flange_tees
 	WHERE edi_std_nomenclature = $1
 	LIMIT 1;",
-        )
-        .bind(edi_std_nomenclature)
-        .fetch_one(&*self.pool)
-        .await?;
+            )
+            .bind(edi_std_nomenclature)
+            .fetch_one(&*self.pool)
+            .await?;
 
-        wide_flange_tee_from_row(row)
+            wide_flange_tee_from_row(row)
+        })
     }
 
-    async fn shape_with_aisc_manual_label(
+    fn shape_with_aisc_manual_label(
         &self,
         aisc_manual_label: String,
-    ) -> Result<WideFlangeTee, Box<dyn Error>> {
-        let row = sqlx::query(
-            "SELECT 
+    ) -> Pin<Box<dyn Future<Output = Result<WideFlangeTee, Box<dyn Error>>> + Send + '_>> {
+        Box::pin(async move {
+            let row = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     t_f,
@@ -185,17 +193,22 @@ impl ShapeRepository<WideFlangeTee> for WideFlangeTeeRepository {
 	FROM wide_flange_tees
 	WHERE aisc_manual_label = $1
 	LIMIT 1;",
-        )
-        .bind(aisc_manual_label)
-        .fetch_one(&*self.pool)
-        .await?;
+            )
+            .bind(aisc_manual_label)
+            .fetch_one(&*self.pool)
+            .await?;
 
-        wide_flange_tee_from_row(row)
+            wide_flange_tee_from_row(row)
+        })
     }
 
-    async fn shapes_with_depth(&self, depth: f64) -> Result<Vec<WideFlangeTee>, Box<dyn Error>> {
-        let rows = sqlx::query(
-            "SELECT 
+    fn shapes_with_depth(
+        &self,
+        depth: f64,
+    ) -> Pin<Box<dyn Future<Output = Result<Vec<WideFlangeTee>, Box<dyn Error>>> + Send + '_>> {
+        Box::pin(async move {
+            let rows = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     t_f,
@@ -236,33 +249,38 @@ impl ShapeRepository<WideFlangeTee> for WideFlangeTeeRepository {
     wgo
 	FROM wide_flange_tees
     WHERE d_lower = $1;",
-        )
-        .bind(depth)
-        .fetch_all(&*self.pool)
-        .await?;
+            )
+            .bind(depth)
+            .fetch_all(&*self.pool)
+            .await?;
 
-        let wf_results = rows
-            .into_iter()
-            .map(|r| wide_flange_tee_from_row(r))
-            .collect::<Vec<_>>();
-        if wf_results.iter().any(|r| r.is_err()) {
-            for result in wf_results.into_iter() {
-                if let Err(err) = result {
-                    return Err(err);
-                }
-            }
-            unreachable!()
-        } else {
-            Ok(wf_results
+            let wf_results = rows
                 .into_iter()
-                .map(|wf| wf.unwrap())
-                .collect::<Vec<_>>())
-        }
+                .map(|r| wide_flange_tee_from_row(r))
+                .collect::<Vec<_>>();
+            if wf_results.iter().any(|r| r.is_err()) {
+                for result in wf_results.into_iter() {
+                    if let Err(err) = result {
+                        return Err(err);
+                    }
+                }
+                unreachable!()
+            } else {
+                Ok(wf_results
+                    .into_iter()
+                    .map(|wf| wf.unwrap())
+                    .collect::<Vec<_>>())
+            }
+        })
     }
 
-    async fn shapes_with_width(&self, width: f64) -> Result<Vec<WideFlangeTee>, Box<dyn Error>> {
-        let rows = sqlx::query(
-            "SELECT 
+    fn shapes_with_width(
+        &self,
+        width: f64,
+    ) -> Pin<Box<dyn Future<Output = Result<Vec<WideFlangeTee>, Box<dyn Error>>> + Send + '_>> {
+        Box::pin(async move {
+            let rows = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     t_f,
@@ -303,28 +321,29 @@ impl ShapeRepository<WideFlangeTee> for WideFlangeTeeRepository {
     wgo
 	FROM wide_flange_tees
     WHERE bf = $1;",
-        )
-        .bind(width)
-        .fetch_all(&*self.pool)
-        .await?;
+            )
+            .bind(width)
+            .fetch_all(&*self.pool)
+            .await?;
 
-        let wf_results = rows
-            .into_iter()
-            .map(|r| wide_flange_tee_from_row(r))
-            .collect::<Vec<_>>();
-        if wf_results.iter().any(|r| r.is_err()) {
-            for result in wf_results.into_iter() {
-                if let Err(err) = result {
-                    return Err(err);
-                }
-            }
-            unreachable!()
-        } else {
-            Ok(wf_results
+            let wf_results = rows
                 .into_iter()
-                .map(|wf| wf.unwrap())
-                .collect::<Vec<_>>())
-        }
+                .map(|r| wide_flange_tee_from_row(r))
+                .collect::<Vec<_>>();
+            if wf_results.iter().any(|r| r.is_err()) {
+                for result in wf_results.into_iter() {
+                    if let Err(err) = result {
+                        return Err(err);
+                    }
+                }
+                unreachable!()
+            } else {
+                Ok(wf_results
+                    .into_iter()
+                    .map(|wf| wf.unwrap())
+                    .collect::<Vec<_>>())
+            }
+        })
     }
 }
 

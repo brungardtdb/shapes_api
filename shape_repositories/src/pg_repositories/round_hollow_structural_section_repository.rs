@@ -2,6 +2,7 @@ use shapes::aisc_shapes::{RoundHollowStructuralSection, RoundShapeRepository, Sh
 use sqlx::Row;
 use sqlx::postgres::{PgPool, PgRow};
 use std::error::Error;
+use std::pin::Pin;
 use std::sync::Arc;
 
 /// Repository that manages data access for all round HSS shapes
@@ -18,9 +19,18 @@ impl RoundHollowStructuralSectionRepository {
 }
 
 impl RoundShapeRepository<RoundHollowStructuralSection> for RoundHollowStructuralSectionRepository {
-    async fn all(&self) -> Result<Vec<RoundHollowStructuralSection>, Box<dyn Error>> {
-        let rows = sqlx::query(
-            "SELECT 
+    fn all(
+        &self,
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Vec<RoundHollowStructuralSection>, Box<dyn Error>>>
+                + Send
+                + '_,
+        >,
+    > {
+        Box::pin(async move {
+            let rows = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     w_upper,
@@ -40,32 +50,36 @@ impl RoundShapeRepository<RoundHollowStructuralSection> for RoundHollowStructura
     j_upper,
     c_upper
     FROM round_hollow_structural_sections;",
-        )
-        .fetch_all(&*self.pool)
-        .await?;
+            )
+            .fetch_all(&*self.pool)
+            .await?;
 
-        let results = rows
-            .into_iter()
-            .map(|r| round_hollow_structural_section_from_row(r))
-            .collect::<Vec<_>>();
-        if results.iter().any(|r| r.is_err()) {
-            for result in results.into_iter() {
-                if let Err(err) = result {
-                    return Err(err);
+            let results = rows
+                .into_iter()
+                .map(|r| round_hollow_structural_section_from_row(r))
+                .collect::<Vec<_>>();
+            if results.iter().any(|r| r.is_err()) {
+                for result in results.into_iter() {
+                    if let Err(err) = result {
+                        return Err(err);
+                    }
                 }
+                unreachable!()
+            } else {
+                Ok(results.into_iter().map(|r| r.unwrap()).collect::<Vec<_>>())
             }
-            unreachable!()
-        } else {
-            Ok(results.into_iter().map(|r| r.unwrap()).collect::<Vec<_>>())
-        }
+        })
     }
 
-    async fn shape_with_edi_std_nomenclature(
+    fn shape_with_edi_std_nomenclature(
         &self,
         edi_std_nomenclature: String,
-    ) -> Result<RoundHollowStructuralSection, Box<dyn Error>> {
-        let row = sqlx::query(
-            "SELECT 
+    ) -> Pin<
+        Box<dyn Future<Output = Result<RoundHollowStructuralSection, Box<dyn Error>>> + Send + '_>,
+    > {
+        Box::pin(async move {
+            let row = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     w_upper,
@@ -87,20 +101,24 @@ impl RoundShapeRepository<RoundHollowStructuralSection> for RoundHollowStructura
     FROM round_hollow_structural_sections 
 	WHERE edi_std_nomenclature = $1
 	LIMIT 1;",
-        )
-        .bind(edi_std_nomenclature)
-        .fetch_one(&*self.pool)
-        .await?;
+            )
+            .bind(edi_std_nomenclature)
+            .fetch_one(&*self.pool)
+            .await?;
 
-        round_hollow_structural_section_from_row(row)
+            round_hollow_structural_section_from_row(row)
+        })
     }
 
-    async fn shape_with_aisc_manual_label(
+    fn shape_with_aisc_manual_label(
         &self,
         aisc_manual_label: String,
-    ) -> Result<RoundHollowStructuralSection, Box<dyn Error>> {
-        let row = sqlx::query(
-            "SELECT 
+    ) -> Pin<
+        Box<dyn Future<Output = Result<RoundHollowStructuralSection, Box<dyn Error>>> + Send + '_>,
+    > {
+        Box::pin(async move {
+            let row = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     w_upper,
@@ -122,20 +140,28 @@ impl RoundShapeRepository<RoundHollowStructuralSection> for RoundHollowStructura
     FROM round_hollow_structural_sections 
 	WHERE aisc_manual_label = $1
 	LIMIT 1;",
-        )
-        .bind(aisc_manual_label)
-        .fetch_one(&*self.pool)
-        .await?;
+            )
+            .bind(aisc_manual_label)
+            .fetch_one(&*self.pool)
+            .await?;
 
-        round_hollow_structural_section_from_row(row)
+            round_hollow_structural_section_from_row(row)
+        })
     }
 
-    async fn shapes_with_diameter(
+    fn shapes_with_diameter(
         &self,
         diameter: f64,
-    ) -> Result<Vec<RoundHollowStructuralSection>, Box<dyn Error>> {
-        let rows = sqlx::query(
-            "SELECT 
+    ) -> Pin<
+        Box<
+            dyn Future<Output = Result<Vec<RoundHollowStructuralSection>, Box<dyn Error>>>
+                + Send
+                + '_,
+        >,
+    > {
+        Box::pin(async move {
+            let rows = sqlx::query(
+                "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
     w_upper,
@@ -156,25 +182,26 @@ impl RoundShapeRepository<RoundHollowStructuralSection> for RoundHollowStructura
     c_upper
     FROM round_hollow_structural_sections 
     WHERE od = $1;",
-        )
-        .bind(diameter)
-        .fetch_all(&*self.pool)
-        .await?;
+            )
+            .bind(diameter)
+            .fetch_all(&*self.pool)
+            .await?;
 
-        let results = rows
-            .into_iter()
-            .map(|r| round_hollow_structural_section_from_row(r))
-            .collect::<Vec<_>>();
-        if results.iter().any(|r| r.is_err()) {
-            for result in results.into_iter() {
-                if let Err(err) = result {
-                    return Err(err);
+            let results = rows
+                .into_iter()
+                .map(|r| round_hollow_structural_section_from_row(r))
+                .collect::<Vec<_>>();
+            if results.iter().any(|r| r.is_err()) {
+                for result in results.into_iter() {
+                    if let Err(err) = result {
+                        return Err(err);
+                    }
                 }
+                unreachable!()
+            } else {
+                Ok(results.into_iter().map(|r| r.unwrap()).collect::<Vec<_>>())
             }
-            unreachable!()
-        } else {
-            Ok(results.into_iter().map(|r| r.unwrap()).collect::<Vec<_>>())
-        }
+        })
     }
 }
 

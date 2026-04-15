@@ -7,5 +7,6 @@ edition = "2024"
 shapes = { path = "../shapes" }
 shape_repositories = {path = "../shape_repositories"}
 sqlx = { version = "0.8", features = [ "runtime-tokio", "tls-native-tls", "postgres" ] }
+axum = "0.8"
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0.228", features = ["derive"]  }
