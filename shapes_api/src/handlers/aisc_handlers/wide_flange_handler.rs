@@ -17,8 +17,8 @@ pub struct AppStateDyn {
 pub async fn get_all(
     State(state): State<Arc<AppStateDyn>>,
 ) -> Result<AppJson<Vec<WideFlange>>, AISCError> {
-    let shapes_result = &state.repo.all().await;
-    match shapes_result {
+    let result = &state.repo.all().await;
+    match result {
         Err(err) => {
             return Err(AISCError::DataError(Box::from(err.to_string())));
         }
