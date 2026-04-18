@@ -19,10 +19,8 @@ pub async fn get_all(
 ) -> Result<AppJson<Vec<WideFlange>>, AISCError> {
     let shapes_result = &state.repo.all().await;
     match shapes_result {
-        Err(_err) => {
-            return Err(AISCError::DataError(Box::from(
-                "Unable to retrieve shapes from the AISC shape database".to_owned(),
-            )));
+        Err(err) => {
+            return Err(AISCError::DataError(Box::from(err.to_string())));
         }
         Ok(shapes) => {
             if shapes.iter().count() < 1 {
