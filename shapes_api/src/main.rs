@@ -21,10 +21,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_state(Arc::new(angle_handler::AppStateDyn {
             repo: angle_repo.clone(),
         }));
-    //     .route("/aisc/angle/all", get(angle_handler::get_all))
-    // .with_state(AppStateDyn{
-    //     repo: angle_repo.clone(),
-    // });
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
         .await
