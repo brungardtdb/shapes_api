@@ -2,6 +2,7 @@ use axum::{Router, routing::get};
 use shape_repositories::pg_repositories::{AngleRepository, WideFlangeRepository};
 use shapes_api::handlers::aisc_handlers::*;
 use std::sync::Arc;
+use tokio::signal;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -13,11 +14,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let wf_repo = Arc::new(WideFlangeRepository::new(conx.clone()));
 
     let app = Router::new()
-        .route("/aisc/wide-flange/all", get(wide_flange_handler::get_all))
+        .route("/aisc/wide-flange", get(wide_flange_handler::get))
         .with_state(Arc::new(wide_flange_handler::AppStateDyn {
             repo: wf_repo.clone(),
         }))
-        .route("/aisc/angle/all", get(angle_handler::get_all))
+        .route("/aisc/angle", get(angle_handler::get_all))
         .with_state(Arc::new(angle_handler::AppStateDyn {
             repo: angle_repo.clone(),
         }));
@@ -26,6 +27,32 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .await
         .unwrap();
     println!("listening on {}", listener.local_addr().unwrap());
-    axum::serve(listener, app).await?;
+    axum::serve(listener, app)
+        .with_graceful_shutdown(shutdown_signal())
+        .await?;
     Ok(())
+}
+
+async fn shutdown_signal() {
+    let ctrl_c = async {
+        signal::ctrl_c()
+            .await
+            .expect("failed to install Ctrl+C handler");
+    };
+
+    #[cfg(unix)]
+    let terminate = async {
+        signal::unix::signal(signal::unix::SignalKind::terminate())
+            .expect("failed to install signal handler")
+            .recv()
+            .await;
+    };
+
+    #[cfg(not(unix))]
+    let terminate = std::future::pending::<()>();
+
+    tokio::select! {
+        _ = ctrl_c => {},
+        _ = terminate => {},
+    }
 }

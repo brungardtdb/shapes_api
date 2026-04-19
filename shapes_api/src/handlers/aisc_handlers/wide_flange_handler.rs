@@ -1,22 +1,62 @@
+use crate::dto;
 use crate::dto::aisc_shapes::WideFlange;
 use crate::error_handling::aisc::{AISCError, AppJson};
+use axum::extract::{Query};
+use serde::Deserialize;
 use shapes::aisc_shapes::WideFlange as WF;
 use shapes::aisc_shapes::shape_repository::ShapeRepository;
 use std::sync::Arc;
 
 use axum::{debug_handler, extract::State};
-
 /// Dynamic App State for Wide Flange Handler
 pub struct AppStateDyn {
     /// Repository for wide flange shapes
     pub repo: Arc<dyn ShapeRepository<WF>>,
 }
 
+#[derive(Debug, Deserialize)]
+/// Query parameters for AISC wide flange
+pub struct Params {
+    /// AISC Manual Label
+    pub aisc_manual_label: Option<String>,
+    /// EDI Std. Nomenclature
+    pub edi_std_nomenclature: Option<String>,
+    /// Beam Depth
+    pub depth: Option<f32>,
+    /// Beam Width
+    pub width: Option<f32>,
+}
+
 /// Gets all wide flange AISC shapes
 #[debug_handler]
-pub async fn get_all(
+pub async fn get(
     State(state): State<Arc<AppStateDyn>>,
+    Query(params): Query<Params>,
 ) -> Result<AppJson<Vec<WideFlange>>, AISCError> {
+    if has_query(&params) {
+        return get_from_query(state, &params).await;
+    }
+    return get_all(state).await;
+}
+
+async fn get_from_query(
+    state: Arc<AppStateDyn>,
+    params: &Params,
+) -> Result<AppJson<Vec<WideFlange>>, AISCError> {
+    if let Some(label) = params.aisc_manual_label.clone() {
+        let shape_result = &state.repo.shape_with_aisc_manual_label(label).await;
+        match shape_result {
+            Err(_err) => return Err(AISCError::ShapeNotFound),
+            Ok(s) => {
+                let shape: dto::aisc_shapes::WideFlange = s.into();
+                return Ok(AppJson(vec![shape]));
+            }
+        }
+    }
+    todo!();
+}
+
+async fn get_all(state: Arc<AppStateDyn>) -> Result<AppJson<Vec<WideFlange>>, AISCError> {
     let result = &state.repo.all().await;
     match result {
         Err(err) => {
@@ -30,7 +70,23 @@ pub async fn get_all(
             }
 
             let result: Vec<WideFlange> = shapes.iter().map(|s: &WF| s.into()).collect::<Vec<_>>();
-            Ok(AppJson(result))
+            return Ok(AppJson(result));
         }
     }
+}
+
+fn has_query(params: &Params) -> bool {
+    if let Some(_) = params.aisc_manual_label {
+        return true;
+    }
+    if let Some(_) = params.edi_std_nomenclature {
+        return true;
+    }
+    if let Some(_) = params.depth {
+        return true;
+    }
+    if let Some(_) = params.width {
+        return true;
+    }
+    return false;
 }

@@ -1,5 +1,5 @@
 use axum::{
-    extract::{FromRequest, rejection::JsonRejection},
+    extract::FromRequest,
     http::StatusCode,
     response::{IntoResponse, Response},
 };
@@ -33,7 +33,7 @@ pub enum AISCError {
     /// Unexpected error
     DataError(Box<dyn Error + Send + Sync>),
     /// Shape not found
-    ShapeNotFound(JsonRejection),
+    ShapeNotFound,
 }
 
 impl IntoResponse for AISCError {
@@ -55,9 +55,11 @@ impl IntoResponse for AISCError {
                 err.to_string(),
                 Some(self),
             ),
-            AISCError::ShapeNotFound(rejection) => {
-                (StatusCode::NOT_FOUND, rejection.to_string(), None)
-            }
+            AISCError::ShapeNotFound => (
+                StatusCode::NOT_FOUND,
+                "Could not find the requested shape".to_owned(),
+                None,
+            ),
         };
 
         let mut response = (status, AppJson(ErrorResponse { message })).into_response();
@@ -65,12 +67,6 @@ impl IntoResponse for AISCError {
             response.extensions_mut().insert(Arc::new(err));
         }
         response
-    }
-}
-
-impl From<JsonRejection> for AISCError {
-    fn from(rejection: JsonRejection) -> Self {
-        Self::ShapeNotFound(rejection)
     }
 }
 
