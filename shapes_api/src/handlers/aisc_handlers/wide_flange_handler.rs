@@ -1,7 +1,7 @@
 use crate::dto;
 use crate::dto::aisc_shapes::WideFlange;
 use crate::error_handling::aisc::{AISCError, AppJson};
-use axum::extract::{Query};
+use axum::extract::Query;
 use serde::Deserialize;
 use shapes::aisc_shapes::WideFlange as WF;
 use shapes::aisc_shapes::shape_repository::ShapeRepository;
@@ -22,9 +22,9 @@ pub struct Params {
     /// EDI Std. Nomenclature
     pub edi_std_nomenclature: Option<String>,
     /// Beam Depth
-    pub depth: Option<f32>,
+    pub detailing_depth: Option<f64>,
     /// Beam Width
-    pub width: Option<f32>,
+    pub detailing_width: Option<f64>,
 }
 
 /// Gets all wide flange AISC shapes
@@ -65,6 +65,61 @@ async fn get_from_query(
             }
         }
     }
+    // Check for width and height
+    match (params.detailing_width, params.detailing_depth) {
+        (Some(width), Some(depth)) => {
+            let shapes_result = &state.repo.shapes_with_width(width).await;
+            match shapes_result {
+                Ok(shapes) => {
+                    return Ok(AppJson(
+                        shapes
+                            .iter()
+                            .filter(|s| s.d_lower == depth)
+                            .map(|s| s.into())
+                            .collect::<Vec<_>>(),
+                    ));
+                }
+                Err(err) => {
+                    return Err(AISCError::DataError(Box::from(err.to_string())));
+                }
+            }
+        }
+        (Some(width), None) => {
+            let shapes_result = &state.repo.shapes_with_width(width).await;
+                        match shapes_result {
+                Ok(shapes) => {
+                    return Ok(AppJson(
+                        shapes
+                            .iter()
+                            .map(|s| s.into())
+                            .collect::<Vec<_>>(),
+                    ));
+                }
+                Err(err) => {
+                    return Err(AISCError::DataError(Box::from(err.to_string())));
+                }
+            }
+        }
+        (None, Some(depth)) => {
+            let shapes_result = &state.repo.shapes_with_depth(depth).await;
+                        match shapes_result {
+                Ok(shapes) => {
+                    return Ok(AppJson(
+                        shapes
+                            .iter()
+                            .map(|s| s.into())
+                            .collect::<Vec<_>>(),
+                    ));
+                }
+                Err(err) => {
+                    return Err(AISCError::DataError(Box::from(err.to_string())));
+                }
+            }
+        }
+        _ => {
+            // No depth or width specified
+            }
+    }
     todo!();
 }
 
@@ -94,10 +149,10 @@ fn has_query(params: &Params) -> bool {
     if let Some(_) = params.edi_std_nomenclature {
         return true;
     }
-    if let Some(_) = params.depth {
+    if let Some(_) = params.detailing_depth {
         return true;
     }
-    if let Some(_) = params.width {
+    if let Some(_) = params.detailing_width {
         return true;
     }
     return false;

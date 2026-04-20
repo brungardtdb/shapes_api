@@ -340,7 +340,7 @@ impl ShapeRepository<WideFlange> for WideFlangeRepository {
     wgi,
     wgo
 	FROM wide_flanges
-    WHERE bf = $1;",
+    WHERE bfdet = $1;",
             )
             .bind(width)
             .fetch_all(&*self.pool)
