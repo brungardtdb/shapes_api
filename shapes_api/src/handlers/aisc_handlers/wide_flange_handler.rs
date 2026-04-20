@@ -86,14 +86,9 @@ async fn get_from_query(
         }
         (Some(width), None) => {
             let shapes_result = &state.repo.shapes_with_width(width).await;
-                        match shapes_result {
+            match shapes_result {
                 Ok(shapes) => {
-                    return Ok(AppJson(
-                        shapes
-                            .iter()
-                            .map(|s| s.into())
-                            .collect::<Vec<_>>(),
-                    ));
+                    return Ok(AppJson(shapes.iter().map(|s| s.into()).collect::<Vec<_>>()));
                 }
                 Err(err) => {
                     return Err(AISCError::DataError(Box::from(err.to_string())));
@@ -102,14 +97,9 @@ async fn get_from_query(
         }
         (None, Some(depth)) => {
             let shapes_result = &state.repo.shapes_with_depth(depth).await;
-                        match shapes_result {
+            match shapes_result {
                 Ok(shapes) => {
-                    return Ok(AppJson(
-                        shapes
-                            .iter()
-                            .map(|s| s.into())
-                            .collect::<Vec<_>>(),
-                    ));
+                    return Ok(AppJson(shapes.iter().map(|s| s.into()).collect::<Vec<_>>()));
                 }
                 Err(err) => {
                     return Err(AISCError::DataError(Box::from(err.to_string())));
@@ -118,7 +108,7 @@ async fn get_from_query(
         }
         _ => {
             // No depth or width specified
-            }
+        }
     }
     todo!();
 }
