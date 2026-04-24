@@ -39,6 +39,25 @@ pub async fn get(
     return get_all(state).await;
 }
 
+async fn get_all(state: Arc<AppStateDyn>) -> Result<AppJson<Vec<WideFlange>>, AISCError> {
+    let result = &state.repo.all().await;
+    match result {
+        Err(err) => {
+            return Err(AISCError::DataError(Box::from(err.to_string())));
+        }
+        Ok(shapes) => {
+            if shapes.iter().count() < 1 {
+                return Err(AISCError::DataError(Box::from(
+                    "Unable to retrieve shapes from the AISC shape database".to_owned(),
+                )));
+            }
+
+            let result: Vec<WideFlange> = shapes.iter().map(|s: &WF| s.into()).collect::<Vec<_>>();
+            return Ok(AppJson(result));
+        }
+    }
+}
+
 async fn get_from_query(
     state: Arc<AppStateDyn>,
     params: &Params,
@@ -111,25 +130,6 @@ async fn get_from_query(
         }
     }
     todo!();
-}
-
-async fn get_all(state: Arc<AppStateDyn>) -> Result<AppJson<Vec<WideFlange>>, AISCError> {
-    let result = &state.repo.all().await;
-    match result {
-        Err(err) => {
-            return Err(AISCError::DataError(Box::from(err.to_string())));
-        }
-        Ok(shapes) => {
-            if shapes.iter().count() < 1 {
-                return Err(AISCError::DataError(Box::from(
-                    "Unable to retrieve shapes from the AISC shape database".to_owned(),
-                )));
-            }
-
-            let result: Vec<WideFlange> = shapes.iter().map(|s: &WF| s.into()).collect::<Vec<_>>();
-            return Ok(AppJson(result));
-        }
-    }
 }
 
 fn has_query(params: &Params) -> bool {
