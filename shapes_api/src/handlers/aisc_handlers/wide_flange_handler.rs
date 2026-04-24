@@ -90,6 +90,9 @@ async fn get_from_query(
             let shapes_result = &state.repo.shapes_with_width(width).await;
             match shapes_result {
                 Ok(shapes) => {
+                    if shapes.iter().len() == 0 {
+                        return Err(AISCError::ShapeNotFound);
+                    }
                     return Ok(AppJson(
                         shapes
                             .iter()
@@ -107,6 +110,9 @@ async fn get_from_query(
             let shapes_result = &state.repo.shapes_with_width(width).await;
             match shapes_result {
                 Ok(shapes) => {
+                    if shapes.iter().len() == 0 {
+                        return Err(AISCError::ShapeNotFound);
+                    }
                     return Ok(AppJson(shapes.iter().map(|s| s.into()).collect::<Vec<_>>()));
                 }
                 Err(err) => {
@@ -118,6 +124,9 @@ async fn get_from_query(
             let shapes_result = &state.repo.shapes_with_depth(depth).await;
             match shapes_result {
                 Ok(shapes) => {
+                    if shapes.iter().len() == 0 {
+                        return Err(AISCError::ShapeNotFound);
+                    }
                     return Ok(AppJson(shapes.iter().map(|s| s.into()).collect::<Vec<_>>()));
                 }
                 Err(err) => {
@@ -127,9 +136,9 @@ async fn get_from_query(
         }
         _ => {
             // No depth or width specified
+            return Ok(AppJson(Vec::new()));
         }
     }
-    todo!();
 }
 
 fn has_query(params: &Params) -> bool {
