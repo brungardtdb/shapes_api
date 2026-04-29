@@ -18,7 +18,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_state(Arc::new(wide_flange_handler::AppStateDyn {
             repo: wf_repo.clone(),
         }))
-        .route("/aisc/angle", get(angle_handler::get_all))
+        .route("/aisc/angle", get(angle_handler::get))
         .with_state(Arc::new(angle_handler::AppStateDyn {
             repo: angle_repo.clone(),
         }));
