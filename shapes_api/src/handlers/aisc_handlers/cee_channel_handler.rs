@@ -11,7 +11,7 @@ use axum::{debug_handler, extract::State};
 
 /// Dynamic App State for Cee Channel Handler
 pub struct AppStateDyn {
-    /// Repository for AISC angles
+    /// Repository for AISC cee channels
     pub repo: Arc<dyn ShapeRepository<Cee>>,
 }
 
@@ -55,7 +55,6 @@ async fn get_from_query(
             }
         }
     }
-
     // Check for EDI Std Nomenclature
     if let Some(nom) = params.edi_std_nomenclature.clone() {
         let shape_result = &state.repo.shape_with_edi_std_nomenclature(nom).await;
