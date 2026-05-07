@@ -277,7 +277,7 @@ impl ShapeRepository<CeeChannel> for CeeChannelRepository {
     t,
     wgi
     FROM cee_channels 
-    WHERE d_lower = $1;",
+    WHERE ddet = $1;",
             )
             .bind(depth)
             .fetch_all(&*self.pool)
@@ -354,7 +354,7 @@ impl ShapeRepository<CeeChannel> for CeeChannelRepository {
     t,
     wgi
     FROM cee_channels 
-    WHERE bf = $1;",
+    WHERE bfdet = $1;",
             )
             .bind(width)
             .fetch_all(&*self.pool)
