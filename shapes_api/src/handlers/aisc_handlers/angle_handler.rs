@@ -3,8 +3,8 @@ use crate::dto::aisc_shapes::Angle;
 use crate::error_handling::aisc::{AISCError, AppJson};
 use axum::extract::Query;
 use serde::Deserialize;
-use shapes::aisc_shapes::Angle as A;
 use shapes::aisc_shapes::shape_repository::ShapeRepository;
+use shapes::aisc_shapes::{Angle as A};
 use std::sync::Arc;
 
 use axum::{debug_handler, extract::State};
@@ -83,59 +83,67 @@ async fn get_from_query(
             }
         }
     }
-    // Check for long and short angle legs
-    match (params.long_leg_width, params.short_leg_width) {
-        (Some(long_leg), Some(short_leg)) => {
-            let shapes_result = &state.repo.shapes_with_width(long_leg).await;
-            match shapes_result {
-                Ok(shapes) => {
-                    if shapes.iter().len() == 0 {
-                        return Err(AISCError::ShapeNotFound);
-                    }
-                    return Ok(AppJson(
-                        shapes
-                            .iter()
-                            .filter(|s| s.d_lower == short_leg)
-                            .map(|s| s.into())
-                            .collect::<Vec<_>>(),
-                    ));
-                }
-                Err(err) => {
-                    return Err(AISCError::DataError(Box::from(err.to_string())));
-                }
-            }
+    Ok(get_from_geometry(state, params).await?)
+}
+
+async fn get_from_geometry(
+    state: Arc<AppStateDyn>,
+    params: &Params,
+) -> Result<AppJson<Vec<Angle>>, AISCError> {
+    let mut angles: Vec<Angle> = Vec::new();
+    if let Some(shorter_leg) = params.short_leg_width {
+        let mut a = get_from_shorter_leg(&state, shorter_leg, &mut angles).await?;
+        angles.append(&mut a);
+    }
+    if let Some(longer_leg) = params.long_leg_width {
+        let mut a = get_from_longer_leg(&state, longer_leg, &mut angles).await?;
+        angles.append(&mut a);
+    }
+    Ok(AppJson(angles))
+}
+
+async fn get_from_shorter_leg(
+    state: &Arc<AppStateDyn>,
+    leg: f64,
+    angles: &mut Vec<Angle>,
+) -> Result<Vec<Angle>, AISCError> {
+    if angles.iter().nth(1).is_some() {
+        return Ok(angles
+            .iter()
+            .filter(|a| a.d_lower == leg)
+            .map(|a| a.clone())
+            .collect::<Vec<_>>());
+    }
+    let result = state.repo.shapes_with_depth(leg).await;
+    match result {
+        Err(err) => {
+            return Err(AISCError::DataError(Box::from(err.to_string())));
         }
-        (Some(long_leg), None) => {
-            let shapes_result = &state.repo.shapes_with_width(long_leg).await;
-            match shapes_result {
-                Ok(shapes) => {
-                    if shapes.iter().len() == 0 {
-                        return Err(AISCError::ShapeNotFound);
-                    }
-                    return Ok(AppJson(shapes.iter().map(|s| s.into()).collect::<Vec<_>>()));
-                }
-                Err(err) => {
-                    return Err(AISCError::DataError(Box::from(err.to_string())));
-                }
-            }
+        Ok(shapes) => {
+            return Ok(shapes.iter().map(|s| s.into()).collect::<Vec<_>>());
         }
-        (None, Some(short_leg)) => {
-            let shapes_result = &state.repo.shapes_with_depth(short_leg).await;
-            match shapes_result {
-                Ok(shapes) => {
-                    if shapes.iter().len() == 0 {
-                        return Err(AISCError::ShapeNotFound);
-                    }
-                    return Ok(AppJson(shapes.iter().map(|s| s.into()).collect::<Vec<_>>()));
-                }
-                Err(err) => {
-                    return Err(AISCError::DataError(Box::from(err.to_string())));
-                }
-            }
+    }
+}
+
+async fn get_from_longer_leg(
+    state: &Arc<AppStateDyn>,
+    leg: f64,
+    angles: &mut Vec<Angle>,
+) -> Result<Vec<Angle>, AISCError> {
+    if angles.iter().nth(1).is_some() {
+        return Ok(angles
+            .iter()
+            .filter(|a| a.b_lower == leg)
+            .map(|a| a.clone())
+            .collect::<Vec<_>>());
+    }
+    let result = state.repo.shapes_with_width(leg).await;
+    match result {
+        Err(err) => {
+            return Err(AISCError::DataError(Box::from(err.to_string())));
         }
-        _ => {
-            // No angle legs specified
-            return Ok(AppJson(Vec::new()));
+        Ok(shapes) => {
+            return Ok(shapes.iter().map(|s| s.into()).collect::<Vec<_>>());
         }
     }
 }
