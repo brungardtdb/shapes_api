@@ -1,5 +1,5 @@
 use axum::{Router, routing::get};
-use shape_repositories::pg_repositories::{
+use shape_repositories::postgres::{
     AngleRepository, CeeChannelRepository, WideFlangeRepository,
 };
 use shapes_api::handlers::aisc_handlers::*;
@@ -12,22 +12,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         std::env::var("DATABASE_URL").expect("Env var DATABASE_URL is required for this example.");
     let pool = sqlx::PgPool::connect(&conn_str).await?;
     let conx = Arc::new(pool);
-    let angle_repo = Arc::new(AngleRepository::new(conx.clone()));
-    let channel_repo = Arc::new(CeeChannelRepository::new(conx.clone()));
-    let wf_repo = Arc::new(WideFlangeRepository::new(conx.clone()));
 
     let app = Router::new()
         .route("/aisc/wide-flange", get(wide_flange_handler::get))
         .with_state(Arc::new(wide_flange_handler::AppStateDyn {
-            repo: wf_repo.clone(),
+            repo: Arc::new(WideFlangeRepository::new(conx.clone())),
         }))
         .route("/aisc/cee-channel", get(cee_channel_handler::get))
         .with_state(Arc::new(cee_channel_handler::AppStateDyn {
-            repo: channel_repo.clone(),
+            repo: Arc::new(CeeChannelRepository::new(conx.clone())),
         }))
         .route("/aisc/angle", get(angle_handler::get))
         .with_state(Arc::new(angle_handler::AppStateDyn {
-            repo: angle_repo.clone(),
+            repo: Arc::new(AngleRepository::new(conx.clone())),
         }));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
