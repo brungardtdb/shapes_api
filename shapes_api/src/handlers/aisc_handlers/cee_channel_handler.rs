@@ -2,7 +2,7 @@ use crate::dto;
 use crate::dto::aisc_shapes::CeeChannel;
 use crate::error_handling::aisc::{AISCError, AppJson};
 use axum::extract::Query;
-use serde::Deserialize;
+use serde::{Deserialize};
 use shapes::aisc_shapes::CeeChannel as Cee;
 use shapes::aisc_shapes::shape_repository::ShapeRepository;
 use std::sync::Arc;
@@ -40,6 +40,23 @@ pub async fn get(
     return get_all(state).await;
 }
 
+async fn get_all(state: Arc<AppStateDyn>) -> Result<AppJson<Vec<CeeChannel>>, AISCError> {
+    let result = &state.repo.all().await;
+    match result {
+        Err(err) => return Err(AISCError::DataError(Box::from(err.to_string()))),
+        Ok(shapes) => {
+            if shapes.iter().count() < 1 {
+                return Err(AISCError::DataError(Box::from(
+                    "Unable to retrieve shapes from the AISC shape database".to_owned(),
+                )));
+            }
+
+            let result: Vec<CeeChannel> = shapes.iter().map(|s| s.into()).collect::<Vec<_>>();
+            Ok(AppJson(result))
+        }
+    }
+}
+
 async fn get_from_query(
     state: Arc<AppStateDyn>,
     params: &Params,
@@ -66,76 +83,65 @@ async fn get_from_query(
             }
         }
     }
-    // Check for width and height
-    match (params.detailing_flange_width, params.detailing_depth) {
-        (Some(width), Some(depth)) => {
-            let shapes_result = &state.repo.shapes_with_width(width).await;
-            match shapes_result {
-                Ok(shapes) => {
-                    if shapes.iter().len() == 0 {
-                        return Err(AISCError::ShapeNotFound);
-                    }
-                    return Ok(AppJson(
-                        shapes
-                            .iter()
-                            .filter(|s| s.d_lower == depth)
-                            .map(|s| s.into())
-                            .collect::<Vec<_>>(),
-                    ));
-                }
-                Err(err) => {
-                    return Err(AISCError::DataError(Box::from(err.to_string())));
-                }
-            }
+    Ok(get_from_geometry(state, params).await?)
+}
+
+async fn get_from_geometry(
+    state: Arc<AppStateDyn>,
+    params: &Params,
+) -> Result<AppJson<Vec<CeeChannel>>, AISCError> {
+    let mut channels: Vec<CeeChannel> = Vec::new();
+    if let Some(depth) = params.detailing_depth {
+        channels = get_from_detailing_depth(&state, depth, &mut channels).await?;
+    }
+    if let Some(flange_width) = params.detailing_flange_width {
+        channels = get_from_detailing_flange_width(&state, flange_width, &mut channels).await?;
+    }
+    Ok(AppJson(channels))
+}
+
+async fn get_from_detailing_depth(
+    state: &Arc<AppStateDyn>,
+    depth: f64,
+    channels: &mut Vec<CeeChannel>,
+) -> Result<Vec<CeeChannel>, AISCError> {
+    if channels.iter().nth(1).is_some() {
+        return Ok(channels
+            .iter()
+            .filter(|c| c.ddet == depth)
+            .map(|c| c.clone())
+            .collect::<Vec<_>>());
+    }
+    let result = state.repo.shapes_with_depth(depth).await;
+    match result {
+        Err(err) => {
+            return Err(AISCError::DataError(Box::from(err.to_string())));
         }
-        (Some(width), None) => {
-            let shapes_result = &state.repo.shapes_with_width(width).await;
-            match shapes_result {
-                Ok(shapes) => {
-                    if shapes.iter().len() == 0 {
-                        return Err(AISCError::ShapeNotFound);
-                    }
-                    return Ok(AppJson(shapes.iter().map(|s| s.into()).collect::<Vec<_>>()));
-                }
-                Err(err) => {
-                    return Err(AISCError::DataError(Box::from(err.to_string())));
-                }
-            }
-        }
-        (None, Some(depth)) => {
-            let shapes_result = &state.repo.shapes_with_depth(depth).await;
-            match shapes_result {
-                Ok(shapes) => {
-                    if shapes.iter().len() == 0 {
-                        return Err(AISCError::ShapeNotFound);
-                    }
-                    return Ok(AppJson(shapes.iter().map(|s| s.into()).collect::<Vec<_>>()));
-                }
-                Err(err) => {
-                    return Err(AISCError::DataError(Box::from(err.to_string())));
-                }
-            }
-        }
-        _ => {
-            // No depth or width specified
-            return Ok(AppJson(Vec::new()));
+        Ok(channels) => {
+            return Ok(channels.iter().map(|c| c.into()).collect::<Vec<_>>());
         }
     }
 }
 
-async fn get_all(state: Arc<AppStateDyn>) -> Result<AppJson<Vec<CeeChannel>>, AISCError> {
-    let result = &state.repo.all().await;
+async fn get_from_detailing_flange_width(
+    state: &Arc<AppStateDyn>,
+    flange_width: f64,
+    channels: &mut Vec<CeeChannel>,
+) -> Result<Vec<CeeChannel>, AISCError> {
+    if channels.iter().nth(1).is_some() {
+        return Ok(channels
+            .iter()
+            .filter(|c| c.bfdet == flange_width)
+            .map(|c| c.clone())
+            .collect::<Vec<_>>());
+    }
+    let result = state.repo.shapes_with_width(flange_width).await;
     match result {
-        Err(err) => return Err(AISCError::DataError(Box::from(err.to_string()))),
-        Ok(shapes) => {
-            if shapes.iter().count() < 1 {
-                return Err(AISCError::DataError(Box::from(
-                    "Unable to retrieve shapes from the AISC shape database".to_owned(),
-                )));
-            }
-
-            let result: Vec<CeeChannel> = shapes.iter().map(|s| s.into()).collect::<Vec<_>>();
-            Ok(AppJson(result))
+        Err(err) => {
+            return Err(AISCError::DataError(Box::from(err.to_string())));
+        }
+        Ok(channels) => {
+            return Ok(channels.iter().map(|c| c.into()).collect::<Vec<_>>());
         }
     }
 }
