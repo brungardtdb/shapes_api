@@ -3,8 +3,8 @@ use crate::dto::aisc_shapes::WideFlange;
 use crate::error_handling::aisc::{AISCError, AppJson};
 use axum::extract::Query;
 use serde::Deserialize;
+use shapes::aisc_shapes::WideFlange as WF;
 use shapes::aisc_shapes::shape_repository::ShapeRepository;
-use shapes::aisc_shapes::{WideFlange as WF};
 use std::sync::Arc;
 
 use axum::{debug_handler, extract::State};

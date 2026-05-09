@@ -264,7 +264,7 @@ impl ShapeRepository<WideFlange> for WideFlangeRepository {
     wgi,
     wgo
 	FROM wide_flanges
-    WHERE d_lower = $1;",
+    WHERE ddet = $1;",
             )
             .bind(depth)
             .fetch_all(&*self.pool)
