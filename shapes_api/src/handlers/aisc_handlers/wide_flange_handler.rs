@@ -15,6 +15,7 @@ pub struct AppStateDyn {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 /// Query parameters for AISC wide flange
 pub struct Params {
     /// AISC Manual Label

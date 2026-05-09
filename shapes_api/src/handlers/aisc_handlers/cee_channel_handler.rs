@@ -16,6 +16,7 @@ pub struct AppStateDyn {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 /// Query parameters for AISC cee channel
 pub struct Params {
     /// AISC Manual Label
