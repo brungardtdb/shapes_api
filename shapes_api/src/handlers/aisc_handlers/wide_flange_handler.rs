@@ -3,8 +3,8 @@ use crate::dto::aisc_shapes::WideFlange;
 use crate::error_handling::aisc::{AISCError, AppJson};
 use axum::extract::Query;
 use serde::Deserialize;
-use shapes::aisc_shapes::WideFlange as WF;
 use shapes::aisc_shapes::shape_repository::ShapeRepository;
+use shapes::aisc_shapes::{WideFlange as WF};
 use std::sync::Arc;
 
 use axum::{debug_handler, extract::State};
@@ -84,60 +84,62 @@ async fn get_from_query(
             }
         }
     }
-    // Check for width and height
-    match (params.detailing_flange_width, params.detailing_depth) {
-        (Some(width), Some(depth)) => {
-            let shapes_result = &state.repo.shapes_with_width(width).await;
-            match shapes_result {
-                Ok(shapes) => {
-                    if shapes.iter().len() == 0 {
-                        return Err(AISCError::ShapeNotFound);
-                    }
-                    return Ok(AppJson(
-                        shapes
-                            .iter()
-                            .filter(|s| s.d_lower == depth)
-                            .map(|s| s.into())
-                            .collect::<Vec<_>>(),
-                    ));
-                }
-                Err(err) => {
-                    return Err(AISCError::DataError(Box::from(err.to_string())));
-                }
-            }
+    Ok(get_from_geometry(state, params).await?)
+}
+
+async fn get_from_geometry(
+    state: Arc<AppStateDyn>,
+    params: &Params,
+) -> Result<AppJson<Vec<WideFlange>>, AISCError> {
+    let mut beams: Vec<WideFlange> = Vec::new();
+    if let Some(depth) = params.detailing_depth {
+        beams = get_from_detailing_depth(&state, depth, &mut beams).await?;
+    }
+    if let Some(flange_width) = params.detailing_flange_width {
+        beams = get_from_detailing_flange_width(&state, flange_width, &mut beams).await?;
+    }
+    Ok(AppJson(beams))
+}
+
+async fn get_from_detailing_depth(
+    state: &Arc<AppStateDyn>,
+    depth: f64,
+    beams: &mut Vec<WideFlange>,
+) -> Result<Vec<WideFlange>, AISCError> {
+    if beams.iter().nth(1).is_some() {
+        return Ok(beams
+            .iter()
+            .filter(|b| b.ddet == depth)
+            .map(|b| b.clone())
+            .collect::<Vec<_>>());
+    }
+    let result = state.repo.shapes_with_depth(depth).await;
+    match result {
+        Err(err) => {
+            return Err(AISCError::DataError(Box::from(err.to_string())));
         }
-        (Some(width), None) => {
-            let shapes_result = &state.repo.shapes_with_width(width).await;
-            match shapes_result {
-                Ok(shapes) => {
-                    if shapes.iter().len() == 0 {
-                        return Err(AISCError::ShapeNotFound);
-                    }
-                    return Ok(AppJson(shapes.iter().map(|s| s.into()).collect::<Vec<_>>()));
-                }
-                Err(err) => {
-                    return Err(AISCError::DataError(Box::from(err.to_string())));
-                }
-            }
+        Ok(shapes) => return Ok(shapes.iter().map(|s| s.into()).collect::<Vec<_>>()),
+    }
+}
+
+async fn get_from_detailing_flange_width(
+    state: &Arc<AppStateDyn>,
+    flange_width: f64,
+    beams: &mut Vec<WideFlange>,
+) -> Result<Vec<WideFlange>, AISCError> {
+    if beams.iter().nth(1).is_some() {
+        return Ok(beams
+            .iter()
+            .filter(|b| b.bfdet == flange_width)
+            .map(|b| b.clone())
+            .collect::<Vec<_>>());
+    }
+    let result = state.repo.shapes_with_width(flange_width).await;
+    match result {
+        Err(err) => {
+            return Err(AISCError::DataError(Box::from(err.to_string())));
         }
-        (None, Some(depth)) => {
-            let shapes_result = &state.repo.shapes_with_depth(depth).await;
-            match shapes_result {
-                Ok(shapes) => {
-                    if shapes.iter().len() == 0 {
-                        return Err(AISCError::ShapeNotFound);
-                    }
-                    return Ok(AppJson(shapes.iter().map(|s| s.into()).collect::<Vec<_>>()));
-                }
-                Err(err) => {
-                    return Err(AISCError::DataError(Box::from(err.to_string())));
-                }
-            }
-        }
-        _ => {
-            // No depth or width specified
-            return Ok(AppJson(Vec::new()));
-        }
+        Ok(shapes) => return Ok(shapes.iter().map(|s| s.into()).collect::<Vec<_>>()),
     }
 }
 

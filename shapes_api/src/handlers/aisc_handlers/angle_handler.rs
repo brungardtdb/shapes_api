@@ -3,8 +3,8 @@ use crate::dto::aisc_shapes::Angle;
 use crate::error_handling::aisc::{AISCError, AppJson};
 use axum::extract::Query;
 use serde::Deserialize;
+use shapes::aisc_shapes::Angle as A;
 use shapes::aisc_shapes::shape_repository::ShapeRepository;
-use shapes::aisc_shapes::{Angle as A};
 use std::sync::Arc;
 
 use axum::{debug_handler, extract::State};
@@ -92,12 +92,10 @@ async fn get_from_geometry(
 ) -> Result<AppJson<Vec<Angle>>, AISCError> {
     let mut angles: Vec<Angle> = Vec::new();
     if let Some(shorter_leg) = params.short_leg_width {
-        let mut a = get_from_shorter_leg(&state, shorter_leg, &mut angles).await?;
-        angles.append(&mut a);
+        angles = get_from_shorter_leg(&state, shorter_leg, &mut angles).await?;
     }
     if let Some(longer_leg) = params.long_leg_width {
-        let mut a = get_from_longer_leg(&state, longer_leg, &mut angles).await?;
-        angles.append(&mut a);
+        angles = get_from_longer_leg(&state, longer_leg, &mut angles).await?;
     }
     Ok(AppJson(angles))
 }
