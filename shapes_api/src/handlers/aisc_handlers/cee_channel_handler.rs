@@ -2,7 +2,7 @@ use crate::dto;
 use crate::dto::aisc_shapes::CeeChannel;
 use crate::error_handling::aisc::{AISCError, AppJson};
 use axum::extract::Query;
-use serde::{Deserialize};
+use serde::Deserialize;
 use shapes::aisc_shapes::CeeChannel as Cee;
 use shapes::aisc_shapes::shape_repository::ShapeRepository;
 use std::sync::Arc;

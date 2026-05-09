@@ -173,7 +173,7 @@ impl ShapeRepository<DoubleAngle> for DoubleAngleRepository {
     ro,
     h_upper
     FROM double_angles 
-    WHERE b_lower = $1;",
+    WHERE d_lower = $1;",
             )
             .bind(depth)
             .fetch_all(&*self.pool)
@@ -224,7 +224,7 @@ impl ShapeRepository<DoubleAngle> for DoubleAngleRepository {
     ro,
     h_upper
     FROM double_angles 
-    WHERE d_lower = $1;",
+    WHERE b_lower = $1;",
             )
             .bind(width)
             .fetch_all(&*self.pool)

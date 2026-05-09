@@ -1,5 +1,5 @@
 use axum::{Router, routing::get};
-use shape_repositories::postgres::{AngleRepository, CeeChannelRepository, WideFlangeRepository};
+use shape_repositories::postgres::*;
 use shapes_api::handlers::aisc_handlers::*;
 use std::sync::Arc;
 use tokio::signal;
@@ -19,6 +19,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/aisc/cee-channel", get(cee_channel_handler::get))
         .with_state(Arc::new(cee_channel_handler::AppStateDyn {
             repo: Arc::new(CeeChannelRepository::new(conx.clone())),
+        }))
+        .route("/aisc/double-angle", get(double_angle_handler::get))
+        .with_state(Arc::new(double_angle_handler::AppStateDyn {
+            repo: Arc::new(DoubleAngleRepository::new(conx.clone())),
         }))
         .route("/aisc/wide-flange", get(wide_flange_handler::get))
         .with_state(Arc::new(wide_flange_handler::AppStateDyn {
