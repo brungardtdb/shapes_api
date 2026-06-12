@@ -7,5 +7,8 @@ pub mod cee_channel_handler;
 /// Handler for double angles
 pub mod double_angle_handler;
 
+/// Handler for h-pile shapes
+pub mod h_pile_handler;
+
 /// Handler for wide flange shapes
 pub mod wide_flange_handler;

@@ -251,7 +251,7 @@ impl ShapeRepository<HPile> for HPileRepository {
     t,
     wgi
     FROM h_piles
-    WHERE d_lower = $1;",
+    WHERE ddet = $1;",
             )
             .bind(depth)
             .fetch_all(&*self.pool)
@@ -322,7 +322,7 @@ impl ShapeRepository<HPile> for HPileRepository {
     t,
     wgi
     FROM h_piles
-    WHERE bf = $1;",
+    WHERE bfdet = $1;",
             )
             .bind(width)
             .fetch_all(&*self.pool)

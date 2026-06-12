@@ -24,6 +24,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_state(Arc::new(double_angle_handler::AppStateDyn {
             repo: Arc::new(DoubleAngleRepository::new(conx.clone())),
         }))
+        .route("/aisc/h-pile", get(h_pile_handler::get))
+        .with_state(Arc::new(h_pile_handler::AppStateDyn {
+            repo: Arc::new(HPileRepository::new(conx.clone())),
+        }))
         .route("/aisc/wide-flange", get(wide_flange_handler::get))
         .with_state(Arc::new(wide_flange_handler::AppStateDyn {
             repo: Arc::new(WideFlangeRepository::new(conx.clone())),
