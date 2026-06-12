@@ -31,6 +31,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/aisc/wide-flange", get(wide_flange_handler::get))
         .with_state(Arc::new(wide_flange_handler::AppStateDyn {
             repo: Arc::new(WideFlangeRepository::new(conx.clone())),
+        }))
+        .route(
+            "/aisc/hollow-structural-section",
+            get(hollow_structural_section_handler::get),
+        )
+        .with_state(Arc::new(hollow_structural_section_handler::AppStateDyn {
+            repo: Arc::new(HollowStructuralSectionRepository::new(conx.clone())),
         }));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
