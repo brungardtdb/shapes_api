@@ -228,7 +228,7 @@ impl ShapeRepository<MiscTee> for MiscTeeRepository {
     h_upper,
     wgi
 	FROM misc_tees
-    WHERE d_lower = $1;",
+    WHERE ddet = $1;",
             )
             .bind(depth)
             .fetch_all(&*self.pool)
@@ -295,7 +295,7 @@ impl ShapeRepository<MiscTee> for MiscTeeRepository {
     h_upper,
     wgi
 	FROM misc_tees
-    WHERE bf = $1;",
+    WHERE bfdet = $1;",
             )
             .bind(width)
             .fetch_all(&*self.pool)
