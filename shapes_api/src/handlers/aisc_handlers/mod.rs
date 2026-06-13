@@ -16,5 +16,8 @@ pub mod hollow_structural_section_handler;
 /// Handler for misc beam shapes
 pub mod misc_beam_handler;
 
+/// Handler for misc channel shapes
+pub mod misc_channel_handler;
+
 /// Handler for wide flange shapes
 pub mod wide_flange_handler;

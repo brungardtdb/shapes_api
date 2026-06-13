@@ -32,6 +32,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_state(Arc::new(misc_beam_handler::AppStateDyn {
             repo: Arc::new(MiscBeamRepository::new(conx.clone())),
         }))
+        .route("/aisc/misc-channel", get(misc_channel_handler::get))
+        .with_state(Arc::new(misc_channel_handler::AppStateDyn {
+            repo: Arc::new(MiscChannelRepository::new(conx.clone())),
+        }))
         .route("/aisc/wide-flange", get(wide_flange_handler::get))
         .with_state(Arc::new(wide_flange_handler::AppStateDyn {
             repo: Arc::new(WideFlangeRepository::new(conx.clone())),

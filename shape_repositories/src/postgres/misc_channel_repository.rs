@@ -276,8 +276,8 @@ impl ShapeRepository<MiscChannel> for MiscChannelRepository {
     pd,
     t,
     wgi
-    FROM misc_channels 
-    WHERE d_lower = $1;",
+    FROM misc_channels
+    WHERE ddet = $1;",
             )
             .bind(depth)
             .fetch_all(&*self.pool)
@@ -353,8 +353,8 @@ impl ShapeRepository<MiscChannel> for MiscChannelRepository {
     pd,
     t,
     wgi
-    FROM misc_channels 
-    WHERE bf = $1;",
+    FROM misc_channels
+    WHERE bfdet = $1;",
             )
             .bind(width)
             .fetch_all(&*self.pool)
