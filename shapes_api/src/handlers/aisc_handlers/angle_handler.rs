@@ -46,7 +46,7 @@ async fn get_all(state: Arc<AppStateDyn>) -> Result<AppJson<Vec<Angle>>, AISCErr
     match result {
         Err(err) => return Err(AISCError::DataError(Box::from(err.to_string()))),
         Ok(shapes) => {
-            if shapes.iter().count() < 1 {
+            if shapes.is_empty() {
                 return Err(AISCError::DataError(Box::from(
                     "Unable to retrieve shapes from the AISC shape database".to_owned(),
                 )));
@@ -106,7 +106,7 @@ async fn get_from_shorter_leg(
     leg: f64,
     angles: &mut Vec<Angle>,
 ) -> Result<Vec<Angle>, AISCError> {
-    if angles.iter().nth(1).is_some() {
+    if angles.iter().nth(0).is_some() {
         return Ok(angles
             .iter()
             .filter(|a| a.d_lower == leg)
@@ -129,7 +129,7 @@ async fn get_from_longer_leg(
     leg: f64,
     angles: &mut Vec<Angle>,
 ) -> Result<Vec<Angle>, AISCError> {
-    if angles.iter().nth(1).is_some() {
+    if angles.iter().nth(0).is_some() {
         return Ok(angles
             .iter()
             .filter(|a| a.b_lower == leg)

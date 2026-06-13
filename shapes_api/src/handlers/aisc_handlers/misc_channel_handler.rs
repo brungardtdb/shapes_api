@@ -46,7 +46,7 @@ async fn get_all(state: Arc<AppStateDyn>) -> Result<AppJson<Vec<MiscChannel>>, A
     match result {
         Err(err) => return Err(AISCError::DataError(Box::from(err.to_string()))),
         Ok(shapes) => {
-            if shapes.iter().count() < 1 {
+            if shapes.is_empty() {
                 return Err(AISCError::DataError(Box::from(
                     "Unable to retrieve shapes from the AISC shape database".to_owned(),
                 )));
@@ -106,7 +106,7 @@ async fn get_from_detailing_depth(
     depth: f64,
     channels: &mut Vec<MiscChannel>,
 ) -> Result<Vec<MiscChannel>, AISCError> {
-    if channels.iter().nth(1).is_some() {
+    if channels.iter().nth(0).is_some() {
         return Ok(channels
             .iter()
             .filter(|c| c.ddet == depth)
@@ -129,7 +129,7 @@ async fn get_from_detailing_flange_width(
     flange_width: f64,
     channels: &mut Vec<MiscChannel>,
 ) -> Result<Vec<MiscChannel>, AISCError> {
-    if channels.iter().nth(1).is_some() {
+    if channels.iter().nth(0).is_some() {
         return Ok(channels
             .iter()
             .filter(|c| c.bfdet == flange_width)

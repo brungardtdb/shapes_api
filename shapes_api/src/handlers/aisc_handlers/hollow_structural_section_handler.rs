@@ -50,7 +50,7 @@ async fn get_all(
             return Err(AISCError::DataError(Box::from(err.to_string())));
         }
         Ok(shapes) => {
-            if shapes.iter().count() < 1 {
+            if shapes.is_empty() {
                 return Err(AISCError::DataError(Box::from(
                     "Unable to retrieve shapes from the AISC shape database".to_owned(),
                 )));
@@ -111,7 +111,7 @@ async fn get_from_member_depth(
     depth: f64,
     sections: &mut Vec<HollowStructuralSection>,
 ) -> Result<Vec<HollowStructuralSection>, AISCError> {
-    if sections.iter().nth(1).is_some() {
+    if sections.iter().nth(0).is_some() {
         return Ok(sections
             .iter()
             .filter(|s| s.ht == depth)
@@ -132,7 +132,7 @@ async fn get_from_member_width(
     width: f64,
     sections: &mut Vec<HollowStructuralSection>,
 ) -> Result<Vec<HollowStructuralSection>, AISCError> {
-    if sections.iter().nth(1).is_some() {
+    if sections.iter().nth(0).is_some() {
         return Ok(sections
             .iter()
             .filter(|s| s.b_upper == width)
