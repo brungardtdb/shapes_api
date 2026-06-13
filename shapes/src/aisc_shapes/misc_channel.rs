@@ -1,7 +1,7 @@
 use crate::aisc_shapes::{MissingPropertyError, ShapeBuilder};
 use std::convert::TryFrom;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 #[allow(dead_code)]
 /// A struct that models the data for misc channel (MC) steel profiles
 pub struct MiscChannel {

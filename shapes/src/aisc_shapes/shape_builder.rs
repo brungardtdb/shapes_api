@@ -1,6 +1,6 @@
 use std::convert::TryFrom;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 #[allow(dead_code)]
 /// [ShapeBuilder] is use to build AISC steel shapes,
 /// it contains a superset of the required fields for

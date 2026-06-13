@@ -1,7 +1,7 @@
 use std::error::Error;
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 /// An error that warns the user of a missing
 /// field on a shape when building that shape
 pub struct MissingPropertyError {
