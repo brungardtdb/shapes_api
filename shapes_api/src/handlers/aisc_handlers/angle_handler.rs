@@ -176,9 +176,9 @@ fn has_query(params: &Params) -> bool {
 pub mod tests {
     use super::*;
     use mockall::{mock, predicate};
-    use shapes::aisc_shapes::Angle as A;
     use shapes::aisc_shapes::shape_builder::ShapeBuilder;
     use shapes::aisc_shapes::shape_repository::ShapeRepository;
+    use shapes::aisc_shapes::{Angle as A, MissingPropertyError};
     use std::error::Error;
     use std::future::Future;
     use std::pin::Pin;
@@ -1011,5 +1011,53 @@ pub mod tests {
         assert!(&result.is_ok());
         let angles = result.unwrap().0;
         assert_eq!(0, angles.clone().iter().count());
+    }
+
+    #[tokio::test]
+    async fn returns_error_if_no_shapes_when_requesting_all() {
+        let mut repo = MockAngleRepo::new();
+        repo.expect_all()
+            .returning(|| Box::pin(async { Ok(vec![]) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+        let params = Params {
+            aisc_manual_label: None,
+            edi_std_nomenclature: None,
+            long_leg_width: None,
+            short_leg_width: None,
+        };
+
+        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        assert!(result.is_err());
+    }
+
+    #[tokio::test]
+    async fn bubbles_up_repo_err_getting_all() {
+        let mut repo = MockAngleRepo::new();
+        repo.expect_all().returning(|| {
+            Box::pin(async { Err(MissingPropertyError::from("AISC Manual Label"))? })
+        });
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+        let params = Params {
+            aisc_manual_label: None,
+            edi_std_nomenclature: None,
+            long_leg_width: None,
+            short_leg_width: None,
+        };
+
+        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        assert!(result.is_err());
+        match result {
+            Ok(_) => unreachable!(),
+            Err(err) => assert_eq!(
+                MissingPropertyError::from("AISC Manual Label").to_string(),
+                err.to_string()
+            ),
+        }
     }
 }

@@ -36,6 +36,16 @@ pub enum AISCError {
     ShapeNotFound,
 }
 
+impl std::fmt::Display for AISCError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            AISCError::DataError(err) => write!(f, "{err}"),
+            AISCError::ShapeError(err) => write!(f, "{err}"),
+            AISCError::ShapeNotFound => write!(f, "Could not find the requested shape"),
+        }
+    }
+}
+
 impl IntoResponse for AISCError {
     fn into_response(self) -> Response {
         /// Serialize errors into a response
