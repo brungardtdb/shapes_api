@@ -75,10 +75,10 @@ impl RoundShapeRepository<RoundHollowStructuralSection> for RoundHollowStructura
         &self,
         edi_std_nomenclature: String,
     ) -> Pin<
-        Box<dyn Future<Output = Result<RoundHollowStructuralSection, Box<dyn Error>>> + Send + '_>,
+        Box<dyn Future<Output = Result<Option<RoundHollowStructuralSection>, Box<dyn Error>>> + Send + '_>,
     > {
         Box::pin(async move {
-            let row = sqlx::query(
+            sqlx::query(
                 "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
@@ -105,9 +105,8 @@ impl RoundShapeRepository<RoundHollowStructuralSection> for RoundHollowStructura
             .bind(edi_std_nomenclature)
             .fetch_optional(&*self.pool)
             .await?
-            .ok_or("Shape not found")?;
-
-            round_hollow_structural_section_from_row(row)
+            .map(round_hollow_structural_section_from_row)
+            .transpose()
         })
     }
 
@@ -115,10 +114,10 @@ impl RoundShapeRepository<RoundHollowStructuralSection> for RoundHollowStructura
         &self,
         aisc_manual_label: String,
     ) -> Pin<
-        Box<dyn Future<Output = Result<RoundHollowStructuralSection, Box<dyn Error>>> + Send + '_>,
+        Box<dyn Future<Output = Result<Option<RoundHollowStructuralSection>, Box<dyn Error>>> + Send + '_>,
     > {
         Box::pin(async move {
-            let row = sqlx::query(
+            sqlx::query(
                 "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
@@ -145,9 +144,8 @@ impl RoundShapeRepository<RoundHollowStructuralSection> for RoundHollowStructura
             .bind(aisc_manual_label)
             .fetch_optional(&*self.pool)
             .await?
-            .ok_or("Shape not found")?;
-
-            round_hollow_structural_section_from_row(row)
+            .map(round_hollow_structural_section_from_row)
+            .transpose()
         })
     }
 

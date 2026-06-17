@@ -9,13 +9,13 @@ pub trait ShapeRepository<T>: Send + Sync + 'static {
     fn shape_with_edi_std_nomenclature(
         &self,
         edi_std_nomenclature: String,
-    ) -> Pin<Box<dyn Future<Output = Result<T, Box<dyn Error>>> + Send + '_>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Option<T>, Box<dyn Error>>> + Send + '_>>;
 
     /// Retrieves a shape based on it's AISC Manual Label
     fn shape_with_aisc_manual_label(
         &self,
         aisc_manual_label: String,
-    ) -> Pin<Box<dyn Future<Output = Result<T, Box<dyn Error>>> + Send + '_>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Option<T>, Box<dyn Error>>> + Send + '_>>;
 
     /// Retrieves shapes based on their depth
     fn shapes_with_depth(
@@ -39,13 +39,13 @@ pub trait RoundShapeRepository<T>: Send + Sync + 'static {
     fn shape_with_edi_std_nomenclature(
         &self,
         edi_std_nomenclature: String,
-    ) -> Pin<Box<dyn Future<Output = Result<T, Box<dyn Error>>> + Send + '_>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Option<T>, Box<dyn Error>>> + Send + '_>>;
 
     /// Retrieves a shape based on it's AISC Manual Label
     fn shape_with_aisc_manual_label(
         &self,
         aisc_manual_label: String,
-    ) -> Pin<Box<dyn Future<Output = Result<T, Box<dyn Error>>> + Send + '_>>;
+    ) -> Pin<Box<dyn Future<Output = Result<Option<T>, Box<dyn Error>>> + Send + '_>>;
 
     /// Retrieves shapes based on their diameter
     fn shapes_with_diameter(

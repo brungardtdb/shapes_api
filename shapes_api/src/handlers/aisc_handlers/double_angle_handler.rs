@@ -65,16 +65,9 @@ async fn get_from_query(
     if let Some(label) = params.aisc_manual_label.clone() {
         let shape_result = &state.repo.shape_with_aisc_manual_label(label).await;
         match shape_result {
-            Err(err) => {
-                // TODO - THIS SHOULD PROBABLY NOT LIVE IN THE HANDLER,
-                // BUT WE NEED TO KNOW IF THE DB FAILED OR IF THE QUERY RETURNED NO RESULTS
-                if *&err.to_string().starts_with("no rows returned") {
-                    return Err(AISCError::ShapeNotFound);
-                } else {
-                    return Err(AISCError::DataError(Box::from(err.to_string())));
-                }
-            }
-            Ok(d) => {
+            Err(err) => return Err(AISCError::DataError(Box::from(err.to_string()))),
+            Ok(None) => return Err(AISCError::ShapeNotFound),
+            Ok(Some(d)) => {
                 let shape: dto::aisc_shapes::DoubleAngle = d.into();
                 return Ok(AppJson(vec![shape]));
             }
@@ -84,16 +77,9 @@ async fn get_from_query(
     if let Some(std_nom) = params.edi_std_nomenclature.clone() {
         let shape_result = &state.repo.shape_with_edi_std_nomenclature(std_nom).await;
         match shape_result {
-            Err(err) => {
-                // TODO - THIS SHOULD PROBABLY NOT LIVE IN THE HANDLER,
-                // BUT WE NEED TO KNOW IF THE DB FAILED OR IF THE QUERY RETURNED NO RESULTS
-                if *&err.to_string().starts_with("no rows returned") {
-                    return Err(AISCError::ShapeNotFound);
-                } else {
-                    return Err(AISCError::DataError(Box::from(err.to_string())));
-                }
-            }
-            Ok(d) => {
+            Err(err) => return Err(AISCError::DataError(Box::from(err.to_string()))),
+            Ok(None) => return Err(AISCError::ShapeNotFound),
+            Ok(Some(d)) => {
                 let shape: dto::aisc_shapes::DoubleAngle = d.into();
                 return Ok(AppJson(vec![shape]));
             }

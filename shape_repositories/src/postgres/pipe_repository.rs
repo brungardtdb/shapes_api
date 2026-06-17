@@ -66,9 +66,9 @@ impl RoundShapeRepository<Pipe> for PipeRepository {
     fn shape_with_edi_std_nomenclature(
         &self,
         edi_std_nomenclature: String,
-    ) -> Pin<Box<dyn Future<Output = Result<Pipe, Box<dyn Error>>> + Send + '_>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Option<Pipe>, Box<dyn Error>>> + Send + '_>> {
         Box::pin(async move {
-            let row = sqlx::query(
+            sqlx::query(
                 "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
@@ -95,18 +95,17 @@ impl RoundShapeRepository<Pipe> for PipeRepository {
             .bind(edi_std_nomenclature)
             .fetch_optional(&*self.pool)
             .await?
-            .ok_or("Shape not found")?;
-
-            pipe_from_row(row)
+            .map(pipe_from_row)
+            .transpose()
         })
     }
 
     fn shape_with_aisc_manual_label(
         &self,
         aisc_manual_label: String,
-    ) -> Pin<Box<dyn Future<Output = Result<Pipe, Box<dyn Error>>> + Send + '_>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Option<Pipe>, Box<dyn Error>>> + Send + '_>> {
         Box::pin(async move {
-            let row = sqlx::query(
+            sqlx::query(
                 "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
@@ -133,9 +132,8 @@ impl RoundShapeRepository<Pipe> for PipeRepository {
             .bind(aisc_manual_label)
             .fetch_optional(&*self.pool)
             .await?
-            .ok_or("Shape not found")?;
-
-            pipe_from_row(row)
+            .map(pipe_from_row)
+            .transpose()
         })
     }
 

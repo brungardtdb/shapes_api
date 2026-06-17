@@ -67,8 +67,9 @@ async fn get_from_query(
     if let Some(label) = params.aisc_manual_label.clone() {
         let shape_result = &state.repo.shape_with_aisc_manual_label(label).await;
         match shape_result {
-            Err(_err) => return Err(AISCError::ShapeNotFound),
-            Ok(s) => {
+            Err(err) => return Err(AISCError::DataError(Box::from(err.to_string()))),
+            Ok(None) => return Err(AISCError::ShapeNotFound),
+            Ok(Some(s)) => {
                 let shape: dto::aisc_shapes::HPile = s.into();
                 return Ok(AppJson(vec![shape]));
             }
@@ -78,8 +79,9 @@ async fn get_from_query(
     if let Some(nom) = params.edi_std_nomenclature.clone() {
         let shape_result = &state.repo.shape_with_edi_std_nomenclature(nom).await;
         match shape_result {
-            Err(_err) => return Err(AISCError::ShapeNotFound),
-            Ok(s) => {
+            Err(err) => return Err(AISCError::DataError(Box::from(err.to_string()))),
+            Ok(None) => return Err(AISCError::ShapeNotFound),
+            Ok(Some(s)) => {
                 let shape: dto::aisc_shapes::HPile = s.into();
                 return Ok(AppJson(vec![shape]));
             }

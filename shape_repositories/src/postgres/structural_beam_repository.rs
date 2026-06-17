@@ -91,9 +91,9 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     fn shape_with_edi_std_nomenclature(
         &self,
         edi_std_nomenclature: String,
-    ) -> Pin<Box<dyn Future<Output = Result<StructuralBeam, Box<dyn Error>>> + Send + '_>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Option<StructuralBeam>, Box<dyn Error>>> + Send + '_>> {
         Box::pin(async move {
-            let row = sqlx::query(
+            sqlx::query(
                 "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
@@ -141,18 +141,17 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
             .bind(edi_std_nomenclature)
             .fetch_optional(&*self.pool)
             .await?
-            .ok_or("Shape not found")?;
-
-            structural_beam_from_row(row)
+            .map(structural_beam_from_row)
+            .transpose()
         })
     }
 
     fn shape_with_aisc_manual_label(
         &self,
         aisc_manual_label: String,
-    ) -> Pin<Box<dyn Future<Output = Result<StructuralBeam, Box<dyn Error>>> + Send + '_>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Option<StructuralBeam>, Box<dyn Error>>> + Send + '_>> {
         Box::pin(async move {
-            let row = sqlx::query(
+            sqlx::query(
                 "SELECT 
     edi_std_nomenclature,
     aisc_manual_label,
@@ -200,9 +199,8 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
             .bind(aisc_manual_label)
             .fetch_optional(&*self.pool)
             .await?
-            .ok_or("Shape not found")?;
-
-            structural_beam_from_row(row)
+            .map(structural_beam_from_row)
+            .transpose()
         })
     }
 

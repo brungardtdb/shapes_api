@@ -66,8 +66,9 @@ async fn get_from_query(
     if let Some(label) = params.aisc_manual_label.clone() {
         let shape_result = &state.repo.shape_with_aisc_manual_label(label).await;
         match shape_result {
-            Err(_err) => return Err(AISCError::ShapeNotFound),
-            Ok(s) => {
+            Err(err) => return Err(AISCError::DataError(Box::from(err.to_string()))),
+            Ok(None) => return Err(AISCError::ShapeNotFound),
+            Ok(Some(s)) => {
                 let shape: dto::aisc_shapes::Angle = s.into();
                 return Ok(AppJson(vec![shape]));
             }
@@ -77,8 +78,9 @@ async fn get_from_query(
     if let Some(nom) = params.edi_std_nomenclature.clone() {
         let shape_result = &state.repo.shape_with_edi_std_nomenclature(nom).await;
         match shape_result {
-            Err(_err) => return Err(AISCError::ShapeNotFound),
-            Ok(s) => {
+            Err(err) => return Err(AISCError::DataError(Box::from(err.to_string()))),
+            Ok(None) => return Err(AISCError::ShapeNotFound),
+            Ok(Some(s)) => {
                 let shape: dto::aisc_shapes::Angle = s.into();
                 return Ok(AppJson(vec![shape]));
             }
@@ -192,12 +194,12 @@ pub mod tests {
             fn shape_with_edi_std_nomenclature<'a>(
                 &'a self,
                 edi_std_nomenclature: String,
-            ) -> Pin<Box<dyn Future<Output = Result<A, Box<dyn Error>>> + Send + 'a>>;
+            ) -> Pin<Box<dyn Future<Output = Result<Option<A>, Box<dyn Error>>> + Send + 'a>>;
 
             fn shape_with_aisc_manual_label<'a>(
                 &'a self,
                 aisc_manual_label: String,
-            ) -> Pin<Box<dyn Future<Output = Result<A, Box<dyn Error>>> + Send + 'a>>;
+            ) -> Pin<Box<dyn Future<Output = Result<Option<A>, Box<dyn Error>>> + Send + 'a>>;
 
             fn shapes_with_depth<'a>(
                 &'a self,
@@ -387,7 +389,7 @@ pub mod tests {
             .with(predicate::eq(String::from("L6X4X3/8")))
             .returning(|_| {
                 Box::pin(async {
-                    Ok(ShapeBuilder::new()
+                    Ok(Some(ShapeBuilder::new()
                         .with_edi_std_nomenclature(String::from("L6X4X3/8"))
                         .with_aisc_manual_label(String::from("L6X4X3/8"))
                         .with_w_upper(12.3)
@@ -434,7 +436,7 @@ pub mod tests {
                         .with_pa_2(14.0)
                         .with_pb(20.0)
                         .try_build::<A>()
-                        .unwrap())
+                        .unwrap()))
                 })
             });
 
@@ -465,7 +467,7 @@ pub mod tests {
             .with(predicate::eq(String::from("L6X4X3/8")))
             .returning(|_| {
                 Box::pin(async {
-                    Ok(ShapeBuilder::new()
+                    Ok(Some(ShapeBuilder::new()
                         .with_edi_std_nomenclature(String::from("L6X4X3/8"))
                         .with_aisc_manual_label(String::from("L6X4X3/8"))
                         .with_w_upper(12.3)
@@ -512,7 +514,7 @@ pub mod tests {
                         .with_pa_2(14.0)
                         .with_pb(20.0)
                         .try_build::<A>()
-                        .unwrap())
+                        .unwrap()))
                 })
             });
 
