@@ -138,8 +138,9 @@ impl ShapeRepository<WideFlangeTee> for WideFlangeTeeRepository {
 	LIMIT 1;",
             )
             .bind(edi_std_nomenclature)
-            .fetch_one(&*self.pool)
-            .await?;
+            .fetch_optional(&*self.pool)
+            .await?
+            .ok_or("Shape not found")?;
 
             wide_flange_tee_from_row(row)
         })
@@ -195,8 +196,9 @@ impl ShapeRepository<WideFlangeTee> for WideFlangeTeeRepository {
 	LIMIT 1;",
             )
             .bind(aisc_manual_label)
-            .fetch_one(&*self.pool)
-            .await?;
+            .fetch_optional(&*self.pool)
+            .await?
+            .ok_or("Shape not found")?;
 
             wide_flange_tee_from_row(row)
         })
