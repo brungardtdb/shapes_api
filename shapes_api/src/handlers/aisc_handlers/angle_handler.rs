@@ -176,6 +176,8 @@ fn has_query(params: &Params) -> bool {
 #[cfg(test)]
 #[doc(hidden)]
 pub mod tests {
+    use crate::error_handling::aisc::AISCError::ShapeNotFound;
+
     use super::*;
     use mockall::{mock, predicate};
     use shapes::aisc_shapes::shape_builder::ShapeBuilder;
@@ -389,54 +391,56 @@ pub mod tests {
             .with(predicate::eq(String::from("L6X4X3/8")))
             .returning(|_| {
                 Box::pin(async {
-                    Ok(Some(ShapeBuilder::new()
-                        .with_edi_std_nomenclature(String::from("L6X4X3/8"))
-                        .with_aisc_manual_label(String::from("L6X4X3/8"))
-                        .with_w_upper(12.3)
-                        .with_a_upper(3.61)
-                        .with_d_lower(4.0)
-                        .with_b_lower(6.0)
-                        .with_t_lower(0.375)
-                        .with_kdes(0.875)
-                        .with_kdet(0.875)
-                        .with_x_lower(0.933)
-                        .with_y_lower(1.93)
-                        .with_xp(0.301)
-                        .with_yp(1.19)
-                        .with_b_t(16.0)
-                        .with_ix(13.4)
-                        .with_zx(5.89)
-                        .with_sx(3.30)
-                        .with_rx(1.93)
-                        .with_iy(4.86)
-                        .with_zy(2.79)
-                        .with_sy(1.58)
-                        .with_ry(1.16)
-                        .with_iz(2.73)
-                        .with_rz(0.870)
-                        .with_sz(1.31)
-                        .with_j_upper(0.177)
-                        .with_cw(0.369)
-                        .with_ro(2.94)
-                        .with_tan_a(0.446)
-                        .with_iw(15.5)
-                        .with_za(2.84)
-                        .with_zb(1.38)
-                        .with_zc(4.02)
-                        .with_wa(2.09)
-                        .with_wb(1.64)
-                        .with_wc(0.979)
-                        .with_swa(5.46)
-                        .with_swb(11.2)
-                        .with_swc(3.85)
-                        .with_sza(1.31)
-                        .with_szb(1.66)
-                        .with_szc(2.79)
-                        .with_pa(16.0)
-                        .with_pa_2(14.0)
-                        .with_pb(20.0)
-                        .try_build::<A>()
-                        .unwrap()))
+                    Ok(Some(
+                        ShapeBuilder::new()
+                            .with_edi_std_nomenclature(String::from("L6X4X3/8"))
+                            .with_aisc_manual_label(String::from("L6X4X3/8"))
+                            .with_w_upper(12.3)
+                            .with_a_upper(3.61)
+                            .with_d_lower(4.0)
+                            .with_b_lower(6.0)
+                            .with_t_lower(0.375)
+                            .with_kdes(0.875)
+                            .with_kdet(0.875)
+                            .with_x_lower(0.933)
+                            .with_y_lower(1.93)
+                            .with_xp(0.301)
+                            .with_yp(1.19)
+                            .with_b_t(16.0)
+                            .with_ix(13.4)
+                            .with_zx(5.89)
+                            .with_sx(3.30)
+                            .with_rx(1.93)
+                            .with_iy(4.86)
+                            .with_zy(2.79)
+                            .with_sy(1.58)
+                            .with_ry(1.16)
+                            .with_iz(2.73)
+                            .with_rz(0.870)
+                            .with_sz(1.31)
+                            .with_j_upper(0.177)
+                            .with_cw(0.369)
+                            .with_ro(2.94)
+                            .with_tan_a(0.446)
+                            .with_iw(15.5)
+                            .with_za(2.84)
+                            .with_zb(1.38)
+                            .with_zc(4.02)
+                            .with_wa(2.09)
+                            .with_wb(1.64)
+                            .with_wc(0.979)
+                            .with_swa(5.46)
+                            .with_swb(11.2)
+                            .with_swc(3.85)
+                            .with_sza(1.31)
+                            .with_szb(1.66)
+                            .with_szc(2.79)
+                            .with_pa(16.0)
+                            .with_pa_2(14.0)
+                            .with_pb(20.0)
+                            .try_build::<A>()
+                            .unwrap(),
+                    ))
                 })
             });
 
@@ -467,54 +471,56 @@ pub mod tests {
             .with(predicate::eq(String::from("L6X4X3/8")))
             .returning(|_| {
                 Box::pin(async {
-                    Ok(Some(ShapeBuilder::new()
-                        .with_edi_std_nomenclature(String::from("L6X4X3/8"))
-                        .with_aisc_manual_label(String::from("L6X4X3/8"))
-                        .with_w_upper(12.3)
-                        .with_a_upper(3.61)
-                        .with_d_lower(4.0)
-                        .with_b_lower(6.0)
-                        .with_t_lower(0.375)
-                        .with_kdes(0.875)
-                        .with_kdet(0.875)
-                        .with_x_lower(0.933)
-                        .with_y_lower(1.93)
-                        .with_xp(0.301)
-                        .with_yp(1.19)
-                        .with_b_t(16.0)
-                        .with_ix(13.4)
-                        .with_zx(5.89)
-                        .with_sx(3.30)
-                        .with_rx(1.93)
-                        .with_iy(4.86)
-                        .with_zy(2.79)
-                        .with_sy(1.58)
-                        .with_ry(1.16)
-                        .with_iz(2.73)
-                        .with_rz(0.870)
-                        .with_sz(1.31)
-                        .with_j_upper(0.177)
-                        .with_cw(0.369)
-                        .with_ro(2.94)
-                        .with_tan_a(0.446)
-                        .with_iw(15.5)
-                        .with_za(2.84)
-                        .with_zb(1.38)
-                        .with_zc(4.02)
-                        .with_wa(2.09)
-                        .with_wb(1.64)
-                        .with_wc(0.979)
-                        .with_swa(5.46)
-                        .with_swb(11.2)
-                        .with_swc(3.85)
-                        .with_sza(1.31)
-                        .with_szb(1.66)
-                        .with_szc(2.79)
-                        .with_pa(16.0)
-                        .with_pa_2(14.0)
-                        .with_pb(20.0)
-                        .try_build::<A>()
-                        .unwrap()))
+                    Ok(Some(
+                        ShapeBuilder::new()
+                            .with_edi_std_nomenclature(String::from("L6X4X3/8"))
+                            .with_aisc_manual_label(String::from("L6X4X3/8"))
+                            .with_w_upper(12.3)
+                            .with_a_upper(3.61)
+                            .with_d_lower(4.0)
+                            .with_b_lower(6.0)
+                            .with_t_lower(0.375)
+                            .with_kdes(0.875)
+                            .with_kdet(0.875)
+                            .with_x_lower(0.933)
+                            .with_y_lower(1.93)
+                            .with_xp(0.301)
+                            .with_yp(1.19)
+                            .with_b_t(16.0)
+                            .with_ix(13.4)
+                            .with_zx(5.89)
+                            .with_sx(3.30)
+                            .with_rx(1.93)
+                            .with_iy(4.86)
+                            .with_zy(2.79)
+                            .with_sy(1.58)
+                            .with_ry(1.16)
+                            .with_iz(2.73)
+                            .with_rz(0.870)
+                            .with_sz(1.31)
+                            .with_j_upper(0.177)
+                            .with_cw(0.369)
+                            .with_ro(2.94)
+                            .with_tan_a(0.446)
+                            .with_iw(15.5)
+                            .with_za(2.84)
+                            .with_zb(1.38)
+                            .with_zc(4.02)
+                            .with_wa(2.09)
+                            .with_wb(1.64)
+                            .with_wc(0.979)
+                            .with_swa(5.46)
+                            .with_swb(11.2)
+                            .with_swc(3.85)
+                            .with_sza(1.31)
+                            .with_szb(1.66)
+                            .with_szc(2.79)
+                            .with_pa(16.0)
+                            .with_pa_2(14.0)
+                            .with_pb(20.0)
+                            .try_build::<A>()
+                            .unwrap(),
+                    ))
                 })
             });
 
@@ -1047,6 +1053,137 @@ pub mod tests {
         };
         let params = Params {
             aisc_manual_label: None,
+            edi_std_nomenclature: None,
+            long_leg_width: None,
+            short_leg_width: None,
+        };
+
+        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        assert!(result.is_err());
+        match result {
+            Ok(_) => unreachable!(),
+            Err(err) => assert_eq!(
+                MissingPropertyError::from("AISC Manual Label").to_string(),
+                err.to_string()
+            ),
+        }
+    }
+
+    #[tokio::test]
+    async fn handles_no_aisc_manual_label_shape() {
+        let mut repo = MockAngleRepo::new();
+        repo.expect_shape_with_aisc_manual_label()
+            .returning(|_| Box::pin(async { Ok(None) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+        let params = Params {
+            aisc_manual_label: Some(String::from("L6X4X3")),
+            edi_std_nomenclature: None,
+            long_leg_width: None,
+            short_leg_width: None,
+        };
+
+        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        assert!(result.is_err());
+        match result {
+            Ok(_) => unreachable!(),
+            Err(err) => assert_eq!(ShapeNotFound.to_string(), err.to_string()),
+        }
+    }
+
+    #[tokio::test]
+    async fn gets_aisc_manual_label_shape() {
+        let mut repo = MockAngleRepo::new();
+        repo.expect_shape_with_aisc_manual_label().returning(|_| {
+            Box::pin(async {
+                Ok(Some(
+                    ShapeBuilder::new()
+                        .with_edi_std_nomenclature(String::from("L6X4X3/8"))
+                        .with_aisc_manual_label(String::from("L6X4X3/8"))
+                        .with_w_upper(12.3)
+                        .with_a_upper(3.61)
+                        .with_d_lower(4.0)
+                        .with_b_lower(6.0)
+                        .with_t_lower(0.375)
+                        .with_kdes(0.875)
+                        .with_kdet(0.875)
+                        .with_x_lower(0.933)
+                        .with_y_lower(1.93)
+                        .with_xp(0.301)
+                        .with_yp(1.19)
+                        .with_b_t(16.0)
+                        .with_ix(13.4)
+                        .with_zx(5.89)
+                        .with_sx(3.30)
+                        .with_rx(1.93)
+                        .with_iy(4.86)
+                        .with_zy(2.79)
+                        .with_sy(1.58)
+                        .with_ry(1.16)
+                        .with_iz(2.73)
+                        .with_rz(0.870)
+                        .with_sz(1.31)
+                        .with_j_upper(0.177)
+                        .with_cw(0.369)
+                        .with_ro(2.94)
+                        .with_tan_a(0.446)
+                        .with_iw(15.5)
+                        .with_za(2.84)
+                        .with_zb(1.38)
+                        .with_zc(4.02)
+                        .with_wa(2.09)
+                        .with_wb(1.64)
+                        .with_wc(0.979)
+                        .with_swa(5.46)
+                        .with_swb(11.2)
+                        .with_swc(3.85)
+                        .with_sza(1.31)
+                        .with_szb(1.66)
+                        .with_szc(2.79)
+                        .with_pa(16.0)
+                        .with_pa_2(14.0)
+                        .with_pb(20.0)
+                        .try_build::<A>()
+                        .unwrap(),
+                ))
+            })
+        });
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+        let params = Params {
+            aisc_manual_label: Some(String::from("L6X4X3/8")),
+            edi_std_nomenclature: None,
+            long_leg_width: None,
+            short_leg_width: None,
+        };
+
+        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        assert!(result.is_ok());
+        match result {
+            Ok(j) => {
+                assert_eq!(1, *&j.0.iter().count());
+                assert_eq!(String::from("L6X4X3/8"), j.0[0].aisc_manual_label);
+            }
+            Err(_) => unreachable!(),
+        }
+    }
+
+    #[tokio::test]
+    async fn handles_repo_error_aisc_label_shape() {
+        let mut repo = MockAngleRepo::new();
+        repo.expect_shape_with_aisc_manual_label().returning(|_| {
+            Box::pin(async { Err(MissingPropertyError::from("AISC Manual Label"))? })
+        });
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+        let params = Params {
+            aisc_manual_label: Some(String::from("L6X4X3")),
             edi_std_nomenclature: None,
             long_leg_width: None,
             short_leg_width: None,
