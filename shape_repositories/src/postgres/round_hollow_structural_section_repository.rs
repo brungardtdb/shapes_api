@@ -75,7 +75,11 @@ impl RoundShapeRepository<RoundHollowStructuralSection> for RoundHollowStructura
         &self,
         edi_std_nomenclature: String,
     ) -> Pin<
-        Box<dyn Future<Output = Result<Option<RoundHollowStructuralSection>, Box<dyn Error>>> + Send + '_>,
+        Box<
+            dyn Future<Output = Result<Option<RoundHollowStructuralSection>, Box<dyn Error>>>
+                + Send
+                + '_,
+        >,
     > {
         Box::pin(async move {
             sqlx::query(
@@ -114,7 +118,11 @@ impl RoundShapeRepository<RoundHollowStructuralSection> for RoundHollowStructura
         &self,
         aisc_manual_label: String,
     ) -> Pin<
-        Box<dyn Future<Output = Result<Option<RoundHollowStructuralSection>, Box<dyn Error>>> + Send + '_>,
+        Box<
+            dyn Future<Output = Result<Option<RoundHollowStructuralSection>, Box<dyn Error>>>
+                + Send
+                + '_,
+        >,
     > {
         Box::pin(async move {
             sqlx::query(

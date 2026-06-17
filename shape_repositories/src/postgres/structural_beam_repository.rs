@@ -91,7 +91,8 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     fn shape_with_edi_std_nomenclature(
         &self,
         edi_std_nomenclature: String,
-    ) -> Pin<Box<dyn Future<Output = Result<Option<StructuralBeam>, Box<dyn Error>>> + Send + '_>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Option<StructuralBeam>, Box<dyn Error>>> + Send + '_>>
+    {
         Box::pin(async move {
             sqlx::query(
                 "SELECT 
@@ -149,7 +150,8 @@ impl ShapeRepository<StructuralBeam> for StructuralBeamRepository {
     fn shape_with_aisc_manual_label(
         &self,
         aisc_manual_label: String,
-    ) -> Pin<Box<dyn Future<Output = Result<Option<StructuralBeam>, Box<dyn Error>>> + Send + '_>> {
+    ) -> Pin<Box<dyn Future<Output = Result<Option<StructuralBeam>, Box<dyn Error>>> + Send + '_>>
+    {
         Box::pin(async move {
             sqlx::query(
                 "SELECT 
