@@ -16,11 +16,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_state(Arc::new(angle_handler::AppStateDyn {
             repo: Arc::new(AngleRepository::new(conx.clone())),
         }))
-        .route("/aisc/cee-channel", get(cee_channel_handler::get_cee_channels))
+        .route(
+            "/aisc/cee-channel",
+            get(cee_channel_handler::get_cee_channels),
+        )
         .with_state(Arc::new(cee_channel_handler::AppStateDyn {
             repo: Arc::new(CeeChannelRepository::new(conx.clone())),
         }))
-        .route("/aisc/double-angle", get(double_angle_handler::get_double_angles))
+        .route(
+            "/aisc/double-angle",
+            get(double_angle_handler::get_double_angles),
+        )
         .with_state(Arc::new(double_angle_handler::AppStateDyn {
             repo: Arc::new(DoubleAngleRepository::new(conx.clone())),
         }))
@@ -32,7 +38,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_state(Arc::new(misc_beam_handler::AppStateDyn {
             repo: Arc::new(MiscBeamRepository::new(conx.clone())),
         }))
-        .route("/aisc/misc-channel", get(misc_channel_handler::get_misc_channels))
+        .route(
+            "/aisc/misc-channel",
+            get(misc_channel_handler::get_misc_channels),
+        )
         .with_state(Arc::new(misc_channel_handler::AppStateDyn {
             repo: Arc::new(MiscChannelRepository::new(conx.clone())),
         }))
@@ -40,7 +49,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_state(Arc::new(misc_tee_handler::AppStateDyn {
             repo: Arc::new(MiscTeeRepository::new(conx.clone())),
         }))
-        .route("/aisc/wide-flange", get(wide_flange_handler::get_wide_flanges))
+        .route(
+            "/aisc/wide-flange",
+            get(wide_flange_handler::get_wide_flanges),
+        )
         .with_state(Arc::new(wide_flange_handler::AppStateDyn {
             repo: Arc::new(WideFlangeRepository::new(conx.clone())),
         }))

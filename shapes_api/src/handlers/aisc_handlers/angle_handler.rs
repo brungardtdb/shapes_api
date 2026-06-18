@@ -98,14 +98,14 @@ async fn get_from_geometry(
         angles = get_from_shorter_leg(&state, shorter_leg, &mut angles).await?;
         if *&angles.iter().count() == 0 {
             // return early because we cannot meet additional search criteria
-            return Ok(AppJson(angles));
+            return Err(AISCError::ShapeNotFound);
         }
     }
     if let Some(longer_leg) = params.long_leg_width {
         angles = get_from_longer_leg(&state, longer_leg, &mut angles).await?;
         if *&angles.iter().count() == 0 {
             // return early because we cannot meet additional search criteria
-            return Ok(AppJson(angles));
+            return Err(AISCError::ShapeNotFound);
         }
     }
     Ok(AppJson(angles))
@@ -176,9 +176,9 @@ fn has_query(params: &Params) -> bool {
 #[cfg(test)]
 #[doc(hidden)]
 pub mod tests {
-    use crate::error_handling::aisc::AISCError::ShapeNotFound;
-
     use super::*;
+    use axum::{Router, routing::get};
+    use axum_test::TestServer;
     use mockall::{mock, predicate};
     use shapes::aisc_shapes::shape_builder::ShapeBuilder;
     use shapes::aisc_shapes::shape_repository::ShapeRepository;
@@ -372,16 +372,17 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: None,
-            edi_std_nomenclature: None,
-            long_leg_width: None,
-            short_leg_width: None,
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(result.is_ok());
-        assert_eq!(3, result.unwrap().0.iter().count());
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles").await;
+
+        response.assert_status_ok();
+        let angles: Vec<Angle> = response.json::<Vec<Angle>>();
+        assert_eq!(3, angles.iter().count());
     }
 
     #[tokio::test]
@@ -447,20 +448,21 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: Some(String::from("L6X4X3/8")),
-            edi_std_nomenclature: None,
-            long_leg_width: None,
-            short_leg_width: None,
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(&result.is_ok());
-        let angles = result.unwrap().0;
-        assert_eq!(1, angles.clone().iter().count());
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles?aisc_manual_label=L6X4X3/8").await;
+
+        response.assert_status_ok();
+        let angles: Vec<Angle> = response.json::<Vec<Angle>>();
+
+        assert_eq!(1, *&angles.iter().count());
         assert_eq!(
             String::from("L6X4X3/8"),
-            angles.clone().iter().nth(0).unwrap().aisc_manual_label
+            angles.iter().nth(0).unwrap().aisc_manual_label
         );
     }
 
@@ -527,20 +529,21 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: None,
-            edi_std_nomenclature: Some(String::from("L6X4X3/8")),
-            long_leg_width: None,
-            short_leg_width: None,
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(&result.is_ok());
-        let angles = result.unwrap().0;
-        assert_eq!(1, angles.clone().iter().count());
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles?edi_std_nomenclature=L6X4X3/8").await;
+
+        response.assert_status_ok();
+        let angles: Vec<Angle> = response.json::<Vec<Angle>>();
+
+        assert_eq!(1, *&angles.iter().count());
         assert_eq!(
             String::from("L6X4X3/8"),
-            angles.clone().iter().nth(0).unwrap().edi_std_nomenclature
+            angles.iter().nth(0).unwrap().edi_std_nomenclature
         );
     }
 
@@ -607,22 +610,23 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: None,
-            edi_std_nomenclature: None,
-            long_leg_width: Some(6.0),
-            short_leg_width: None,
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(&result.is_ok());
-        let angles = result.unwrap().0;
-        assert_eq!(1, angles.clone().iter().count());
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles?long_leg_width=6.0").await;
+
+        response.assert_status_ok();
+        let angles: Vec<Angle> = response.json::<Vec<Angle>>();
+
+        assert_eq!(1, *&angles.iter().count());
         assert_eq!(
             String::from("L6X4X3/8"),
-            angles.clone().iter().nth(0).unwrap().edi_std_nomenclature
+            *&angles.iter().nth(0).unwrap().edi_std_nomenclature
         );
-        assert_eq!(6.0, angles.clone().iter().nth(0).unwrap().b_lower);
+        assert_eq!(6.0, angles.iter().nth(0).unwrap().b_lower);
     }
 
     #[tokio::test]
@@ -688,22 +692,23 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: None,
-            edi_std_nomenclature: None,
-            long_leg_width: None,
-            short_leg_width: Some(4.0),
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(&result.is_ok());
-        let angles = result.unwrap().0;
-        assert_eq!(1, angles.clone().iter().count());
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles?short_leg_width=4.0").await;
+
+        response.assert_status_ok();
+        let angles: Vec<Angle> = response.json::<Vec<Angle>>();
+
+        assert_eq!(1, *&angles.iter().count());
         assert_eq!(
             String::from("L6X4X3/8"),
-            angles.clone().iter().nth(0).unwrap().edi_std_nomenclature
+            *&angles.iter().nth(0).unwrap().edi_std_nomenclature
         );
-        assert_eq!(4.0, angles.clone().iter().nth(0).unwrap().d_lower);
+        assert_eq!(4.0, angles.iter().nth(0).unwrap().d_lower);
     }
 
     #[tokio::test]
@@ -874,22 +879,25 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: None,
-            edi_std_nomenclature: None,
-            long_leg_width: Some(8.0),
-            short_leg_width: Some(6.0),
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(&result.is_ok());
-        let angles = result.unwrap().0;
-        assert_eq!(1, angles.clone().iter().count());
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server
+            .get("/angles?long_leg_width=8.0&short_leg_width=6.0")
+            .await;
+
+        response.assert_status_ok();
+        let angles: Vec<Angle> = response.json::<Vec<Angle>>();
+
+        assert_eq!(1, *&angles.iter().count());
         assert_eq!(
             String::from("L8X6X1/2"),
-            angles.clone().iter().nth(0).unwrap().edi_std_nomenclature
+            *&angles.iter().nth(0).unwrap().edi_std_nomenclature
         );
-        assert_eq!(8.0, angles.clone().iter().nth(0).unwrap().b_lower);
+        assert_eq!(8.0, *&angles.clone().iter().nth(0).unwrap().b_lower);
         assert_eq!(6.0, angles.clone().iter().nth(0).unwrap().d_lower);
     }
 
@@ -1008,17 +1016,17 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: None,
-            edi_std_nomenclature: None,
-            long_leg_width: Some(8.0),
-            short_leg_width: Some(4.0),
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(&result.is_ok());
-        let angles = result.unwrap().0;
-        assert_eq!(0, angles.clone().iter().count());
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server
+            .get("/angles?long_leg_width=8.0&short_leg_width=4.0")
+            .await;
+
+        response.assert_status_not_found();
     }
 
     #[tokio::test]
@@ -1030,15 +1038,14 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: None,
-            edi_std_nomenclature: None,
-            long_leg_width: None,
-            short_leg_width: None,
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(result.is_err());
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles").await;
+        response.assert_status_internal_server_error();
     }
 
     #[tokio::test]
@@ -1051,22 +1058,14 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: None,
-            edi_std_nomenclature: None,
-            long_leg_width: None,
-            short_leg_width: None,
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(result.is_err());
-        match result {
-            Ok(_) => unreachable!(),
-            Err(err) => assert_eq!(
-                MissingPropertyError::from("AISC Manual Label").to_string(),
-                err.to_string()
-            ),
-        }
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles").await;
+        response.assert_status_internal_server_error();
     }
 
     #[tokio::test]
@@ -1078,19 +1077,14 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: Some(String::from("L6X4X3")),
-            edi_std_nomenclature: None,
-            long_leg_width: None,
-            short_leg_width: None,
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(result.is_err());
-        match result {
-            Ok(_) => unreachable!(),
-            Err(err) => assert_eq!(ShapeNotFound.to_string(), err.to_string()),
-        }
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles?aisc_manual_label=L8X8X1").await;
+        response.assert_status_not_found();
     }
 
     #[tokio::test]
@@ -1154,22 +1148,22 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: Some(String::from("L6X4X3/8")),
-            edi_std_nomenclature: None,
-            long_leg_width: None,
-            short_leg_width: None,
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(result.is_ok());
-        match result {
-            Ok(j) => {
-                assert_eq!(1, *&j.0.iter().count());
-                assert_eq!(String::from("L6X4X3/8"), j.0[0].aisc_manual_label);
-            }
-            Err(_) => unreachable!(),
-        }
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles?aisc_manual_label=L6X4X3/8").await;
+
+        response.assert_status_ok();
+        let angles: Vec<Angle> = response.json::<Vec<Angle>>();
+
+        assert_eq!(1, *&angles.iter().count());
+        assert_eq!(
+            String::from("L6X4X3/8"),
+            angles.iter().nth(0).unwrap().aisc_manual_label
+        );
     }
 
     #[tokio::test]
@@ -1182,22 +1176,14 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: Some(String::from("L6X4X3")),
-            edi_std_nomenclature: None,
-            long_leg_width: None,
-            short_leg_width: None,
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(result.is_err());
-        match result {
-            Ok(_) => unreachable!(),
-            Err(err) => assert_eq!(
-                MissingPropertyError::from("AISC Manual Label").to_string(),
-                err.to_string()
-            ),
-        }
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles?aisc_manual_label=L6X4X3/8").await;
+        response.assert_status_internal_server_error();
     }
 
     #[tokio::test]
@@ -1209,19 +1195,14 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: None,
-            edi_std_nomenclature: Some(String::from("L6X4X3")),
-            long_leg_width: None,
-            short_leg_width: None,
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(result.is_err());
-        match result {
-            Ok(_) => unreachable!(),
-            Err(err) => assert_eq!(ShapeNotFound.to_string(), err.to_string()),
-        }
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles?edi_std_nomenclature=L6X4X3/8").await;
+        response.assert_status_not_found();
     }
 
     #[tokio::test]
@@ -1286,22 +1267,22 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: None,
-            edi_std_nomenclature: Some(String::from("L6X4X3/8")),
-            long_leg_width: None,
-            short_leg_width: None,
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(result.is_ok());
-        match result {
-            Ok(j) => {
-                assert_eq!(1, *&j.0.iter().count());
-                assert_eq!(String::from("L6X4X3/8"), j.0[0].aisc_manual_label);
-            }
-            Err(_) => unreachable!(),
-        }
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles?edi_std_nomenclature=L6X4X3/8").await;
+
+        response.assert_status_ok();
+        let angles: Vec<Angle> = response.json::<Vec<Angle>>();
+
+        assert_eq!(1, *&angles.iter().count());
+        assert_eq!(
+            String::from("L6X4X3/8"),
+            angles.iter().nth(0).unwrap().aisc_manual_label
+        );
     }
 
     #[tokio::test]
@@ -1315,22 +1296,14 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: None,
-            edi_std_nomenclature: Some(String::from("L6X4X3/8")),
-            long_leg_width: None,
-            short_leg_width: None,
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(result.is_err());
-        match result {
-            Ok(_) => unreachable!(),
-            Err(err) => assert_eq!(
-                MissingPropertyError::from("AISC Manual Label").to_string(),
-                err.to_string()
-            ),
-        }
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles?edi_std_nomenclature=L6X4X3/8").await;
+        response.assert_status_internal_server_error();
     }
 
     #[tokio::test]
@@ -1342,19 +1315,14 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: None,
-            edi_std_nomenclature: None,
-            long_leg_width: None,
-            short_leg_width: Some(6.0),
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(result.is_err());
-        match result {
-            Ok(_) => unreachable!(),
-            Err(err) => assert_eq!(MissingPropertyError::from("d").to_string(), err.to_string()),
-        }
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles?short_leg_width=6.0").await;
+        response.assert_status_internal_server_error();
     }
 
     #[tokio::test]
@@ -1366,18 +1334,13 @@ pub mod tests {
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
         };
-        let params = Params {
-            aisc_manual_label: None,
-            edi_std_nomenclature: None,
-            long_leg_width: Some(6.0),
-            short_leg_width: None,
-        };
 
-        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
-        assert!(result.is_err());
-        match result {
-            Ok(_) => unreachable!(),
-            Err(err) => assert_eq!(MissingPropertyError::from("b").to_string(), err.to_string()),
-        }
+        let app = Router::new()
+            .route("/angles", get(get_angles))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/angles?long_leg_width=6.0").await;
+        response.assert_status_internal_server_error();
     }
 }

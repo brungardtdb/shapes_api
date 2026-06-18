@@ -10,6 +10,10 @@ sqlx = { version = "0.8", features = [ "runtime-tokio", "tls-native-tls", "postg
 axum = { version = "0.8", features = ["macros"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0.228", features = ["derive"]  }
+serde_json = "1.0.150"
+axum-test = { version = "20.1.0" }
+tower = { version = "0.5.3" }
+tower-http = { version = "0.7.0", features = ["trace"]}
 
 [dev-dependencies]
 mockall = "0.14.0"
