@@ -31,7 +31,7 @@ pub struct Params {
 
 /// Gets all AISC angles
 #[debug_handler]
-pub async fn get(
+pub async fn get_angles(
     State(state): State<Arc<AppStateDyn>>,
     Query(params): Query<Params>,
 ) -> Result<AppJson<Vec<Angle>>, AISCError> {
@@ -379,7 +379,7 @@ pub mod tests {
             short_leg_width: None,
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(result.is_ok());
         assert_eq!(3, result.unwrap().0.iter().count());
     }
@@ -454,7 +454,7 @@ pub mod tests {
             short_leg_width: None,
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(&result.is_ok());
         let angles = result.unwrap().0;
         assert_eq!(1, angles.clone().iter().count());
@@ -534,7 +534,7 @@ pub mod tests {
             short_leg_width: None,
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(&result.is_ok());
         let angles = result.unwrap().0;
         assert_eq!(1, angles.clone().iter().count());
@@ -614,7 +614,7 @@ pub mod tests {
             short_leg_width: None,
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(&result.is_ok());
         let angles = result.unwrap().0;
         assert_eq!(1, angles.clone().iter().count());
@@ -695,7 +695,7 @@ pub mod tests {
             short_leg_width: Some(4.0),
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(&result.is_ok());
         let angles = result.unwrap().0;
         assert_eq!(1, angles.clone().iter().count());
@@ -881,7 +881,7 @@ pub mod tests {
             short_leg_width: Some(6.0),
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(&result.is_ok());
         let angles = result.unwrap().0;
         assert_eq!(1, angles.clone().iter().count());
@@ -1015,7 +1015,7 @@ pub mod tests {
             short_leg_width: Some(4.0),
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(&result.is_ok());
         let angles = result.unwrap().0;
         assert_eq!(0, angles.clone().iter().count());
@@ -1037,7 +1037,7 @@ pub mod tests {
             short_leg_width: None,
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(result.is_err());
     }
 
@@ -1058,7 +1058,7 @@ pub mod tests {
             short_leg_width: None,
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(result.is_err());
         match result {
             Ok(_) => unreachable!(),
@@ -1085,7 +1085,7 @@ pub mod tests {
             short_leg_width: None,
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(result.is_err());
         match result {
             Ok(_) => unreachable!(),
@@ -1161,7 +1161,7 @@ pub mod tests {
             short_leg_width: None,
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(result.is_ok());
         match result {
             Ok(j) => {
@@ -1189,7 +1189,7 @@ pub mod tests {
             short_leg_width: None,
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(result.is_err());
         match result {
             Ok(_) => unreachable!(),
@@ -1216,7 +1216,7 @@ pub mod tests {
             short_leg_width: None,
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(result.is_err());
         match result {
             Ok(_) => unreachable!(),
@@ -1293,7 +1293,7 @@ pub mod tests {
             short_leg_width: None,
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(result.is_ok());
         match result {
             Ok(j) => {
@@ -1322,7 +1322,7 @@ pub mod tests {
             short_leg_width: None,
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(result.is_err());
         match result {
             Ok(_) => unreachable!(),
@@ -1349,7 +1349,7 @@ pub mod tests {
             short_leg_width: Some(6.0),
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(result.is_err());
         match result {
             Ok(_) => unreachable!(),
@@ -1373,7 +1373,7 @@ pub mod tests {
             short_leg_width: None,
         };
 
-        let result = get(State(Arc::new(app_state)), Query(params)).await;
+        let result = get_angles(State(Arc::new(app_state)), Query(params)).await;
         assert!(result.is_err());
         match result {
             Ok(_) => unreachable!(),

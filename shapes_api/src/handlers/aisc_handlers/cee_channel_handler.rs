@@ -31,7 +31,7 @@ pub struct Params {
 
 /// Gets all AISC Cee Channels
 #[debug_handler]
-pub async fn get(
+pub async fn get_cee_channels(
     State(state): State<Arc<AppStateDyn>>,
     Query(params): Query<Params>,
 ) -> Result<AppJson<Vec<CeeChannel>>, AISCError> {

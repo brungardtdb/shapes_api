@@ -12,41 +12,41 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let conx = Arc::new(pool);
 
     let app = Router::new()
-        .route("/aisc/angle", get(angle_handler::get))
+        .route("/aisc/angle", get(angle_handler::get_angles))
         .with_state(Arc::new(angle_handler::AppStateDyn {
             repo: Arc::new(AngleRepository::new(conx.clone())),
         }))
-        .route("/aisc/cee-channel", get(cee_channel_handler::get))
+        .route("/aisc/cee-channel", get(cee_channel_handler::get_cee_channels))
         .with_state(Arc::new(cee_channel_handler::AppStateDyn {
             repo: Arc::new(CeeChannelRepository::new(conx.clone())),
         }))
-        .route("/aisc/double-angle", get(double_angle_handler::get))
+        .route("/aisc/double-angle", get(double_angle_handler::get_double_angles))
         .with_state(Arc::new(double_angle_handler::AppStateDyn {
             repo: Arc::new(DoubleAngleRepository::new(conx.clone())),
         }))
-        .route("/aisc/h-pile", get(h_pile_handler::get))
+        .route("/aisc/h-pile", get(h_pile_handler::get_h_piles))
         .with_state(Arc::new(h_pile_handler::AppStateDyn {
             repo: Arc::new(HPileRepository::new(conx.clone())),
         }))
-        .route("/aisc/misc-beam", get(misc_beam_handler::get))
+        .route("/aisc/misc-beam", get(misc_beam_handler::get_misc_beams))
         .with_state(Arc::new(misc_beam_handler::AppStateDyn {
             repo: Arc::new(MiscBeamRepository::new(conx.clone())),
         }))
-        .route("/aisc/misc-channel", get(misc_channel_handler::get))
+        .route("/aisc/misc-channel", get(misc_channel_handler::get_misc_channels))
         .with_state(Arc::new(misc_channel_handler::AppStateDyn {
             repo: Arc::new(MiscChannelRepository::new(conx.clone())),
         }))
-        .route("/aisc/misc-tee", get(misc_tee_handler::get))
+        .route("/aisc/misc-tee", get(misc_tee_handler::get_misc_tees))
         .with_state(Arc::new(misc_tee_handler::AppStateDyn {
             repo: Arc::new(MiscTeeRepository::new(conx.clone())),
         }))
-        .route("/aisc/wide-flange", get(wide_flange_handler::get))
+        .route("/aisc/wide-flange", get(wide_flange_handler::get_wide_flanges))
         .with_state(Arc::new(wide_flange_handler::AppStateDyn {
             repo: Arc::new(WideFlangeRepository::new(conx.clone())),
         }))
         .route(
             "/aisc/hollow-structural-section",
-            get(hollow_structural_section_handler::get),
+            get(hollow_structural_section_handler::get_hollow_structural_sections),
         )
         .with_state(Arc::new(hollow_structural_section_handler::AppStateDyn {
             repo: Arc::new(HollowStructuralSectionRepository::new(conx.clone())),

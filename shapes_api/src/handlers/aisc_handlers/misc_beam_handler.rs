@@ -30,7 +30,7 @@ pub struct Params {
 
 /// Gets all misc beam AISC shapes
 #[debug_handler]
-pub async fn get(
+pub async fn get_misc_beams(
     State(state): State<Arc<AppStateDyn>>,
     Query(params): Query<Params>,
 ) -> Result<AppJson<Vec<MiscBeam>>, AISCError> {

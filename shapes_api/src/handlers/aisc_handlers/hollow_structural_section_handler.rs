@@ -31,7 +31,7 @@ pub struct Params {
 
 /// Gets all hollow structural section AISC shapes
 #[debug_handler]
-pub async fn get(
+pub async fn get_hollow_structural_sections(
     State(state): State<Arc<AppStateDyn>>,
     Query(params): Query<Params>,
 ) -> Result<AppJson<Vec<HollowStructuralSection>>, AISCError> {

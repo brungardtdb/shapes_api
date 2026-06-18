@@ -30,7 +30,7 @@ pub struct Params {
 
 /// Gets all wide flange AISC shapes
 #[debug_handler]
-pub async fn get(
+pub async fn get_wide_flanges(
     State(state): State<Arc<AppStateDyn>>,
     Query(params): Query<Params>,
 ) -> Result<AppJson<Vec<WideFlange>>, AISCError> {

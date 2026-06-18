@@ -30,7 +30,7 @@ pub struct Params {
 
 /// Gets all misc tee AISC shapes
 #[debug_handler]
-pub async fn get(
+pub async fn get_misc_tees(
     State(state): State<Arc<AppStateDyn>>,
     Query(params): Query<Params>,
 ) -> Result<AppJson<Vec<MiscTee>>, AISCError> {

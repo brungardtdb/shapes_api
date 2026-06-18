@@ -31,7 +31,7 @@ pub struct Params {
 
 /// Gets all AISC double angles
 #[debug_handler]
-pub async fn get(
+pub async fn get_double_angles(
     State(state): State<Arc<AppStateDyn>>,
     Query(params): Query<Params>,
 ) -> Result<AppJson<Vec<DoubleAngle>>, AISCError> {
