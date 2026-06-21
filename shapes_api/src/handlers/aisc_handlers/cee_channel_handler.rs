@@ -456,4 +456,81 @@ pub mod tests {
             assert_eq!(1, *&channels.iter().count());
             assert_eq!(String::from("C7X14.75"), channels.iter().nth(0).unwrap().aisc_manual_label);
     }
+
+    #[tokio::test]
+    async fn returns_shape_w_edi_std_nomenclature() {
+                let mut repo = MockChannelRepo::new();
+        repo.expect_shape_with_edi_std_nomenclature()
+            .returning(|_| {
+                Box::pin(async {
+                    Ok(Some(
+                        ShapeBuilder::new()
+                            .with_edi_std_nomenclature(String::from("C7X14.75"))
+                            .with_aisc_manual_label(String::from("C7X14.75"))
+                            .with_w_upper(14.75)
+                            .with_a_upper(4.33)
+                            .with_d_lower(7.0)
+                            .with_ddet(7.0)
+                            .with_bf(2.3)
+                            .with_bfdet(2.25)
+                            .with_tw(0.419)
+                            .with_twdet(0.4375)
+                            .with_twdet_2(0.25)
+                            .with_tf(0.366)
+                            .with_tfdet(0.375)
+                            .with_kdes(0.875)
+                            .with_kdet(0.875)
+                            .with_x_lower(0.532)
+                            .with_eo(0.441)
+                            .with_xp(0.309)
+                            .with_b_t(6.28)
+                            .with_h_tw(12.9)
+                            .with_ix(27.2)
+                            .with_zx(9.75)
+                            .with_sx(7.78)
+                            .with_rx(2.51)
+                            .with_iy(1.37)
+                            .with_zy(1.63)
+                            .with_sy(0.772)
+                            .with_ry(0.561)
+                            .with_j_upper(0.267)
+                            .with_cw(13.1)
+                            .with_wno(4.78)
+                            .with_sw1(1.26)
+                            .with_sw2(1.0)
+                            .with_sw3(0.498)
+                            .with_qf(2.28)
+                            .with_qw(4.85)
+                            .with_ro(2.75)
+                            .with_h_upper(0.875)
+                            .with_rts(0.738)
+                            .with_ho(6.63)
+                            .with_pa(20.0)
+                            .with_pb(22.3)
+                            .with_pc(16.3)
+                            .with_pd(18.6)
+                            .with_t(5.25)
+                            .with_wgi(1.25)
+                            .try_build::<C>()
+                            .unwrap(),
+                    ))
+                })
+            });
+
+            let app_state = AppStateDyn {
+                repo: Arc::new(repo)
+            };
+
+            let app = Router::new()
+            .route("/angles", get(get_cee_channels))
+            .with_state(Arc::new(app_state));
+
+            let server = TestServer::new(app);
+            let response = server.get("/angles?edi_std_nomenclature=C7X14.75").await;
+            response.assert_status_ok();
+
+            let channels: Vec<CeeChannel> = response.json::<Vec<CeeChannel>>();
+            assert_eq!(1, *&channels.iter().count());
+            assert_eq!(String::from("C7X14.75"), channels.iter().nth(0).unwrap().edi_std_nomenclature);
+    }
 }
