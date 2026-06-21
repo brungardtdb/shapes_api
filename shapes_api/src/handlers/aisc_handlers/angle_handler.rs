@@ -1072,6 +1072,7 @@ pub mod tests {
     async fn handles_no_aisc_manual_label_shape() {
         let mut repo = MockAngleRepo::new();
         repo.expect_shape_with_aisc_manual_label()
+            .with(predicate::eq(String::from("L8X8X1")))
             .returning(|_| Box::pin(async { Ok(None) }));
 
         let app_state = AppStateDyn {
@@ -1090,7 +1091,9 @@ pub mod tests {
     #[tokio::test]
     async fn gets_aisc_manual_label_shape() {
         let mut repo = MockAngleRepo::new();
-        repo.expect_shape_with_aisc_manual_label().returning(|_| {
+        repo.expect_shape_with_aisc_manual_label()
+            .with(predicate::eq(String::from("L6X4X3/8")))
+            .returning(|_| {
             Box::pin(async {
                 Ok(Some(
                     ShapeBuilder::new()
@@ -1169,7 +1172,9 @@ pub mod tests {
     #[tokio::test]
     async fn handles_failure_filtering_on_aisc_label_shape() {
         let mut repo = MockAngleRepo::new();
-        repo.expect_shape_with_aisc_manual_label().returning(|_| {
+        repo.expect_shape_with_aisc_manual_label()
+            .with(predicate::eq(String::from("L6X4X3/8")))
+            .returning(|_| {
             Box::pin(async { Err(MissingPropertyError::from("AISC Manual Label"))? })
         });
 
@@ -1190,6 +1195,7 @@ pub mod tests {
     async fn handles_no_edi_std_nomenclature_shape() {
         let mut repo = MockAngleRepo::new();
         repo.expect_shape_with_edi_std_nomenclature()
+            .with(predicate::eq(String::from("L6X4X3/8")))
             .returning(|_| Box::pin(async { Ok(None) }));
 
         let app_state = AppStateDyn {
@@ -1209,6 +1215,7 @@ pub mod tests {
     async fn gets_edi_std_nomenclature_shape() {
         let mut repo = MockAngleRepo::new();
         repo.expect_shape_with_edi_std_nomenclature()
+            .with(predicate::eq(String::from("L6X4X3/8")))
             .returning(|_| {
                 Box::pin(async {
                     Ok(Some(
@@ -1289,6 +1296,7 @@ pub mod tests {
     async fn handles_failure_filtering_on_edi_std_nomenclature() {
         let mut repo = MockAngleRepo::new();
         repo.expect_shape_with_edi_std_nomenclature()
+            .with(predicate::eq(String::from("L6X4X3/8")))
             .returning(|_| {
                 Box::pin(async { Err(MissingPropertyError::from("AISC Manual Label"))? })
             });
@@ -1310,6 +1318,7 @@ pub mod tests {
     async fn handles_failure_filtering_on_width() {
         let mut repo = MockAngleRepo::new();
         repo.expect_shapes_with_width()
+            .with(predicate::eq(6.0_f64))
             .returning(|_| Box::pin(async { Err(MissingPropertyError::from("d"))? }));
 
         let app_state = AppStateDyn {
@@ -1329,6 +1338,7 @@ pub mod tests {
     async fn handles_failure_filtering_on_depth() {
         let mut repo = MockAngleRepo::new();
         repo.expect_shapes_with_depth()
+            .with(predicate::eq(6.0_f64))
             .returning(|_| Box::pin(async { Err(MissingPropertyError::from("b"))? }));
 
         let app_state = AppStateDyn {
