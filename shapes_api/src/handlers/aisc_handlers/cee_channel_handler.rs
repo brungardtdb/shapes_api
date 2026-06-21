@@ -96,9 +96,17 @@ async fn get_from_geometry(
     let mut channels: Vec<CeeChannel> = Vec::new();
     if let Some(depth) = params.detailing_depth {
         channels = get_from_detailing_depth(&state, depth, &mut channels).await?;
+        if *&channels.is_empty() {
+            // return early because we cannot meet additional search criteria
+            return Err(AISCError::ShapeNotFound);
+        }
     }
     if let Some(flange_width) = params.detailing_flange_width {
         channels = get_from_detailing_flange_width(&state, flange_width, &mut channels).await?;
+        if *&channels.is_empty() {
+            // return early because we cannot meet additional search criteria
+            return Err(AISCError::ShapeNotFound);
+        }
     }
     Ok(AppJson(channels))
 }
@@ -1039,5 +1047,136 @@ pub mod tests {
             assert_eq!(8.0, c.ddet);
             assert_eq!(2.25, c.bfdet);
         });
+    }
+
+    #[tokio::test]
+    async fn filters_on_width_and_depth_with_one_query_returning_no_records() {
+        let mut repo = MockChannelRepo::new();
+
+        repo.expect_shapes_with_depth()
+            .with(predicate::eq(2.0))
+            .returning(|_| Box::pin(async { Ok(vec![]) }));
+
+        repo.expect_shapes_with_width()
+            .with(predicate::eq(2.25))
+            .returning(|_| {
+                Box::pin(async {
+                    Ok(vec![
+                        ShapeBuilder::new()
+                            .with_edi_std_nomenclature(String::from("C8X11.5"))
+                            .with_aisc_manual_label(String::from("C8X11.5"))
+                            .with_w_upper(11.5)
+                            .with_a_upper(3.37)
+                            .with_d_lower(8.0)
+                            .with_ddet(8.0)
+                            .with_bf(2.26)
+                            .with_bfdet(2.25)
+                            .with_tw(0.22)
+                            .with_twdet(0.25)
+                            .with_twdet_2(0.125)
+                            .with_tf(0.390)
+                            .with_tfdet(0.375)
+                            .with_kdes(0.938)
+                            .with_kdet(0.9375)
+                            .with_x_lower(0.572)
+                            .with_eo(0.697)
+                            .with_xp(0.211)
+                            .with_b_t(5.79)
+                            .with_h_tw(28.9)
+                            .with_ix(32.5)
+                            .with_zx(9.63)
+                            .with_sx(8.14)
+                            .with_rx(3.11)
+                            .with_iy(1.31)
+                            .with_zy(1.57)
+                            .with_sy(0.775)
+                            .with_ry(0.623)
+                            .with_j_upper(0.13)
+                            .with_cw(16.5)
+                            .with_wno(5.11)
+                            .with_sw1(1.34)
+                            .with_sw2(0.855)
+                            .with_sw3(0.430)
+                            .with_qf(3.03)
+                            .with_qw(4.79)
+                            .with_ro(3.41)
+                            .with_h_upper(0.862)
+                            .with_rts(0.756)
+                            .with_ho(7.61)
+                            .with_pa(21.9)
+                            .with_pb(24.1)
+                            .with_pc(18.3)
+                            .with_pd(20.5)
+                            .with_t(6.125)
+                            .with_wgi(1.375)
+                            .try_build::<C>()
+                            .unwrap(),
+                        ShapeBuilder::new()
+                            .with_edi_std_nomenclature(String::from("C7X14.75"))
+                            .with_aisc_manual_label(String::from("C7X14.75"))
+                            .with_w_upper(14.75)
+                            .with_a_upper(4.33)
+                            .with_d_lower(7.0)
+                            .with_ddet(7.0)
+                            .with_bf(2.3)
+                            .with_bfdet(2.25)
+                            .with_tw(0.419)
+                            .with_twdet(0.4375)
+                            .with_twdet_2(0.25)
+                            .with_tf(0.366)
+                            .with_tfdet(0.375)
+                            .with_kdes(0.875)
+                            .with_kdet(0.875)
+                            .with_x_lower(0.532)
+                            .with_eo(0.441)
+                            .with_xp(0.309)
+                            .with_b_t(6.28)
+                            .with_h_tw(12.9)
+                            .with_ix(27.2)
+                            .with_zx(9.75)
+                            .with_sx(7.78)
+                            .with_rx(2.51)
+                            .with_iy(1.37)
+                            .with_zy(1.63)
+                            .with_sy(0.772)
+                            .with_ry(0.561)
+                            .with_j_upper(0.267)
+                            .with_cw(13.1)
+                            .with_wno(4.78)
+                            .with_sw1(1.26)
+                            .with_sw2(1.0)
+                            .with_sw3(0.498)
+                            .with_qf(2.28)
+                            .with_qw(4.85)
+                            .with_ro(2.75)
+                            .with_h_upper(0.875)
+                            .with_rts(0.738)
+                            .with_ho(6.63)
+                            .with_pa(20.0)
+                            .with_pb(22.3)
+                            .with_pc(16.3)
+                            .with_pd(18.6)
+                            .with_t(5.25)
+                            .with_wgi(1.25)
+                            .try_build::<C>()
+                            .unwrap(),
+                    ])
+                })
+            });
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/cee-channels", get(get_cee_channels))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server
+            .get("/cee-channels?detailing_depth=2.0&detailing_flange_width=2.25")
+            .await;
+
+        response.assert_status_not_found();
     }
 }
