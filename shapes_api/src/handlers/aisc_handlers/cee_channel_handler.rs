@@ -178,6 +178,7 @@ pub mod tests {
     use std::error::Error;
     use std::future::Future;
     use std::pin::Pin;
+    use std::vec;
 
     mock! {
         pub ChannelRepo {}
@@ -369,11 +370,11 @@ pub mod tests {
         };
 
         let app = Router::new()
-            .route("/channels", get(get_cee_channels))
+            .route("/cee-channels", get(get_cee_channels))
             .with_state(Arc::new(app_state));
 
         let server = TestServer::new(app);
-        let response = server.get("/channels").await;
+        let response = server.get("/cee-channels").await;
 
         response.assert_status_ok();
         let channels: Vec<CeeChannel> = response.json::<Vec<CeeChannel>>();
@@ -384,6 +385,7 @@ pub mod tests {
     async fn returns_shape_w_aisc_manual_label() {
         let mut repo = MockChannelRepo::new();
         repo.expect_shape_with_aisc_manual_label()
+            .with(predicate::eq(String::from("C7X14.75")))
             .returning(|_| {
                 Box::pin(async {
                     Ok(Some(
@@ -440,27 +442,31 @@ pub mod tests {
                 })
             });
 
-            let app_state = AppStateDyn {
-                repo: Arc::new(repo)
-            };
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
 
-            let app = Router::new()
-            .route("/angles", get(get_cee_channels))
+        let app = Router::new()
+            .route("/cee-channels", get(get_cee_channels))
             .with_state(Arc::new(app_state));
 
-            let server = TestServer::new(app);
-            let response = server.get("/angles?aisc_manual_label=C7X14.75").await;
-            response.assert_status_ok();
+        let server = TestServer::new(app);
+        let response = server.get("/cee-channels?aisc_manual_label=C7X14.75").await;
+        response.assert_status_ok();
 
-            let channels: Vec<CeeChannel> = response.json::<Vec<CeeChannel>>();
-            assert_eq!(1, *&channels.iter().count());
-            assert_eq!(String::from("C7X14.75"), channels.iter().nth(0).unwrap().aisc_manual_label);
+        let channels: Vec<CeeChannel> = response.json::<Vec<CeeChannel>>();
+        assert_eq!(1, *&channels.iter().count());
+        assert_eq!(
+            String::from("C7X14.75"),
+            channels.iter().nth(0).unwrap().aisc_manual_label
+        );
     }
 
     #[tokio::test]
     async fn returns_shape_w_edi_std_nomenclature() {
-                let mut repo = MockChannelRepo::new();
+        let mut repo = MockChannelRepo::new();
         repo.expect_shape_with_edi_std_nomenclature()
+            .with(predicate::eq(String::from("C7X14.75")))
             .returning(|_| {
                 Box::pin(async {
                     Ok(Some(
@@ -517,20 +523,521 @@ pub mod tests {
                 })
             });
 
-            let app_state = AppStateDyn {
-                repo: Arc::new(repo)
-            };
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
 
-            let app = Router::new()
-            .route("/angles", get(get_cee_channels))
+        let app = Router::new()
+            .route("/cee-channels", get(get_cee_channels))
             .with_state(Arc::new(app_state));
 
-            let server = TestServer::new(app);
-            let response = server.get("/angles?edi_std_nomenclature=C7X14.75").await;
-            response.assert_status_ok();
+        let server = TestServer::new(app);
+        let response = server
+            .get("/cee-channels?edi_std_nomenclature=C7X14.75")
+            .await;
+        response.assert_status_ok();
 
-            let channels: Vec<CeeChannel> = response.json::<Vec<CeeChannel>>();
-            assert_eq!(1, *&channels.iter().count());
-            assert_eq!(String::from("C7X14.75"), channels.iter().nth(0).unwrap().edi_std_nomenclature);
+        let channels: Vec<CeeChannel> = response.json::<Vec<CeeChannel>>();
+        assert_eq!(1, *&channels.iter().count());
+        assert_eq!(
+            String::from("C7X14.75"),
+            channels.iter().nth(0).unwrap().edi_std_nomenclature
+        );
+    }
+
+    #[tokio::test]
+    async fn filters_on_depth() {
+        let mut repo = MockChannelRepo::new();
+        repo.expect_shapes_with_depth()
+            .with(predicate::eq(8.0))
+            .returning(|_| {
+                Box::pin(async {
+                    Ok(vec![
+                        ShapeBuilder::new()
+                            .with_edi_std_nomenclature(String::from("C8X13.75"))
+                            .with_aisc_manual_label(String::from("C8X13.75"))
+                            .with_w_upper(13.75)
+                            .with_a_upper(4.03)
+                            .with_d_lower(8.0)
+                            .with_ddet(8.0)
+                            .with_bf(2.34)
+                            .with_bfdet(2.375)
+                            .with_tw(0.303)
+                            .with_twdet(0.3125)
+                            .with_twdet_2(0.1875)
+                            .with_tf(0.390)
+                            .with_tfdet(0.375)
+                            .with_kdes(0.938)
+                            .with_kdet(0.9375)
+                            .with_x_lower(0.554)
+                            .with_eo(0.604)
+                            .with_xp(0.252)
+                            .with_b_t(6.0)
+                            .with_h_tw(21.0)
+                            .with_ix(36.1)
+                            .with_zx(11.0)
+                            .with_sx(9.02)
+                            .with_rx(2.99)
+                            .with_iy(1.52)
+                            .with_zy(1.73)
+                            .with_sy(0.848)
+                            .with_ry(0.613)
+                            .with_j_upper(0.186)
+                            .with_cw(19.2)
+                            .with_wno(5.45)
+                            .with_sw1(1.52)
+                            .with_sw2(1.10)
+                            .with_sw3(0.557)
+                            .with_qf(3.02)
+                            .with_qw(5.45)
+                            .with_ro(3.25)
+                            .with_h_upper(0.874)
+                            .with_rts(0.774)
+                            .with_ho(7.61)
+                            .with_pa(22.1)
+                            .with_pb(24.4)
+                            .with_pc(18.3)
+                            .with_pd(20.7)
+                            .with_t(6.125)
+                            .with_wgi(1.375)
+                            .try_build::<C>()
+                            .unwrap(),
+                        ShapeBuilder::new()
+                            .with_edi_std_nomenclature(String::from("C8X11.5"))
+                            .with_aisc_manual_label(String::from("C8X11.5"))
+                            .with_w_upper(11.5)
+                            .with_a_upper(3.37)
+                            .with_d_lower(8.0)
+                            .with_ddet(8.0)
+                            .with_bf(2.26)
+                            .with_bfdet(2.25)
+                            .with_tw(0.22)
+                            .with_twdet(0.25)
+                            .with_twdet_2(0.125)
+                            .with_tf(0.390)
+                            .with_tfdet(0.375)
+                            .with_kdes(0.938)
+                            .with_kdet(0.9375)
+                            .with_x_lower(0.572)
+                            .with_eo(0.697)
+                            .with_xp(0.211)
+                            .with_b_t(5.79)
+                            .with_h_tw(28.9)
+                            .with_ix(32.5)
+                            .with_zx(9.63)
+                            .with_sx(8.14)
+                            .with_rx(3.11)
+                            .with_iy(1.31)
+                            .with_zy(1.57)
+                            .with_sy(0.775)
+                            .with_ry(0.623)
+                            .with_j_upper(0.13)
+                            .with_cw(16.5)
+                            .with_wno(5.11)
+                            .with_sw1(1.34)
+                            .with_sw2(0.855)
+                            .with_sw3(0.430)
+                            .with_qf(3.03)
+                            .with_qw(4.79)
+                            .with_ro(3.41)
+                            .with_h_upper(0.862)
+                            .with_rts(0.756)
+                            .with_ho(7.61)
+                            .with_pa(21.9)
+                            .with_pb(24.1)
+                            .with_pc(18.3)
+                            .with_pd(20.5)
+                            .with_t(6.125)
+                            .with_wgi(1.375)
+                            .try_build::<C>()
+                            .unwrap(),
+                    ])
+                })
+            });
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/cee-channels", get(get_cee_channels))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/cee-channels?detailing_depth=8.0").await;
+        response.assert_status_ok();
+
+        let channels: Vec<CeeChannel> = response.json::<Vec<CeeChannel>>();
+        assert_eq!(2, *&channels.iter().count());
+        channels.iter().for_each(|c| assert_eq!(8.0, c.ddet));
+    }
+
+    #[tokio::test]
+    async fn filters_on_width() {
+        let mut repo = MockChannelRepo::new();
+        repo.expect_shapes_with_width()
+            .with(predicate::eq(2.25))
+            .returning(|_| {
+                Box::pin(async {
+                    Ok(vec![
+                        ShapeBuilder::new()
+                            .with_edi_std_nomenclature(String::from("C8X11.5"))
+                            .with_aisc_manual_label(String::from("C8X11.5"))
+                            .with_w_upper(11.5)
+                            .with_a_upper(3.37)
+                            .with_d_lower(8.0)
+                            .with_ddet(8.0)
+                            .with_bf(2.26)
+                            .with_bfdet(2.25)
+                            .with_tw(0.22)
+                            .with_twdet(0.25)
+                            .with_twdet_2(0.125)
+                            .with_tf(0.390)
+                            .with_tfdet(0.375)
+                            .with_kdes(0.938)
+                            .with_kdet(0.9375)
+                            .with_x_lower(0.572)
+                            .with_eo(0.697)
+                            .with_xp(0.211)
+                            .with_b_t(5.79)
+                            .with_h_tw(28.9)
+                            .with_ix(32.5)
+                            .with_zx(9.63)
+                            .with_sx(8.14)
+                            .with_rx(3.11)
+                            .with_iy(1.31)
+                            .with_zy(1.57)
+                            .with_sy(0.775)
+                            .with_ry(0.623)
+                            .with_j_upper(0.13)
+                            .with_cw(16.5)
+                            .with_wno(5.11)
+                            .with_sw1(1.34)
+                            .with_sw2(0.855)
+                            .with_sw3(0.430)
+                            .with_qf(3.03)
+                            .with_qw(4.79)
+                            .with_ro(3.41)
+                            .with_h_upper(0.862)
+                            .with_rts(0.756)
+                            .with_ho(7.61)
+                            .with_pa(21.9)
+                            .with_pb(24.1)
+                            .with_pc(18.3)
+                            .with_pd(20.5)
+                            .with_t(6.125)
+                            .with_wgi(1.375)
+                            .try_build::<C>()
+                            .unwrap(),
+                        ShapeBuilder::new()
+                            .with_edi_std_nomenclature(String::from("C7X14.75"))
+                            .with_aisc_manual_label(String::from("C7X14.75"))
+                            .with_w_upper(14.75)
+                            .with_a_upper(4.33)
+                            .with_d_lower(7.0)
+                            .with_ddet(7.0)
+                            .with_bf(2.3)
+                            .with_bfdet(2.25)
+                            .with_tw(0.419)
+                            .with_twdet(0.4375)
+                            .with_twdet_2(0.25)
+                            .with_tf(0.366)
+                            .with_tfdet(0.375)
+                            .with_kdes(0.875)
+                            .with_kdet(0.875)
+                            .with_x_lower(0.532)
+                            .with_eo(0.441)
+                            .with_xp(0.309)
+                            .with_b_t(6.28)
+                            .with_h_tw(12.9)
+                            .with_ix(27.2)
+                            .with_zx(9.75)
+                            .with_sx(7.78)
+                            .with_rx(2.51)
+                            .with_iy(1.37)
+                            .with_zy(1.63)
+                            .with_sy(0.772)
+                            .with_ry(0.561)
+                            .with_j_upper(0.267)
+                            .with_cw(13.1)
+                            .with_wno(4.78)
+                            .with_sw1(1.26)
+                            .with_sw2(1.0)
+                            .with_sw3(0.498)
+                            .with_qf(2.28)
+                            .with_qw(4.85)
+                            .with_ro(2.75)
+                            .with_h_upper(0.875)
+                            .with_rts(0.738)
+                            .with_ho(6.63)
+                            .with_pa(20.0)
+                            .with_pb(22.3)
+                            .with_pc(16.3)
+                            .with_pd(18.6)
+                            .with_t(5.25)
+                            .with_wgi(1.25)
+                            .try_build::<C>()
+                            .unwrap(),
+                    ])
+                })
+            });
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/cee-channels", get(get_cee_channels))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server
+            .get("/cee-channels?detailing_flange_width=2.25")
+            .await;
+        response.assert_status_ok();
+
+        let channels: Vec<CeeChannel> = response.json::<Vec<CeeChannel>>();
+        assert_eq!(2, *&channels.iter().count());
+        channels.iter().for_each(|c| assert_eq!(2.25, c.bfdet));
+    }
+
+    #[tokio::test]
+    async fn filters_on_width_and_depth() {
+        let mut repo = MockChannelRepo::new();
+
+        repo.expect_shapes_with_depth()
+            .with(predicate::eq(8.0))
+            .returning(|_| {
+                Box::pin(async {
+                    Ok(vec![
+                        ShapeBuilder::new()
+                            .with_edi_std_nomenclature(String::from("C8X13.75"))
+                            .with_aisc_manual_label(String::from("C8X13.75"))
+                            .with_w_upper(13.75)
+                            .with_a_upper(4.03)
+                            .with_d_lower(8.0)
+                            .with_ddet(8.0)
+                            .with_bf(2.34)
+                            .with_bfdet(2.375)
+                            .with_tw(0.303)
+                            .with_twdet(0.3125)
+                            .with_twdet_2(0.1875)
+                            .with_tf(0.390)
+                            .with_tfdet(0.375)
+                            .with_kdes(0.938)
+                            .with_kdet(0.9375)
+                            .with_x_lower(0.554)
+                            .with_eo(0.604)
+                            .with_xp(0.252)
+                            .with_b_t(6.0)
+                            .with_h_tw(21.0)
+                            .with_ix(36.1)
+                            .with_zx(11.0)
+                            .with_sx(9.02)
+                            .with_rx(2.99)
+                            .with_iy(1.52)
+                            .with_zy(1.73)
+                            .with_sy(0.848)
+                            .with_ry(0.613)
+                            .with_j_upper(0.186)
+                            .with_cw(19.2)
+                            .with_wno(5.45)
+                            .with_sw1(1.52)
+                            .with_sw2(1.10)
+                            .with_sw3(0.557)
+                            .with_qf(3.02)
+                            .with_qw(5.45)
+                            .with_ro(3.25)
+                            .with_h_upper(0.874)
+                            .with_rts(0.774)
+                            .with_ho(7.61)
+                            .with_pa(22.1)
+                            .with_pb(24.4)
+                            .with_pc(18.3)
+                            .with_pd(20.7)
+                            .with_t(6.125)
+                            .with_wgi(1.375)
+                            .try_build::<C>()
+                            .unwrap(),
+                        ShapeBuilder::new()
+                            .with_edi_std_nomenclature(String::from("C8X11.5"))
+                            .with_aisc_manual_label(String::from("C8X11.5"))
+                            .with_w_upper(11.5)
+                            .with_a_upper(3.37)
+                            .with_d_lower(8.0)
+                            .with_ddet(8.0)
+                            .with_bf(2.26)
+                            .with_bfdet(2.25)
+                            .with_tw(0.22)
+                            .with_twdet(0.25)
+                            .with_twdet_2(0.125)
+                            .with_tf(0.390)
+                            .with_tfdet(0.375)
+                            .with_kdes(0.938)
+                            .with_kdet(0.9375)
+                            .with_x_lower(0.572)
+                            .with_eo(0.697)
+                            .with_xp(0.211)
+                            .with_b_t(5.79)
+                            .with_h_tw(28.9)
+                            .with_ix(32.5)
+                            .with_zx(9.63)
+                            .with_sx(8.14)
+                            .with_rx(3.11)
+                            .with_iy(1.31)
+                            .with_zy(1.57)
+                            .with_sy(0.775)
+                            .with_ry(0.623)
+                            .with_j_upper(0.13)
+                            .with_cw(16.5)
+                            .with_wno(5.11)
+                            .with_sw1(1.34)
+                            .with_sw2(0.855)
+                            .with_sw3(0.430)
+                            .with_qf(3.03)
+                            .with_qw(4.79)
+                            .with_ro(3.41)
+                            .with_h_upper(0.862)
+                            .with_rts(0.756)
+                            .with_ho(7.61)
+                            .with_pa(21.9)
+                            .with_pb(24.1)
+                            .with_pc(18.3)
+                            .with_pd(20.5)
+                            .with_t(6.125)
+                            .with_wgi(1.375)
+                            .try_build::<C>()
+                            .unwrap(),
+                    ])
+                })
+            });
+
+        repo.expect_shapes_with_width()
+            .with(predicate::eq(2.25))
+            .returning(|_| {
+                Box::pin(async {
+                    Ok(vec![
+                        ShapeBuilder::new()
+                            .with_edi_std_nomenclature(String::from("C8X11.5"))
+                            .with_aisc_manual_label(String::from("C8X11.5"))
+                            .with_w_upper(11.5)
+                            .with_a_upper(3.37)
+                            .with_d_lower(8.0)
+                            .with_ddet(8.0)
+                            .with_bf(2.26)
+                            .with_bfdet(2.25)
+                            .with_tw(0.22)
+                            .with_twdet(0.25)
+                            .with_twdet_2(0.125)
+                            .with_tf(0.390)
+                            .with_tfdet(0.375)
+                            .with_kdes(0.938)
+                            .with_kdet(0.9375)
+                            .with_x_lower(0.572)
+                            .with_eo(0.697)
+                            .with_xp(0.211)
+                            .with_b_t(5.79)
+                            .with_h_tw(28.9)
+                            .with_ix(32.5)
+                            .with_zx(9.63)
+                            .with_sx(8.14)
+                            .with_rx(3.11)
+                            .with_iy(1.31)
+                            .with_zy(1.57)
+                            .with_sy(0.775)
+                            .with_ry(0.623)
+                            .with_j_upper(0.13)
+                            .with_cw(16.5)
+                            .with_wno(5.11)
+                            .with_sw1(1.34)
+                            .with_sw2(0.855)
+                            .with_sw3(0.430)
+                            .with_qf(3.03)
+                            .with_qw(4.79)
+                            .with_ro(3.41)
+                            .with_h_upper(0.862)
+                            .with_rts(0.756)
+                            .with_ho(7.61)
+                            .with_pa(21.9)
+                            .with_pb(24.1)
+                            .with_pc(18.3)
+                            .with_pd(20.5)
+                            .with_t(6.125)
+                            .with_wgi(1.375)
+                            .try_build::<C>()
+                            .unwrap(),
+                        ShapeBuilder::new()
+                            .with_edi_std_nomenclature(String::from("C7X14.75"))
+                            .with_aisc_manual_label(String::from("C7X14.75"))
+                            .with_w_upper(14.75)
+                            .with_a_upper(4.33)
+                            .with_d_lower(7.0)
+                            .with_ddet(7.0)
+                            .with_bf(2.3)
+                            .with_bfdet(2.25)
+                            .with_tw(0.419)
+                            .with_twdet(0.4375)
+                            .with_twdet_2(0.25)
+                            .with_tf(0.366)
+                            .with_tfdet(0.375)
+                            .with_kdes(0.875)
+                            .with_kdet(0.875)
+                            .with_x_lower(0.532)
+                            .with_eo(0.441)
+                            .with_xp(0.309)
+                            .with_b_t(6.28)
+                            .with_h_tw(12.9)
+                            .with_ix(27.2)
+                            .with_zx(9.75)
+                            .with_sx(7.78)
+                            .with_rx(2.51)
+                            .with_iy(1.37)
+                            .with_zy(1.63)
+                            .with_sy(0.772)
+                            .with_ry(0.561)
+                            .with_j_upper(0.267)
+                            .with_cw(13.1)
+                            .with_wno(4.78)
+                            .with_sw1(1.26)
+                            .with_sw2(1.0)
+                            .with_sw3(0.498)
+                            .with_qf(2.28)
+                            .with_qw(4.85)
+                            .with_ro(2.75)
+                            .with_h_upper(0.875)
+                            .with_rts(0.738)
+                            .with_ho(6.63)
+                            .with_pa(20.0)
+                            .with_pb(22.3)
+                            .with_pc(16.3)
+                            .with_pd(18.6)
+                            .with_t(5.25)
+                            .with_wgi(1.25)
+                            .try_build::<C>()
+                            .unwrap(),
+                    ])
+                })
+            });
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/cee-channels", get(get_cee_channels))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server
+            .get("/cee-channels?detailing_depth=8.0&detailing_flange_width=2.25")
+            .await;
+        response.assert_status_ok();
+
+        let channels: Vec<CeeChannel> = response.json::<Vec<CeeChannel>>();
+        assert_eq!(1, *&channels.iter().count());
+        channels.iter().for_each(|c| {
+            assert_eq!(8.0, c.ddet);
+            assert_eq!(2.25, c.bfdet);
+        });
     }
 }
