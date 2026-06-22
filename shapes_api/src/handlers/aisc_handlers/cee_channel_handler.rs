@@ -1179,4 +1179,42 @@ pub mod tests {
 
         response.assert_status_not_found();
     }
+
+    #[tokio::test]
+    async fn returns_error_if_no_shapes_when_requesting_all() {
+        let mut repo = MockChannelRepo::new();
+        repo.expect_all()
+            .returning(|| Box::pin(async { Ok(vec![]) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/cee-channels", get(get_cee_channels))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/cee-channels");
+        response.await.assert_status_internal_server_error();
+    }
+
+    #[tokio::test]
+    async fn bubbles_up_repo_err_getting_all() {
+        let mut repo = MockChannelRepo::new();
+        repo.expect_all()
+            .returning(|| Box::pin(async { Err(MissingPropertyError::from("Ix"))? }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/cee-channels", get(get_cee_channels))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/cee-channels");
+        response.await.assert_status_internal_server_error();
+    }
 }
