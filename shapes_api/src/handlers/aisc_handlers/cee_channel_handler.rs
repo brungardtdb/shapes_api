@@ -1217,4 +1217,44 @@ pub mod tests {
         let response = server.get("/cee-channels");
         response.await.assert_status_internal_server_error();
     }
+
+    #[tokio::test]
+    async fn handles_no_aisc_manual_label_shape() {
+        let mut repo = MockChannelRepo::new();
+        repo.expect_shape_with_aisc_manual_label()
+            .with(predicate::eq(String::from("C8X12")))
+            .returning(|_| Box::pin(async { Ok(None) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/cee-channels", get(get_cee_channels))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/cee-channels?aisc_manual_label=C8X12");
+        response.await.assert_status_not_found();
+    }
+
+    #[tokio::test]
+    async fn handles_failure_filtering_on_aisc_label_shape() {
+        let mut repo = MockChannelRepo::new();
+        repo.expect_shape_with_aisc_manual_label()
+            .with(predicate::eq(String::from("C8X11.5")))
+            .returning(|_| Box::pin(async { Err(MissingPropertyError::from("W"))? }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/cee-channels", get(get_cee_channels))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/cee-channels?aisc_manual_label=C8X11.5");
+        response.await.assert_status_internal_server_error();
+    }
 }
