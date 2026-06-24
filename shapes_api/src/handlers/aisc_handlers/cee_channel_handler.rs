@@ -1257,4 +1257,84 @@ pub mod tests {
         let response = server.get("/cee-channels?aisc_manual_label=C8X11.5");
         response.await.assert_status_internal_server_error();
     }
+
+    #[tokio::test]
+    async fn handles_no_edi_std_nomenclature_shape() {
+        let mut repo = MockChannelRepo::new();
+        repo.expect_shape_with_edi_std_nomenclature()
+            .with(predicate::eq(String::from("C8X12")))
+            .returning(|_| Box::pin(async { Ok(None) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/cee-channels", get(get_cee_channels))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/cee-channels?edi_std_nomenclature=C8X12");
+        response.await.assert_status_not_found();
+    }
+
+    #[tokio::test]
+    async fn handles_failure_filtering_on_edi_std_nomenclature() {
+        let mut repo = MockChannelRepo::new();
+        repo.expect_shape_with_edi_std_nomenclature()
+            .with(predicate::eq(String::from("C8X11.5")))
+            .returning(|_| Box::pin(async { Err(MissingPropertyError::from("W"))? }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/cee-channels", get(get_cee_channels))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/cee-channels?edi_std_nomenclature=C8X11.5");
+        response.await.assert_status_internal_server_error();
+    }
+
+    #[tokio::test]
+    async fn handles_failure_filtering_on_width() {
+        let mut repo = MockChannelRepo::new();
+        repo.expect_shapes_with_width()
+            .with(predicate::eq(2.25_f64))
+            .returning(|_| Box::pin(async { Err(MissingPropertyError::from("bfdet"))? }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/cee-channel", get(get_cee_channels))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/cee-channel?detailing_flange_width=2.25").await;
+        response.assert_status_internal_server_error();
+    }
+
+    #[tokio::test]
+    async fn handles_failure_filtering_on_depth() {
+        let mut repo = MockChannelRepo::new();
+        repo.expect_shapes_with_depth()
+            .with(predicate::eq(8.0_f64))
+            .returning(|_| Box::pin(async { Err(MissingPropertyError::from("bfdet"))? }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/cee-channels", get(get_cee_channels))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/cee-channels?detailing_depth=8.0");
+        response.await.assert_status_internal_server_error();
+    }
 }
