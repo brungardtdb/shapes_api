@@ -1,8 +1,8 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use shapes::aisc_shapes::DoubleAngle as AISCDoubleAngle;
 
 /// A data transfer object for double angle (2L) steel profiles
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DoubleAngle {
     /// The shape designation according to the AISC Naming Convention
     /// for Structural Steel Products for Use in Electronic Data Interchange (EDI), June 25, 2001.
