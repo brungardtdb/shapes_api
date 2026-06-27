@@ -357,9 +357,8 @@ pub mod tests {
     #[tokio::test]
     async fn returns_all_shapes_w_no_query() {
         let mut repo = MockWideFlangeRepo::new();
-        repo.expect_all().returning(|| {
-            Box::pin(async { Ok(vec![w44x408(), w44x368(), w40x397()]) })
-        });
+        repo.expect_all()
+            .returning(|| Box::pin(async { Ok(vec![w44x408(), w44x368(), w40x397()]) }));
 
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
@@ -421,7 +420,9 @@ pub mod tests {
             .with_state(Arc::new(app_state));
 
         let server = TestServer::new(app);
-        let response = server.get("/wide-flanges?edi_std_nomenclature=W44X368").await;
+        let response = server
+            .get("/wide-flanges?edi_std_nomenclature=W44X368")
+            .await;
 
         response.assert_status_ok();
         let beams: Vec<WideFlange> = response.json::<Vec<WideFlange>>();
@@ -570,9 +571,8 @@ pub mod tests {
     #[tokio::test]
     async fn bubbles_up_repo_err_getting_all() {
         let mut repo = MockWideFlangeRepo::new();
-        repo.expect_all().returning(|| {
-            Box::pin(async { Err(MissingPropertyError::from("ddet"))? })
-        });
+        repo.expect_all()
+            .returning(|| Box::pin(async { Err(MissingPropertyError::from("ddet"))? }));
 
         let app_state = AppStateDyn {
             repo: Arc::new(repo),

@@ -371,9 +371,8 @@ pub mod tests {
     #[tokio::test]
     async fn returns_all_shapes_w_no_query() {
         let mut repo = MockAngleRepo::new();
-        repo.expect_all().returning(|| {
-            Box::pin(async { Ok(vec![l6x4x3_8(), l8x6x1_2(), l8x8x1()]) })
-        });
+        repo.expect_all()
+            .returning(|| Box::pin(async { Ok(vec![l6x4x3_8(), l8x6x1_2(), l8x8x1()]) }));
 
         let app_state = AppStateDyn {
             repo: Arc::new(repo),

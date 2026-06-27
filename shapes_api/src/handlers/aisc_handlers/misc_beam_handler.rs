@@ -351,9 +351,8 @@ pub mod tests {
     #[tokio::test]
     async fn returns_all_shapes_w_no_query() {
         let mut repo = MockMiscBeamRepo::new();
-        repo.expect_all().returning(|| {
-            Box::pin(async { Ok(vec![m12_5x12_4(), m12_5x11_6(), m12x11_8()]) })
-        });
+        repo.expect_all()
+            .returning(|| Box::pin(async { Ok(vec![m12_5x12_4(), m12_5x11_6(), m12x11_8()]) }));
 
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
@@ -470,9 +469,7 @@ pub mod tests {
             .with_state(Arc::new(app_state));
 
         let server = TestServer::new(app);
-        let response = server
-            .get("/misc-beams?detailing_flange_width=3.5")
-            .await;
+        let response = server.get("/misc-beams?detailing_flange_width=3.5").await;
 
         response.assert_status_ok();
         let beams: Vec<MiscBeam> = response.json::<Vec<MiscBeam>>();
@@ -624,9 +621,7 @@ pub mod tests {
             .with_state(Arc::new(app_state));
 
         let server = TestServer::new(app);
-        let response = server
-            .get("/misc-beams?aisc_manual_label=M12X11.8")
-            .await;
+        let response = server.get("/misc-beams?aisc_manual_label=M12X11.8").await;
         response.assert_status_internal_server_error();
     }
 
@@ -646,9 +641,7 @@ pub mod tests {
             .with_state(Arc::new(app_state));
 
         let server = TestServer::new(app);
-        let response = server
-            .get("/misc-beams?edi_std_nomenclature=M12X10")
-            .await;
+        let response = server.get("/misc-beams?edi_std_nomenclature=M12X10").await;
         response.assert_status_not_found();
     }
 
@@ -692,9 +685,7 @@ pub mod tests {
             .with_state(Arc::new(app_state));
 
         let server = TestServer::new(app);
-        let response = server
-            .get("/misc-beams?detailing_flange_width=3.5")
-            .await;
+        let response = server.get("/misc-beams?detailing_flange_width=3.5").await;
         response.assert_status_internal_server_error();
     }
 

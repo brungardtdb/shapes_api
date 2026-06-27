@@ -327,9 +327,8 @@ pub mod tests {
     #[tokio::test]
     async fn returns_all_shapes_w_no_query() {
         let mut repo = MockMiscTeeRepo::new();
-        repo.expect_all().returning(|| {
-            Box::pin(async { Ok(vec![mt6_25x6_2(), mt6_25x5_8(), mt6x5_9()]) })
-        });
+        repo.expect_all()
+            .returning(|| Box::pin(async { Ok(vec![mt6_25x6_2(), mt6_25x5_8(), mt6x5_9()]) }));
 
         let app_state = AppStateDyn {
             repo: Arc::new(repo),

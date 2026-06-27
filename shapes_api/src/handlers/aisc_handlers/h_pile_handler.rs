@@ -399,9 +399,8 @@ pub mod tests {
     #[tokio::test]
     async fn returns_all_shapes_w_no_query() {
         let mut repo = MockHPileRepo::new();
-        repo.expect_all().returning(|| {
-            Box::pin(async { Ok(vec![hp18x204(), hp18x181(), hp16x183()]) })
-        });
+        repo.expect_all()
+            .returning(|| Box::pin(async { Ok(vec![hp18x204(), hp18x181(), hp16x183()]) }));
 
         let app_state = AppStateDyn {
             repo: Arc::new(repo),

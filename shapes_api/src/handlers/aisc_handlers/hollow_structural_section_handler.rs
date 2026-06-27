@@ -317,7 +317,8 @@ pub mod tests {
         let response = server.get("/hss").await;
 
         response.assert_status_ok();
-        let sections: Vec<HollowStructuralSection> = response.json::<Vec<HollowStructuralSection>>();
+        let sections: Vec<HollowStructuralSection> =
+            response.json::<Vec<HollowStructuralSection>>();
         assert_eq!(3, sections.iter().count());
     }
 
@@ -340,7 +341,8 @@ pub mod tests {
         let response = server.get("/hss?aisc_manual_label=HSS8X6X1/2").await;
 
         response.assert_status_ok();
-        let sections: Vec<HollowStructuralSection> = response.json::<Vec<HollowStructuralSection>>();
+        let sections: Vec<HollowStructuralSection> =
+            response.json::<Vec<HollowStructuralSection>>();
 
         assert_eq!(1, sections.iter().count());
         assert_eq!(
@@ -368,7 +370,8 @@ pub mod tests {
         let response = server.get("/hss?edi_std_nomenclature=HSS8X6X.500").await;
 
         response.assert_status_ok();
-        let sections: Vec<HollowStructuralSection> = response.json::<Vec<HollowStructuralSection>>();
+        let sections: Vec<HollowStructuralSection> =
+            response.json::<Vec<HollowStructuralSection>>();
 
         assert_eq!(1, sections.iter().count());
         assert_eq!(
@@ -396,7 +399,8 @@ pub mod tests {
         let response = server.get("/hss?member_depth=8.0").await;
 
         response.assert_status_ok();
-        let sections: Vec<HollowStructuralSection> = response.json::<Vec<HollowStructuralSection>>();
+        let sections: Vec<HollowStructuralSection> =
+            response.json::<Vec<HollowStructuralSection>>();
 
         assert_eq!(2, sections.iter().count());
         sections.iter().for_each(|s| assert_eq!(8.0, s.ht));
@@ -421,7 +425,8 @@ pub mod tests {
         let response = server.get("/hss?member_width=6.0").await;
 
         response.assert_status_ok();
-        let sections: Vec<HollowStructuralSection> = response.json::<Vec<HollowStructuralSection>>();
+        let sections: Vec<HollowStructuralSection> =
+            response.json::<Vec<HollowStructuralSection>>();
 
         assert_eq!(2, sections.iter().count());
         sections.iter().for_each(|s| assert_eq!(6.0, s.b_upper));
@@ -446,7 +451,8 @@ pub mod tests {
         let response = server.get("/hss?member_depth=8.0&member_width=6.0").await;
 
         response.assert_status_ok();
-        let sections: Vec<HollowStructuralSection> = response.json::<Vec<HollowStructuralSection>>();
+        let sections: Vec<HollowStructuralSection> =
+            response.json::<Vec<HollowStructuralSection>>();
 
         assert_eq!(1, sections.iter().count());
         assert_eq!(
@@ -504,9 +510,8 @@ pub mod tests {
     #[tokio::test]
     async fn bubbles_up_repo_err_getting_all() {
         let mut repo = MockHSSRepo::new();
-        repo.expect_all().returning(|| {
-            Box::pin(async { Err(MissingPropertyError::from("Ht"))? })
-        });
+        repo.expect_all()
+            .returning(|| Box::pin(async { Err(MissingPropertyError::from("Ht"))? }));
 
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
