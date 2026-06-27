@@ -709,9 +709,7 @@ pub mod tests {
             .with_state(Arc::new(app_state));
 
         let server = TestServer::new(app);
-        let response = server
-            .get("/wide-flange-tees?detailing_depth=11.875")
-            .await;
+        let response = server.get("/wide-flange-tees?detailing_depth=11.875").await;
         response.assert_status_internal_server_error();
     }
 }
