@@ -78,6 +78,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         )
         .with_state(Arc::new(structural_beam_handler::AppStateDyn {
             repo: Arc::new(StructuralBeamRepository::new(conx.clone())),
+        }))
+        .route(
+            "/aisc/structural-tee",
+            get(structural_tee_handler::get_structural_tees),
+        )
+        .with_state(Arc::new(structural_tee_handler::AppStateDyn {
+            repo: Arc::new(StructuralTeeRepository::new(conx.clone())),
         }));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
