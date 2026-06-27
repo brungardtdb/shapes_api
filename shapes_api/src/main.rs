@@ -38,6 +38,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_state(Arc::new(misc_beam_handler::AppStateDyn {
             repo: Arc::new(MiscBeamRepository::new(conx.clone())),
         }))
+        .route("/aisc/pipe", get(pipe_handler::get_pipes))
+        .with_state(Arc::new(pipe_handler::AppStateDyn {
+            repo: Arc::new(PipeRepository::new(conx.clone())),
+        }))
         .route(
             "/aisc/misc-channel",
             get(misc_channel_handler::get_misc_channels),
