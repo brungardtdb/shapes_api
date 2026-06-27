@@ -1,8 +1,8 @@
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use shapes::aisc_shapes::WideFlangeTee as WFTee;
 
 /// A data transfer object for wide flange tee (WT) steel profiles
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WideFlangeTee {
     /// The shape designation according to the AISC Naming Convention
     /// for Structural Steel Products for Use in Electronic Data Interchange (EDI), June 25, 2001.

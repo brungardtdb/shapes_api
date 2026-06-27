@@ -33,3 +33,6 @@ pub mod structural_tee_handler;
 
 /// Handler for wide flange shapes
 pub mod wide_flange_handler;
+
+/// Handler for wide flange tee shapes
+pub mod wide_flange_tee_handler;

@@ -85,6 +85,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         )
         .with_state(Arc::new(structural_tee_handler::AppStateDyn {
             repo: Arc::new(StructuralTeeRepository::new(conx.clone())),
+        }))
+        .route(
+            "/aisc/wide-flange-tee",
+            get(wide_flange_tee_handler::get_wide_flange_tees),
+        )
+        .with_state(Arc::new(wide_flange_tee_handler::AppStateDyn {
+            repo: Arc::new(WideFlangeTeeRepository::new(conx.clone())),
         }));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
