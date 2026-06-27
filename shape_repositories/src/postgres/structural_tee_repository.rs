@@ -323,37 +323,37 @@ impl ShapeRepository<StructuralTee> for StructuralTeeRepository {
 fn structural_tee_from_row(row: PgRow) -> Result<StructuralTee, Box<dyn Error>> {
     let maybe_wgi: Option<f64> = row.try_get("wgi")?;
     let builder = ShapeBuilder::new()
-        .with_edi_std_nomenclature(row.try_get("edi_std_nomenclature")?)
-        .with_aisc_manual_label(row.try_get("aisc_manual_label")?)
-        .with_w_upper(row.try_get("w_upper")?)
-        .with_a_upper(row.try_get("a_upper")?)
-        .with_d_lower(row.try_get("d_lower")?)
-        .with_ddet(row.try_get("ddet")?)
-        .with_bf(row.try_get("bf")?)
-        .with_bfdet(row.try_get("bfdet")?)
-        .with_tw(row.try_get("tw")?)
-        .with_twdet(row.try_get("twdet")?)
-        .with_twdet_2(row.try_get("twdet_2")?)
-        .with_tf(row.try_get("tf")?)
-        .with_tfdet(row.try_get("tfdet")?)
-        .with_kdes(row.try_get("kdes")?)
-        .with_kdet(row.try_get("kdet")?)
-        .with_y_lower(row.try_get("y_lower")?)
-        .with_yp(row.try_get("yp")?)
-        .with_bf_2tf(row.try_get("bf_2tf")?)
-        .with_d_t(row.try_get("d_t")?)
-        .with_ix(row.try_get("ix")?)
-        .with_zx(row.try_get("zx")?)
-        .with_sx(row.try_get("sx")?)
-        .with_rx(row.try_get("rx")?)
-        .with_iy(row.try_get("iy")?)
-        .with_zy(row.try_get("zy")?)
-        .with_sy(row.try_get("sy")?)
-        .with_ry(row.try_get("ry")?)
-        .with_j_upper(row.try_get("j_upper")?)
-        .with_cw(row.try_get("cw")?)
-        .with_ro(row.try_get("ro")?)
-        .with_h_upper(row.try_get("h_upper")?);
+        .edi_std_nomenclature(row.try_get("edi_std_nomenclature")?)
+        .aisc_manual_label(row.try_get("aisc_manual_label")?)
+        .w_upper(row.try_get("w_upper")?)
+        .a_upper(row.try_get("a_upper")?)
+        .d_lower(row.try_get("d_lower")?)
+        .ddet(row.try_get("ddet")?)
+        .bf(row.try_get("bf")?)
+        .bfdet(row.try_get("bfdet")?)
+        .tw(row.try_get("tw")?)
+        .twdet(row.try_get("twdet")?)
+        .twdet_2(row.try_get("twdet_2")?)
+        .tf(row.try_get("tf")?)
+        .tfdet(row.try_get("tfdet")?)
+        .kdes(row.try_get("kdes")?)
+        .kdet(row.try_get("kdet")?)
+        .y_lower(row.try_get("y_lower")?)
+        .yp(row.try_get("yp")?)
+        .bf_2tf(row.try_get("bf_2tf")?)
+        .d_t(row.try_get("d_t")?)
+        .ix(row.try_get("ix")?)
+        .zx(row.try_get("zx")?)
+        .sx(row.try_get("sx")?)
+        .rx(row.try_get("rx")?)
+        .iy(row.try_get("iy")?)
+        .zy(row.try_get("zy")?)
+        .sy(row.try_get("sy")?)
+        .ry(row.try_get("ry")?)
+        .j_upper(row.try_get("j_upper")?)
+        .cw(row.try_get("cw")?)
+        .ro(row.try_get("ro")?)
+        .h_upper(row.try_get("h_upper")?);
 
     let builder = add_optional_wgi(builder, maybe_wgi);
     Ok(builder.try_build::<StructuralTee>()?)
@@ -361,7 +361,7 @@ fn structural_tee_from_row(row: PgRow) -> Result<StructuralTee, Box<dyn Error>> 
 
 fn add_optional_wgi(builder: ShapeBuilder, maybe_wgi: Option<f64>) -> ShapeBuilder {
     match maybe_wgi {
-        Some(wgi) => builder.with_wgi(wgi),
+        Some(wgi) => builder.wgi(wgi),
         None => builder,
     }
 }

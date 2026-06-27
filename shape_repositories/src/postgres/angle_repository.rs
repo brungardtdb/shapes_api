@@ -388,50 +388,50 @@ fn angle_from_row(row: PgRow) -> Result<Angle, Box<dyn Error>> {
     let maybe_swb: Option<f64> = row.try_get("swb")?;
 
     let builder = ShapeBuilder::new()
-        .with_edi_std_nomenclature(row.try_get("edi_std_nomenclature")?)
-        .with_aisc_manual_label(row.try_get("aisc_manual_label")?)
-        .with_w_upper(row.try_get("w_upper")?)
-        .with_a_upper(row.try_get("a_upper")?)
-        .with_d_lower(row.try_get("d_lower")?)
-        .with_b_lower(row.try_get("b_lower")?)
-        .with_t_lower(row.try_get("t_lower")?)
-        .with_kdes(row.try_get("kdes")?)
-        .with_kdet(row.try_get("kdet")?)
-        .with_x_lower(row.try_get("x_lower")?)
-        .with_y_lower(row.try_get("y_lower")?)
-        .with_xp(row.try_get("xp")?)
-        .with_yp(row.try_get("yp")?)
-        .with_b_t(row.try_get("b_t")?)
-        .with_ix(row.try_get("ix")?)
-        .with_zx(row.try_get("zx")?)
-        .with_sx(row.try_get("sx")?)
-        .with_rx(row.try_get("rx")?)
-        .with_iy(row.try_get("iy")?)
-        .with_zy(row.try_get("zy")?)
-        .with_sy(row.try_get("sy")?)
-        .with_ry(row.try_get("ry")?)
-        .with_iz(row.try_get("iz")?)
-        .with_rz(row.try_get("rz")?)
-        .with_sz(row.try_get("sz")?)
-        .with_j_upper(row.try_get("j_upper")?)
-        .with_cw(row.try_get("cw")?)
-        .with_ro(row.try_get("ro")?)
-        .with_tan_a(row.try_get("tan_a")?)
-        .with_iw(row.try_get("iw")?)
-        .with_za(row.try_get("za")?)
-        .with_zb(row.try_get("zb")?)
-        .with_zc(row.try_get("zc")?)
-        .with_wa(row.try_get("wa")?)
-        .with_wb(row.try_get("wb")?)
-        .with_wc(row.try_get("wc")?)
-        .with_swa(row.try_get("swa")?)
-        .with_swc(row.try_get("swc")?)
-        .with_sza(row.try_get("sza")?)
-        .with_szb(row.try_get("szb")?)
-        .with_szc(row.try_get("szc")?)
-        .with_pa(row.try_get("pa")?)
-        .with_pa_2(row.try_get("pa_2")?)
-        .with_pb(row.try_get("pb")?);
+        .edi_std_nomenclature(row.try_get("edi_std_nomenclature")?)
+        .aisc_manual_label(row.try_get("aisc_manual_label")?)
+        .w_upper(row.try_get("w_upper")?)
+        .a_upper(row.try_get("a_upper")?)
+        .d_lower(row.try_get("d_lower")?)
+        .b_lower(row.try_get("b_lower")?)
+        .t_lower(row.try_get("t_lower")?)
+        .kdes(row.try_get("kdes")?)
+        .kdet(row.try_get("kdet")?)
+        .x_lower(row.try_get("x_lower")?)
+        .y_lower(row.try_get("y_lower")?)
+        .xp(row.try_get("xp")?)
+        .yp(row.try_get("yp")?)
+        .b_t(row.try_get("b_t")?)
+        .ix(row.try_get("ix")?)
+        .zx(row.try_get("zx")?)
+        .sx(row.try_get("sx")?)
+        .rx(row.try_get("rx")?)
+        .iy(row.try_get("iy")?)
+        .zy(row.try_get("zy")?)
+        .sy(row.try_get("sy")?)
+        .ry(row.try_get("ry")?)
+        .iz(row.try_get("iz")?)
+        .rz(row.try_get("rz")?)
+        .sz(row.try_get("sz")?)
+        .j_upper(row.try_get("j_upper")?)
+        .cw(row.try_get("cw")?)
+        .ro(row.try_get("ro")?)
+        .tan_a(row.try_get("tan_a")?)
+        .iw(row.try_get("iw")?)
+        .za(row.try_get("za")?)
+        .zb(row.try_get("zb")?)
+        .zc(row.try_get("zc")?)
+        .wa(row.try_get("wa")?)
+        .wb(row.try_get("wb")?)
+        .wc(row.try_get("wc")?)
+        .swa(row.try_get("swa")?)
+        .swc(row.try_get("swc")?)
+        .sza(row.try_get("sza")?)
+        .szb(row.try_get("szb")?)
+        .szc(row.try_get("szc")?)
+        .pa(row.try_get("pa")?)
+        .pa_2(row.try_get("pa_2")?)
+        .pb(row.try_get("pb")?);
 
     let builder = optional_h_upper(builder, maybe_h_upper);
     let buider = optional_swb(builder, maybe_swb);
@@ -440,14 +440,14 @@ fn angle_from_row(row: PgRow) -> Result<Angle, Box<dyn Error>> {
 
 fn optional_h_upper(builder: ShapeBuilder, maybe_h_upper: Option<f64>) -> ShapeBuilder {
     match maybe_h_upper {
-        Some(h_upper) => builder.with_h_upper(h_upper),
+        Some(h_upper) => builder.h_upper(h_upper),
         None => builder,
     }
 }
 
 fn optional_swb(builder: ShapeBuilder, maybe_swb: Option<f64>) -> ShapeBuilder {
     match maybe_swb {
-        Some(swb) => builder.with_swb(swb),
+        Some(swb) => builder.swb(swb),
         None => builder,
     }
 }

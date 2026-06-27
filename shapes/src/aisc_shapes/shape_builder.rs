@@ -294,581 +294,581 @@ impl ShapeBuilder {
 
     #[allow(dead_code)]
     /// Assigns value for EDI Std Nomenclature
-    pub fn with_edi_std_nomenclature(mut self, edi_std_nom: String) -> Self {
+    pub fn edi_std_nomenclature(mut self, edi_std_nom: String) -> Self {
         self.edi_std_nomenclature = Some(edi_std_nom);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns value for AISC Manual Label
-    pub fn with_aisc_manual_label(mut self, aisc_label: String) -> Self {
+    pub fn aisc_manual_label(mut self, aisc_label: String) -> Self {
         self.aisc_manual_label = Some(aisc_label);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns value for T_F
-    pub fn with_t_f(mut self, t_f: bool) -> Self {
+    pub fn t_f(mut self, t_f: bool) -> Self {
         self.t_f = Some(t_f);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for W
-    pub fn with_w_upper(mut self, w_upper: f64) -> Self {
+    pub fn w_upper(mut self, w_upper: f64) -> Self {
         self.w_upper = Some(w_upper);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for A
-    pub fn with_a_upper(mut self, a_upper: f64) -> Self {
+    pub fn a_upper(mut self, a_upper: f64) -> Self {
         self.a_upper = Some(a_upper);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for d
-    pub fn with_d_lower(mut self, d_lower: f64) -> Self {
+    pub fn d_lower(mut self, d_lower: f64) -> Self {
         self.d_lower = Some(d_lower);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for ddet
-    pub fn with_ddet(mut self, ddet: f64) -> Self {
+    pub fn ddet(mut self, ddet: f64) -> Self {
         self.ddet = Some(ddet);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Ht
-    pub fn with_ht(mut self, ht: f64) -> Self {
+    pub fn ht(mut self, ht: f64) -> Self {
         self.ht = Some(ht);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for h
-    pub fn with_h(mut self, h: f64) -> Self {
+    pub fn h(mut self, h: f64) -> Self {
         self.h = Some(h);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for OD
-    pub fn with_od(mut self, od: f64) -> Self {
+    pub fn od(mut self, od: f64) -> Self {
         self.od = Some(od);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for bf
-    pub fn with_bf(mut self, bf: f64) -> Self {
+    pub fn bf(mut self, bf: f64) -> Self {
         self.bf = Some(bf);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for bfdet
-    pub fn with_bfdet(mut self, bfdet: f64) -> Self {
+    pub fn bfdet(mut self, bfdet: f64) -> Self {
         self.bfdet = Some(bfdet);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for B
-    pub fn with_b_upper(mut self, b_upper: f64) -> Self {
+    pub fn b_upper(mut self, b_upper: f64) -> Self {
         self.b_upper = Some(b_upper);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for b
-    pub fn with_b_lower(mut self, b_lower: f64) -> Self {
+    pub fn b_lower(mut self, b_lower: f64) -> Self {
         self.b_lower = Some(b_lower);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for ID
-    pub fn with_id(mut self, id: f64) -> Self {
+    pub fn id(mut self, id: f64) -> Self {
         self.id = Some(id);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for tw
-    pub fn with_tw(mut self, tw: f64) -> Self {
+    pub fn tw(mut self, tw: f64) -> Self {
         self.tw = Some(tw);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for twdet
-    pub fn with_twdet(mut self, twdet: f64) -> Self {
+    pub fn twdet(mut self, twdet: f64) -> Self {
         self.twdet = Some(twdet);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for twdet/2
-    pub fn with_twdet_2(mut self, twdet_2: f64) -> Self {
+    pub fn twdet_2(mut self, twdet_2: f64) -> Self {
         self.twdet_2 = Some(twdet_2);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for tf
-    pub fn with_tf(mut self, tf: f64) -> Self {
+    pub fn tf(mut self, tf: f64) -> Self {
         self.tf = Some(tf);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for tfdet
-    pub fn with_tfdet(mut self, tfdet: f64) -> Self {
+    pub fn tfdet(mut self, tfdet: f64) -> Self {
         self.tfdet = Some(tfdet);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for t
-    pub fn with_t_lower(mut self, t_lower: f64) -> Self {
+    pub fn t_lower(mut self, t_lower: f64) -> Self {
         self.t_lower = Some(t_lower);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for tnom
-    pub fn with_t_nom(mut self, t_nom: f64) -> Self {
+    pub fn t_nom(mut self, t_nom: f64) -> Self {
         self.t_nom = Some(t_nom);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for tdes
-    pub fn with_tdes(mut self, tdes: f64) -> Self {
+    pub fn tdes(mut self, tdes: f64) -> Self {
         self.tdes = Some(tdes);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for kdes
-    pub fn with_kdes(mut self, kdes: f64) -> Self {
+    pub fn kdes(mut self, kdes: f64) -> Self {
         self.kdes = Some(kdes);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for kdet
-    pub fn with_kdet(mut self, kdet: f64) -> Self {
+    pub fn kdet(mut self, kdet: f64) -> Self {
         self.kdet = Some(kdet);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for k1
-    pub fn with_k1(mut self, k1: f64) -> Self {
+    pub fn k1(mut self, k1: f64) -> Self {
         self.k1 = Some(k1);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for x
-    pub fn with_x_lower(mut self, x_lower: f64) -> Self {
+    pub fn x_lower(mut self, x_lower: f64) -> Self {
         self.x_lower = Some(x_lower);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for y
-    pub fn with_y_lower(mut self, y_lower: f64) -> Self {
+    pub fn y_lower(mut self, y_lower: f64) -> Self {
         self.y_lower = Some(y_lower);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for eo
-    pub fn with_eo(mut self, eo: f64) -> Self {
+    pub fn eo(mut self, eo: f64) -> Self {
         self.eo = Some(eo);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for xp
-    pub fn with_xp(mut self, xp: f64) -> Self {
+    pub fn xp(mut self, xp: f64) -> Self {
         self.xp = Some(xp);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for yp
-    pub fn with_yp(mut self, yp: f64) -> Self {
+    pub fn yp(mut self, yp: f64) -> Self {
         self.yp = Some(yp);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for bf/2tf
-    pub fn with_bf_2tf(mut self, bf_2tf: f64) -> Self {
+    pub fn bf_2tf(mut self, bf_2tf: f64) -> Self {
         self.bf_2tf = Some(bf_2tf);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for b/t
-    pub fn with_b_t(mut self, b_t: f64) -> Self {
+    pub fn b_t(mut self, b_t: f64) -> Self {
         self.b_t = Some(b_t);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for b/tdes
-    pub fn with_b_tdes(mut self, b_tdes: f64) -> Self {
+    pub fn b_tdes(mut self, b_tdes: f64) -> Self {
         self.b_tdes = Some(b_tdes);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for h/tw
-    pub fn with_h_tw(mut self, h_tw: f64) -> Self {
+    pub fn h_tw(mut self, h_tw: f64) -> Self {
         self.h_tw = Some(h_tw);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for h/tdes
-    pub fn with_h_tdes(mut self, h_tdes: f64) -> Self {
+    pub fn h_tdes(mut self, h_tdes: f64) -> Self {
         self.h_tdes = Some(h_tdes);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for D/t
-    pub fn with_d_t(mut self, d_t: f64) -> Self {
+    pub fn d_t(mut self, d_t: f64) -> Self {
         self.d_t = Some(d_t);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Ix
-    pub fn with_ix(mut self, ix: f64) -> Self {
+    pub fn ix(mut self, ix: f64) -> Self {
         self.ix = Some(ix);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Zx
-    pub fn with_zx(mut self, zx: f64) -> Self {
+    pub fn zx(mut self, zx: f64) -> Self {
         self.zx = Some(zx);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Sx
-    pub fn with_sx(mut self, sx: f64) -> Self {
+    pub fn sx(mut self, sx: f64) -> Self {
         self.sx = Some(sx);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for rx
-    pub fn with_rx(mut self, rx: f64) -> Self {
+    pub fn rx(mut self, rx: f64) -> Self {
         self.rx = Some(rx);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Iy
-    pub fn with_iy(mut self, iy: f64) -> Self {
+    pub fn iy(mut self, iy: f64) -> Self {
         self.iy = Some(iy);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Zy
-    pub fn with_zy(mut self, zy: f64) -> Self {
+    pub fn zy(mut self, zy: f64) -> Self {
         self.zy = Some(zy);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Sy
-    pub fn with_sy(mut self, sy: f64) -> Self {
+    pub fn sy(mut self, sy: f64) -> Self {
         self.sy = Some(sy);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for ry
-    pub fn with_ry(mut self, ry: f64) -> Self {
+    pub fn ry(mut self, ry: f64) -> Self {
         self.ry = Some(ry);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Iz
-    pub fn with_iz(mut self, iz: f64) -> Self {
+    pub fn iz(mut self, iz: f64) -> Self {
         self.iz = Some(iz);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for rz
-    pub fn with_rz(mut self, rz: f64) -> Self {
+    pub fn rz(mut self, rz: f64) -> Self {
         self.rz = Some(rz);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Sz
-    pub fn with_sz(mut self, sz: f64) -> Self {
+    pub fn sz(mut self, sz: f64) -> Self {
         self.sz = Some(sz);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for J
-    pub fn with_j_upper(mut self, j_upper: f64) -> Self {
+    pub fn j_upper(mut self, j_upper: f64) -> Self {
         self.j_upper = Some(j_upper);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Cw
-    pub fn with_cw(mut self, cw: f64) -> Self {
+    pub fn cw(mut self, cw: f64) -> Self {
         self.cw = Some(cw);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for C
-    pub fn with_c_upper(mut self, c_upper: f64) -> Self {
+    pub fn c_upper(mut self, c_upper: f64) -> Self {
         self.c_upper = Some(c_upper);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Wno
-    pub fn with_wno(mut self, wno: f64) -> Self {
+    pub fn wno(mut self, wno: f64) -> Self {
         self.wno = Some(wno);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Sw1
-    pub fn with_sw1(mut self, sw1: f64) -> Self {
+    pub fn sw1(mut self, sw1: f64) -> Self {
         self.sw1 = Some(sw1);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Sw2
-    pub fn with_sw2(mut self, sw2: f64) -> Self {
+    pub fn sw2(mut self, sw2: f64) -> Self {
         self.sw2 = Some(sw2);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Sw3
-    pub fn with_sw3(mut self, sw3: f64) -> Self {
+    pub fn sw3(mut self, sw3: f64) -> Self {
         self.sw3 = Some(sw3);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Qf
-    pub fn with_qf(mut self, qf: f64) -> Self {
+    pub fn qf(mut self, qf: f64) -> Self {
         self.qf = Some(qf);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Qw
-    pub fn with_qw(mut self, qw: f64) -> Self {
+    pub fn qw(mut self, qw: f64) -> Self {
         self.qw = Some(qw);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for ro
-    pub fn with_ro(mut self, ro: f64) -> Self {
+    pub fn ro(mut self, ro: f64) -> Self {
         self.ro = Some(ro);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for H
-    pub fn with_h_upper(mut self, h_upper: f64) -> Self {
+    pub fn h_upper(mut self, h_upper: f64) -> Self {
         self.h_upper = Some(h_upper);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for tan(α)
-    pub fn with_tan_a(mut self, tan_a: f64) -> Self {
+    pub fn tan_a(mut self, tan_a: f64) -> Self {
         self.tan_a = Some(tan_a);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for Iw
-    pub fn with_iw(mut self, iw: f64) -> Self {
+    pub fn iw(mut self, iw: f64) -> Self {
         self.iw = Some(iw);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for zA
-    pub fn with_za(mut self, za: f64) -> Self {
+    pub fn za(mut self, za: f64) -> Self {
         self.za = Some(za);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for zB
-    pub fn with_zb(mut self, zb: f64) -> Self {
+    pub fn zb(mut self, zb: f64) -> Self {
         self.zb = Some(zb);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for zC
-    pub fn with_zc(mut self, zc: f64) -> Self {
+    pub fn zc(mut self, zc: f64) -> Self {
         self.zc = Some(zc);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for wA
-    pub fn with_wa(mut self, wa: f64) -> Self {
+    pub fn wa(mut self, wa: f64) -> Self {
         self.wa = Some(wa);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for wB
-    pub fn with_wb(mut self, wb: f64) -> Self {
+    pub fn wb(mut self, wb: f64) -> Self {
         self.wb = Some(wb);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for wC
-    pub fn with_wc(mut self, wc: f64) -> Self {
+    pub fn wc(mut self, wc: f64) -> Self {
         self.wc = Some(wc);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for SwA
-    pub fn with_swa(mut self, swa: f64) -> Self {
+    pub fn swa(mut self, swa: f64) -> Self {
         self.swa = Some(swa);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for SwB
-    pub fn with_swb(mut self, swb: f64) -> Self {
+    pub fn swb(mut self, swb: f64) -> Self {
         self.swb = Some(swb);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for SwC
-    pub fn with_swc(mut self, swc: f64) -> Self {
+    pub fn swc(mut self, swc: f64) -> Self {
         self.swc = Some(swc);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for SzA
-    pub fn with_sza(mut self, sza: f64) -> Self {
+    pub fn sza(mut self, sza: f64) -> Self {
         self.sza = Some(sza);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for SzB
-    pub fn with_szb(mut self, szb: f64) -> Self {
+    pub fn szb(mut self, szb: f64) -> Self {
         self.szb = Some(szb);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for SzC
-    pub fn with_szc(mut self, szc: f64) -> Self {
+    pub fn szc(mut self, szc: f64) -> Self {
         self.szc = Some(szc);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for rts
-    pub fn with_rts(mut self, rts: f64) -> Self {
+    pub fn rts(mut self, rts: f64) -> Self {
         self.rts = Some(rts);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for ho
-    pub fn with_ho(mut self, ho: f64) -> Self {
+    pub fn ho(mut self, ho: f64) -> Self {
         self.ho = Some(ho);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for PA
-    pub fn with_pa(mut self, pa: f64) -> Self {
+    pub fn pa(mut self, pa: f64) -> Self {
         self.pa = Some(pa);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for PA2
-    pub fn with_pa_2(mut self, pa_2: f64) -> Self {
+    pub fn pa_2(mut self, pa_2: f64) -> Self {
         self.pa_2 = Some(pa_2);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for PB
-    pub fn with_pb(mut self, pb: f64) -> Self {
+    pub fn pb(mut self, pb: f64) -> Self {
         self.pb = Some(pb);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for PC
-    pub fn with_pc(mut self, pc: f64) -> Self {
+    pub fn pc(mut self, pc: f64) -> Self {
         self.pc = Some(pc);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for PD
-    pub fn with_pd(mut self, pd: f64) -> Self {
+    pub fn pd(mut self, pd: f64) -> Self {
         self.pd = Some(pd);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for T
-    pub fn with_t(mut self, t: f64) -> Self {
+    pub fn t(mut self, t: f64) -> Self {
         self.t = Some(t);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for WGi
-    pub fn with_wgi(mut self, wgi: f64) -> Self {
+    pub fn wgi(mut self, wgi: f64) -> Self {
         self.wgi = Some(wgi);
         self
     }
 
     #[allow(dead_code)]
     /// Assigns a value for WGo
-    pub fn with_wgo(mut self, wgo: f64) -> Self {
+    pub fn wgo(mut self, wgo: f64) -> Self {
         self.wgo = Some(wgo);
         self
     }
