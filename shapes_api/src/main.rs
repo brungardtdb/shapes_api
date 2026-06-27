@@ -71,7 +71,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             round_hollow_structural_section_handler::AppStateDyn {
                 repo: Arc::new(RoundHollowStructuralSectionRepository::new(conx.clone())),
             },
-        ));
+        ))
+        .route(
+            "/aisc/structural-beam",
+            get(structural_beam_handler::get_structural_beams),
+        )
+        .with_state(Arc::new(structural_beam_handler::AppStateDyn {
+            repo: Arc::new(StructuralBeamRepository::new(conx.clone())),
+        }));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
         .await

@@ -25,5 +25,8 @@ pub mod misc_tee_handler;
 /// Handler for round hollow structural section shapes
 pub mod round_hollow_structural_section_handler;
 
+/// Handler for structural beam shapes
+pub mod structural_beam_handler;
+
 /// Handler for wide flange shapes
 pub mod wide_flange_handler;
