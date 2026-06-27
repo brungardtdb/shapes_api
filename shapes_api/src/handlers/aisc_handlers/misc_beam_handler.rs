@@ -97,9 +97,15 @@ async fn get_from_geometry(
     let mut beams: Vec<MiscBeam> = Vec::new();
     if let Some(depth) = params.detailing_depth {
         beams = get_from_detailing_depth(&state, depth, &mut beams).await?;
+        if beams.is_empty() {
+            return Err(AISCError::ShapeNotFound);
+        }
     }
     if let Some(flange_width) = params.detailing_flange_width {
         beams = get_from_detailing_flange_width(&state, flange_width, &mut beams).await?;
+        if beams.is_empty() {
+            return Err(AISCError::ShapeNotFound);
+        }
     }
     Ok(AppJson(beams))
 }
@@ -160,4 +166,555 @@ fn has_query(params: &Params) -> bool {
         return true;
     }
     return false;
+}
+
+#[cfg(test)]
+#[doc(hidden)]
+pub mod tests {
+    use super::*;
+    use axum::{Router, routing::get};
+    use axum_test::TestServer;
+    use mockall::{mock, predicate};
+    use shapes::aisc_shapes::shape_builder::ShapeBuilder;
+    use shapes::aisc_shapes::shape_repository::ShapeRepository;
+    use shapes::aisc_shapes::{MiscBeam as MB, MissingPropertyError};
+    use std::error::Error;
+    use std::future::Future;
+    use std::pin::Pin;
+
+    mock! {
+        pub MiscBeamRepo {}
+
+        impl ShapeRepository<MB> for MiscBeamRepo {
+            fn all<'a>(&'a self) -> Pin<Box<dyn Future<Output = Result<Vec<MB>, Box<dyn Error>>> + Send + 'a>>;
+
+            fn shape_with_aisc_manual_label<'a>(
+                &'a self,
+                aisc_manual_label: String,
+            ) -> Pin<Box<dyn Future<Output = Result<Option<MB>, Box<dyn Error>>> + Send + 'a>>;
+
+            fn shape_with_edi_std_nomenclature<'a>(
+                &'a self,
+                edi_std_nomenclature: String,
+            ) -> Pin<Box<dyn Future<Output = Result<Option<MB>, Box<dyn Error>>> + Send + 'a>>;
+
+            fn shapes_with_depth<'a>(
+                &'a self,
+                depth: f64,
+            ) -> Pin<Box<dyn Future<Output = Result<Vec<MB>, Box<dyn Error>>> + Send + 'a>>;
+
+            fn shapes_with_width<'a>(
+                &'a self,
+                width: f64,
+            ) -> Pin<Box<dyn Future<Output = Result<Vec<MB>, Box<dyn Error>>> + Send + 'a>>;
+        }
+    }
+
+    fn m12_5x12_4() -> MB {
+        ShapeBuilder::new()
+            .with_edi_std_nomenclature(String::from("M12.5X12.4"))
+            .with_aisc_manual_label(String::from("M12.5X12.4"))
+            .with_t_f(false)
+            .with_w_upper(12.4)
+            .with_a_upper(3.63)
+            .with_d_lower(12.5)
+            .with_ddet(12.5)
+            .with_bf(3.75)
+            .with_bfdet(3.75)
+            .with_tw(0.155)
+            .with_twdet(0.125)
+            .with_twdet_2(0.0625)
+            .with_tf(0.228)
+            .with_tfdet(0.25)
+            .with_kdes(0.563)
+            .with_kdet(0.5625)
+            .with_k1(0.375)
+            .with_bf_2tf(8.22)
+            .with_h_tw(74.8)
+            .with_ix(89.3)
+            .with_zx(16.5)
+            .with_sx(14.2)
+            .with_rx(4.96)
+            .with_iy(2.01)
+            .with_zy(1.68)
+            .with_sy(1.07)
+            .with_ry(0.744)
+            .with_j_upper(0.0493)
+            .with_cw(76.0)
+            .with_wno(11.5)
+            .with_sw1(2.46)
+            .with_qf(2.51)
+            .with_qw(8.06)
+            .with_rts(0.933)
+            .with_ho(12.3)
+            .with_pa(35.5)
+            .with_pb(39.3)
+            .with_pc(28.8)
+            .with_pd(32.5)
+            .with_t(11.375)
+            .try_build::<MB>()
+            .unwrap()
+    }
+
+    fn m12_5x11_6() -> MB {
+        ShapeBuilder::new()
+            .with_edi_std_nomenclature(String::from("M12.5X11.6"))
+            .with_aisc_manual_label(String::from("M12.5X11.6"))
+            .with_t_f(false)
+            .with_w_upper(11.6)
+            .with_a_upper(3.4)
+            .with_d_lower(12.5)
+            .with_ddet(12.5)
+            .with_bf(3.5)
+            .with_bfdet(3.5)
+            .with_tw(0.155)
+            .with_twdet(0.125)
+            .with_twdet_2(0.0625)
+            .with_tf(0.211)
+            .with_tfdet(0.1875)
+            .with_kdes(0.563)
+            .with_kdet(0.5625)
+            .with_k1(0.375)
+            .with_bf_2tf(8.29)
+            .with_h_tw(74.8)
+            .with_ix(80.3)
+            .with_zx(15.0)
+            .with_sx(12.8)
+            .with_rx(4.86)
+            .with_iy(1.51)
+            .with_zy(1.37)
+            .with_sy(0.864)
+            .with_ry(0.667)
+            .with_j_upper(0.0414)
+            .with_cw(57.1)
+            .with_wno(10.8)
+            .with_sw1(1.99)
+            .with_qf(2.17)
+            .with_qw(7.36)
+            .with_rts(0.852)
+            .with_ho(12.3)
+            .with_pa(34.8)
+            .with_pb(38.3)
+            .with_pc(28.5)
+            .with_pd(32.0)
+            .with_t(11.375)
+            .try_build::<MB>()
+            .unwrap()
+    }
+
+    fn m12x11_8() -> MB {
+        ShapeBuilder::new()
+            .with_edi_std_nomenclature(String::from("M12X11.8"))
+            .with_aisc_manual_label(String::from("M12X11.8"))
+            .with_t_f(false)
+            .with_w_upper(11.8)
+            .with_a_upper(3.47)
+            .with_d_lower(12.0)
+            .with_ddet(12.0)
+            .with_bf(3.07)
+            .with_bfdet(3.125)
+            .with_tw(0.177)
+            .with_twdet(0.1875)
+            .with_twdet_2(0.125)
+            .with_tf(0.225)
+            .with_tfdet(0.25)
+            .with_kdes(0.563)
+            .with_kdet(0.5625)
+            .with_k1(0.375)
+            .with_bf_2tf(6.81)
+            .with_h_tw(62.5)
+            .with_ix(72.2)
+            .with_zx(14.3)
+            .with_sx(12.0)
+            .with_rx(4.56)
+            .with_iy(1.09)
+            .with_zy(1.15)
+            .with_sy(0.709)
+            .with_ry(0.559)
+            .with_j_upper(0.05)
+            .with_cw(37.7)
+            .with_wno(9.04)
+            .with_sw1(1.56)
+            .with_qf(1.92)
+            .with_qw(7.02)
+            .with_rts(0.731)
+            .with_ho(11.8)
+            .with_pa(32.4)
+            .with_pb(35.5)
+            .with_pc(27.1)
+            .with_pd(30.1)
+            .with_t(10.875)
+            .try_build::<MB>()
+            .unwrap()
+    }
+
+    #[tokio::test]
+    async fn returns_all_shapes_w_no_query() {
+        let mut repo = MockMiscBeamRepo::new();
+        repo.expect_all().returning(|| {
+            Box::pin(async { Ok(vec![m12_5x12_4(), m12_5x11_6(), m12x11_8()]) })
+        });
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/misc-beams").await;
+
+        response.assert_status_ok();
+        let beams: Vec<MiscBeam> = response.json::<Vec<MiscBeam>>();
+        assert_eq!(3, beams.iter().count());
+    }
+
+    #[tokio::test]
+    async fn returns_shape_w_aisc_manual_label() {
+        let mut repo = MockMiscBeamRepo::new();
+        repo.expect_shape_with_aisc_manual_label()
+            .with(predicate::eq(String::from("M12X11.8")))
+            .returning(|_| Box::pin(async { Ok(Some(m12x11_8())) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/misc-beams?aisc_manual_label=M12X11.8").await;
+
+        response.assert_status_ok();
+        let beams: Vec<MiscBeam> = response.json::<Vec<MiscBeam>>();
+
+        assert_eq!(1, beams.iter().count());
+        assert_eq!(
+            String::from("M12X11.8"),
+            beams.iter().nth(0).unwrap().aisc_manual_label
+        );
+    }
+
+    #[tokio::test]
+    async fn returns_shape_w_edi_std_nomenclature() {
+        let mut repo = MockMiscBeamRepo::new();
+        repo.expect_shape_with_edi_std_nomenclature()
+            .with(predicate::eq(String::from("M12X11.8")))
+            .returning(|_| Box::pin(async { Ok(Some(m12x11_8())) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server
+            .get("/misc-beams?edi_std_nomenclature=M12X11.8")
+            .await;
+
+        response.assert_status_ok();
+        let beams: Vec<MiscBeam> = response.json::<Vec<MiscBeam>>();
+
+        assert_eq!(1, beams.iter().count());
+        assert_eq!(
+            String::from("M12X11.8"),
+            beams.iter().nth(0).unwrap().edi_std_nomenclature
+        );
+    }
+
+    #[tokio::test]
+    async fn filters_on_depth() {
+        let mut repo = MockMiscBeamRepo::new();
+        repo.expect_shapes_with_depth()
+            .with(predicate::eq(12.5))
+            .returning(|_| Box::pin(async { Ok(vec![m12_5x12_4(), m12_5x11_6()]) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/misc-beams?detailing_depth=12.5").await;
+
+        response.assert_status_ok();
+        let beams: Vec<MiscBeam> = response.json::<Vec<MiscBeam>>();
+
+        assert_eq!(2, beams.iter().count());
+        beams.iter().for_each(|b| assert_eq!(12.5, b.ddet));
+    }
+
+    #[tokio::test]
+    async fn filters_on_width() {
+        let mut repo = MockMiscBeamRepo::new();
+        repo.expect_shapes_with_width()
+            .with(predicate::eq(3.5))
+            .returning(|_| Box::pin(async { Ok(vec![m12_5x11_6()]) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server
+            .get("/misc-beams?detailing_flange_width=3.5")
+            .await;
+
+        response.assert_status_ok();
+        let beams: Vec<MiscBeam> = response.json::<Vec<MiscBeam>>();
+
+        assert_eq!(1, beams.iter().count());
+        assert_eq!(
+            String::from("M12.5X11.6"),
+            beams.iter().nth(0).unwrap().edi_std_nomenclature
+        );
+        assert_eq!(3.5, beams.iter().nth(0).unwrap().bfdet);
+    }
+
+    #[tokio::test]
+    async fn filters_on_width_and_depth() {
+        let mut repo = MockMiscBeamRepo::new();
+
+        repo.expect_shapes_with_depth()
+            .with(predicate::eq(12.5))
+            .returning(|_| Box::pin(async { Ok(vec![m12_5x12_4(), m12_5x11_6()]) }));
+
+        repo.expect_shapes_with_width()
+            .with(predicate::eq(3.5))
+            .returning(|_| Box::pin(async { Ok(vec![m12_5x11_6()]) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server
+            .get("/misc-beams?detailing_depth=12.5&detailing_flange_width=3.5")
+            .await;
+
+        response.assert_status_ok();
+        let beams: Vec<MiscBeam> = response.json::<Vec<MiscBeam>>();
+
+        assert_eq!(1, beams.iter().count());
+        beams.iter().for_each(|b| {
+            assert_eq!(12.5, b.ddet);
+            assert_eq!(3.5, b.bfdet);
+        });
+    }
+
+    #[tokio::test]
+    async fn filters_on_width_and_depth_with_one_query_returning_no_records() {
+        let mut repo = MockMiscBeamRepo::new();
+
+        repo.expect_shapes_with_depth()
+            .with(predicate::eq(4.0))
+            .returning(|_| Box::pin(async { Ok(vec![]) }));
+
+        repo.expect_shapes_with_width()
+            .with(predicate::eq(3.5))
+            .returning(|_| Box::pin(async { Ok(vec![m12_5x11_6()]) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server
+            .get("/misc-beams?detailing_depth=4.0&detailing_flange_width=3.5")
+            .await;
+
+        response.assert_status_not_found();
+    }
+
+    #[tokio::test]
+    async fn returns_error_if_no_shapes_when_requesting_all() {
+        let mut repo = MockMiscBeamRepo::new();
+        repo.expect_all()
+            .returning(|| Box::pin(async { Ok(vec![]) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/misc-beams").await;
+        response.assert_status_internal_server_error();
+    }
+
+    #[tokio::test]
+    async fn bubbles_up_repo_err_getting_all() {
+        let mut repo = MockMiscBeamRepo::new();
+        repo.expect_all()
+            .returning(|| Box::pin(async { Err(MissingPropertyError::from("Ix"))? }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/misc-beams").await;
+        response.assert_status_internal_server_error();
+    }
+
+    #[tokio::test]
+    async fn handles_no_aisc_manual_label_shape() {
+        let mut repo = MockMiscBeamRepo::new();
+        repo.expect_shape_with_aisc_manual_label()
+            .with(predicate::eq(String::from("M12X10")))
+            .returning(|_| Box::pin(async { Ok(None) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/misc-beams?aisc_manual_label=M12X10").await;
+        response.assert_status_not_found();
+    }
+
+    #[tokio::test]
+    async fn handles_failure_filtering_on_aisc_label_shape() {
+        let mut repo = MockMiscBeamRepo::new();
+        repo.expect_shape_with_aisc_manual_label()
+            .with(predicate::eq(String::from("M12X11.8")))
+            .returning(|_| {
+                Box::pin(async { Err(MissingPropertyError::from("AISC Manual Label"))? })
+            });
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server
+            .get("/misc-beams?aisc_manual_label=M12X11.8")
+            .await;
+        response.assert_status_internal_server_error();
+    }
+
+    #[tokio::test]
+    async fn handles_no_edi_std_nomenclature_shape() {
+        let mut repo = MockMiscBeamRepo::new();
+        repo.expect_shape_with_edi_std_nomenclature()
+            .with(predicate::eq(String::from("M12X10")))
+            .returning(|_| Box::pin(async { Ok(None) }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server
+            .get("/misc-beams?edi_std_nomenclature=M12X10")
+            .await;
+        response.assert_status_not_found();
+    }
+
+    #[tokio::test]
+    async fn handles_failure_filtering_on_edi_std_nomenclature() {
+        let mut repo = MockMiscBeamRepo::new();
+        repo.expect_shape_with_edi_std_nomenclature()
+            .with(predicate::eq(String::from("M12X11.8")))
+            .returning(|_| {
+                Box::pin(async { Err(MissingPropertyError::from("AISC Manual Label"))? })
+            });
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server
+            .get("/misc-beams?edi_std_nomenclature=M12X11.8")
+            .await;
+        response.assert_status_internal_server_error();
+    }
+
+    #[tokio::test]
+    async fn handles_failure_filtering_on_width() {
+        let mut repo = MockMiscBeamRepo::new();
+        repo.expect_shapes_with_width()
+            .with(predicate::eq(3.5_f64))
+            .returning(|_| Box::pin(async { Err(MissingPropertyError::from("bfdet"))? }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server
+            .get("/misc-beams?detailing_flange_width=3.5")
+            .await;
+        response.assert_status_internal_server_error();
+    }
+
+    #[tokio::test]
+    async fn handles_failure_filtering_on_depth() {
+        let mut repo = MockMiscBeamRepo::new();
+        repo.expect_shapes_with_depth()
+            .with(predicate::eq(12.5_f64))
+            .returning(|_| Box::pin(async { Err(MissingPropertyError::from("ddet"))? }));
+
+        let app_state = AppStateDyn {
+            repo: Arc::new(repo),
+        };
+
+        let app = Router::new()
+            .route("/misc-beams", get(get_misc_beams))
+            .with_state(Arc::new(app_state));
+
+        let server = TestServer::new(app);
+        let response = server.get("/misc-beams?detailing_depth=12.5").await;
+        response.assert_status_internal_server_error();
+    }
 }
