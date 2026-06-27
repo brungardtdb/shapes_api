@@ -62,7 +62,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         )
         .with_state(Arc::new(hollow_structural_section_handler::AppStateDyn {
             repo: Arc::new(HollowStructuralSectionRepository::new(conx.clone())),
-        }));
+        }))
+        .route(
+            "/aisc/round-hollow-structural-section",
+            get(round_hollow_structural_section_handler::get_round_hollow_structural_sections),
+        )
+        .with_state(Arc::new(
+            round_hollow_structural_section_handler::AppStateDyn {
+                repo: Arc::new(RoundHollowStructuralSectionRepository::new(conx.clone())),
+            },
+        ));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
         .await
