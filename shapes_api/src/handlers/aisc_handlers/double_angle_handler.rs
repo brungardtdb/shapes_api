@@ -213,81 +213,119 @@ pub mod tests {
         }
     }
 
+    fn double_l8x6x1llbb() -> DE {
+        ShapeBuilder::new()
+            .with_edi_std_nomenclature(String::from("2L8X6X1LLBB"))
+            .with_aisc_manual_label(String::from("2L8X6X1LLBB"))
+            .with_w_upper(88.4)
+            .with_a_upper(26.2)
+            .with_d_lower(8.0)
+            .with_b_lower(6.0)
+            .with_t_lower(1.0)
+            .with_y_lower(2.65)
+            .with_yp(1.45)
+            .with_b_t(8.0)
+            .with_ix(162.0)
+            .with_zx(54.6)
+            .with_sx(30.2)
+            .with_rx(2.49)
+            .with_iy(150.0)
+            .with_zy(43.2)
+            .with_sy(25.0)
+            .with_ry(2.39)
+            .with_ro(4.06)
+            .with_h_upper(0.721)
+            .try_build::<DE>()
+            .unwrap()
+    }
+
+    fn double_l10x10x1_3_8() -> DE {
+        ShapeBuilder::new()
+            .with_edi_std_nomenclature(String::from("2L10X10X1-3/8"))
+            .with_aisc_manual_label(String::from("2L10X10X1-3/8"))
+            .with_w_upper(174.0)
+            .with_a_upper(51.2)
+            .with_d_lower(10.0)
+            .with_b_lower(10.0)
+            .with_t_lower(1.38)
+            .with_y_lower(3.0)
+            .with_yp(1.28)
+            .with_b_t(7.25)
+            .with_ix(462.0)
+            .with_zx(120.0)
+            .with_sx(66.0)
+            .with_rx(3.0)
+            .with_iy(923.0)
+            .with_zy(154.0)
+            .with_sy(92.3)
+            .with_ry(4.25)
+            .with_ro(5.69)
+            .with_h_upper(0.835)
+            .try_build::<DE>()
+            .unwrap()
+    }
+
+    fn double_l12x12x1_3_8() -> DE {
+        ShapeBuilder::new()
+            .with_edi_std_nomenclature(String::from("2L12X12X1-3/8"))
+            .with_aisc_manual_label(String::from("2L12X12X1-3/8"))
+            .with_w_upper(210.0)
+            .with_a_upper(62.2)
+            .with_d_lower(12.0)
+            .with_b_lower(12.0)
+            .with_t_lower(1.38)
+            .with_y_lower(3.5)
+            .with_yp(1.3)
+            .with_b_t(8.7)
+            .with_ix(826.0)
+            .with_zx(176.0)
+            .with_sx(97.2)
+            .with_rx(3.64)
+            .with_iy(1590.0)
+            .with_zy(218.0)
+            .with_sy(133.0)
+            .with_ry(5.06)
+            .with_ro(6.84)
+            .with_h_upper(0.831)
+            .try_build::<DE>()
+            .unwrap()
+    }
+
+    fn double_l8x8x1() -> DE {
+        ShapeBuilder::new()
+            .with_edi_std_nomenclature(String::from("2L8X8X1"))
+            .with_aisc_manual_label(String::from("2L8X8X1"))
+            .with_w_upper(102.0)
+            .with_a_upper(30.2)
+            .with_d_lower(8.0)
+            .with_b_lower(8.0)
+            .with_t_lower(1.0)
+            .with_y_lower(2.36)
+            .with_yp(0.944)
+            .with_b_t(8.0)
+            .with_ix(178.0)
+            .with_zx(57.0)
+            .with_sx(31.6)
+            .with_rx(2.43)
+            .with_iy(347.0)
+            .with_zy(71.3)
+            .with_sy(43.4)
+            .with_ry(3.39)
+            .with_ro(4.56)
+            .with_h_upper(0.834)
+            .try_build::<DE>()
+            .unwrap()
+    }
+
     #[tokio::test]
     async fn returns_all_shapes_w_no_query() {
         let mut repo = MockDoubleAngleRepo::new();
         repo.expect_all().returning(|| {
             Box::pin(async {
                 Ok(vec![
-                    ShapeBuilder::new()
-                        .with_edi_std_nomenclature(String::from("2L8X6X1LLBB"))
-                        .with_aisc_manual_label(String::from("2L8X6X1LLBB"))
-                        .with_w_upper(88.4)
-                        .with_a_upper(26.2)
-                        .with_d_lower(8.0)
-                        .with_b_lower(6.0)
-                        .with_t_lower(1.0)
-                        .with_y_lower(2.65)
-                        .with_yp(1.45)
-                        .with_b_t(8.0)
-                        .with_ix(162.0)
-                        .with_zx(54.6)
-                        .with_sx(30.2)
-                        .with_rx(2.49)
-                        .with_iy(150.0)
-                        .with_zy(43.2)
-                        .with_sy(25.0)
-                        .with_ry(2.39)
-                        .with_ro(4.06)
-                        .with_h_upper(0.721)
-                        .try_build::<DE>()
-                        .unwrap(),
-                    ShapeBuilder::new()
-                        .with_edi_std_nomenclature(String::from("2L10X10X1-3/8"))
-                        .with_aisc_manual_label(String::from("2L10X10X1-3/8"))
-                        .with_w_upper(174.0)
-                        .with_a_upper(51.2)
-                        .with_d_lower(10.0)
-                        .with_b_lower(10.0)
-                        .with_t_lower(1.38)
-                        .with_y_lower(3.0)
-                        .with_yp(1.28)
-                        .with_b_t(7.25)
-                        .with_ix(462.0)
-                        .with_zx(120.0)
-                        .with_sx(66.0)
-                        .with_rx(3.0)
-                        .with_iy(923.0)
-                        .with_zy(154.0)
-                        .with_sy(92.3)
-                        .with_ry(4.25)
-                        .with_ro(5.69)
-                        .with_h_upper(0.835)
-                        .try_build::<DE>()
-                        .unwrap(),
-                    ShapeBuilder::new()
-                        .with_edi_std_nomenclature(String::from("2L12X12X1-3/8"))
-                        .with_aisc_manual_label(String::from("2L12X12X1-3/8"))
-                        .with_w_upper(210.0)
-                        .with_a_upper(62.2)
-                        .with_d_lower(12.0)
-                        .with_b_lower(12.0)
-                        .with_t_lower(1.38)
-                        .with_y_lower(3.5)
-                        .with_yp(1.3)
-                        .with_b_t(8.7)
-                        .with_ix(826.0)
-                        .with_zx(176.0)
-                        .with_sx(97.2)
-                        .with_rx(3.64)
-                        .with_iy(1590.0)
-                        .with_zy(218.0)
-                        .with_sy(133.0)
-                        .with_ry(5.06)
-                        .with_ro(6.84)
-                        .with_h_upper(0.831)
-                        .try_build::<DE>()
-                        .unwrap(),
+                    double_l8x6x1llbb(),
+                    double_l10x10x1_3_8(),
+                    double_l12x12x1_3_8(),
                 ])
             })
         });
@@ -313,35 +351,7 @@ pub mod tests {
         let mut repo = MockDoubleAngleRepo::new();
         repo.expect_shape_with_aisc_manual_label()
             .with(predicate::eq(String::from("2L10X10X1-3/8")))
-            .returning(|_| {
-                Box::pin(async {
-                    Ok(Some(
-                        ShapeBuilder::new()
-                            .with_edi_std_nomenclature(String::from("2L10X10X1-3/8"))
-                            .with_aisc_manual_label(String::from("2L10X10X1-3/8"))
-                            .with_w_upper(174.0)
-                            .with_a_upper(51.2)
-                            .with_d_lower(10.0)
-                            .with_b_lower(10.0)
-                            .with_t_lower(1.38)
-                            .with_y_lower(3.0)
-                            .with_yp(1.28)
-                            .with_b_t(7.25)
-                            .with_ix(462.0)
-                            .with_zx(120.0)
-                            .with_sx(66.0)
-                            .with_rx(3.0)
-                            .with_iy(923.0)
-                            .with_zy(154.0)
-                            .with_sy(92.3)
-                            .with_ry(4.25)
-                            .with_ro(5.69)
-                            .with_h_upper(0.835)
-                            .try_build::<DE>()
-                            .unwrap(),
-                    ))
-                })
-            });
+            .returning(|_| Box::pin(async { Ok(Some(double_l10x10x1_3_8())) }));
 
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
@@ -371,35 +381,7 @@ pub mod tests {
         let mut repo = MockDoubleAngleRepo::new();
         repo.expect_shape_with_edi_std_nomenclature()
             .with(predicate::eq(String::from("2L10X10X1-3/8")))
-            .returning(|_| {
-                Box::pin(async {
-                    Ok(Some(
-                        ShapeBuilder::new()
-                            .with_edi_std_nomenclature(String::from("2L10X10X1-3/8"))
-                            .with_aisc_manual_label(String::from("2L10X10X1-3/8"))
-                            .with_w_upper(174.0)
-                            .with_a_upper(51.2)
-                            .with_d_lower(10.0)
-                            .with_b_lower(10.0)
-                            .with_t_lower(1.38)
-                            .with_y_lower(3.0)
-                            .with_yp(1.28)
-                            .with_b_t(7.25)
-                            .with_ix(462.0)
-                            .with_zx(120.0)
-                            .with_sx(66.0)
-                            .with_rx(3.0)
-                            .with_iy(923.0)
-                            .with_zy(154.0)
-                            .with_sy(92.3)
-                            .with_ry(4.25)
-                            .with_ro(5.69)
-                            .with_h_upper(0.835)
-                            .try_build::<DE>()
-                            .unwrap(),
-                    ))
-                })
-            });
+            .returning(|_| Box::pin(async { Ok(Some(double_l10x10x1_3_8())) }));
 
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
@@ -429,35 +411,7 @@ pub mod tests {
         let mut repo = MockDoubleAngleRepo::new();
         repo.expect_shapes_with_depth()
             .with(predicate::eq(8.0))
-            .returning(|_| {
-                Box::pin(async {
-                    Ok(vec![
-                        ShapeBuilder::new()
-                            .with_edi_std_nomenclature(String::from("2L8X6X1LLBB"))
-                            .with_aisc_manual_label(String::from("2L8X6X1LLBB"))
-                            .with_w_upper(88.4)
-                            .with_a_upper(26.2)
-                            .with_d_lower(8.0)
-                            .with_b_lower(6.0)
-                            .with_t_lower(1.0)
-                            .with_y_lower(2.65)
-                            .with_yp(1.45)
-                            .with_b_t(8.0)
-                            .with_ix(162.0)
-                            .with_zx(54.6)
-                            .with_sx(30.2)
-                            .with_rx(2.49)
-                            .with_iy(150.0)
-                            .with_zy(43.2)
-                            .with_sy(25.0)
-                            .with_ry(2.39)
-                            .with_ro(4.06)
-                            .with_h_upper(0.721)
-                            .try_build::<DE>()
-                            .unwrap(),
-                    ])
-                })
-            });
+            .returning(|_| Box::pin(async { Ok(vec![double_l8x6x1llbb()]) }));
 
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
@@ -486,35 +440,7 @@ pub mod tests {
         let mut repo = MockDoubleAngleRepo::new();
         repo.expect_shapes_with_width()
             .with(predicate::eq(12.0))
-            .returning(|_| {
-                Box::pin(async {
-                    Ok(vec![
-                        ShapeBuilder::new()
-                            .with_edi_std_nomenclature(String::from("2L12X12X1-3/8"))
-                            .with_aisc_manual_label(String::from("2L12X12X1-3/8"))
-                            .with_w_upper(210.0)
-                            .with_a_upper(62.2)
-                            .with_d_lower(12.0)
-                            .with_b_lower(12.0)
-                            .with_t_lower(1.38)
-                            .with_y_lower(3.5)
-                            .with_yp(1.3)
-                            .with_b_t(8.7)
-                            .with_ix(826.0)
-                            .with_zx(176.0)
-                            .with_sx(97.2)
-                            .with_rx(3.64)
-                            .with_iy(1590.0)
-                            .with_zy(218.0)
-                            .with_sy(133.0)
-                            .with_ry(5.06)
-                            .with_ro(6.84)
-                            .with_h_upper(0.831)
-                            .try_build::<DE>()
-                            .unwrap(),
-                    ])
-                })
-            });
+            .returning(|_| Box::pin(async { Ok(vec![double_l12x12x1_3_8()]) }));
 
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
@@ -543,90 +469,11 @@ pub mod tests {
         let mut repo = MockDoubleAngleRepo::new();
         repo.expect_shapes_with_depth()
             .with(predicate::eq(8.0))
-            .returning(|_| {
-                Box::pin(async {
-                    Ok(vec![
-                        ShapeBuilder::new()
-                            .with_edi_std_nomenclature(String::from("2L8X6X1LLBB"))
-                            .with_aisc_manual_label(String::from("2L8X6X1LLBB"))
-                            .with_w_upper(88.4)
-                            .with_a_upper(26.2)
-                            .with_d_lower(8.0)
-                            .with_b_lower(6.0)
-                            .with_t_lower(1.0)
-                            .with_y_lower(2.65)
-                            .with_yp(1.45)
-                            .with_b_t(8.0)
-                            .with_ix(162.0)
-                            .with_zx(54.6)
-                            .with_sx(30.2)
-                            .with_rx(2.49)
-                            .with_iy(150.0)
-                            .with_zy(43.2)
-                            .with_sy(25.0)
-                            .with_ry(2.39)
-                            .with_ro(4.06)
-                            .with_h_upper(0.721)
-                            .try_build::<DE>()
-                            .unwrap(),
-                        ShapeBuilder::new()
-                            .with_edi_std_nomenclature(String::from("2L8X8X1"))
-                            .with_aisc_manual_label(String::from("2L8X8X1"))
-                            .with_w_upper(102.0)
-                            .with_a_upper(30.2)
-                            .with_d_lower(8.0)
-                            .with_b_lower(8.0)
-                            .with_t_lower(1.0)
-                            .with_y_lower(2.36)
-                            .with_yp(0.944)
-                            .with_b_t(8.0)
-                            .with_ix(178.0)
-                            .with_zx(57.0)
-                            .with_sx(31.6)
-                            .with_rx(2.43)
-                            .with_iy(347.0)
-                            .with_zy(71.3)
-                            .with_sy(43.4)
-                            .with_ry(3.39)
-                            .with_ro(4.56)
-                            .with_h_upper(0.834)
-                            .try_build::<DE>()
-                            .unwrap(),
-                    ])
-                })
-            });
+            .returning(|_| Box::pin(async { Ok(vec![double_l8x6x1llbb(), double_l8x8x1()]) }));
 
         repo.expect_shapes_with_width()
             .with(predicate::eq(6.0))
-            .returning(|_| {
-                Box::pin(async {
-                    Ok(vec![
-                        ShapeBuilder::new()
-                            .with_edi_std_nomenclature(String::from("2L8X6X1LLBB"))
-                            .with_aisc_manual_label(String::from("2L8X6X1LLBB"))
-                            .with_w_upper(88.4)
-                            .with_a_upper(26.2)
-                            .with_d_lower(8.0)
-                            .with_b_lower(6.0)
-                            .with_t_lower(1.0)
-                            .with_y_lower(2.65)
-                            .with_yp(1.45)
-                            .with_b_t(8.0)
-                            .with_ix(162.0)
-                            .with_zx(54.6)
-                            .with_sx(30.2)
-                            .with_rx(2.49)
-                            .with_iy(150.0)
-                            .with_zy(43.2)
-                            .with_sy(25.0)
-                            .with_ry(2.39)
-                            .with_ro(4.06)
-                            .with_h_upper(0.721)
-                            .try_build::<DE>()
-                            .unwrap(),
-                    ])
-                })
-            });
+            .returning(|_| Box::pin(async { Ok(vec![double_l8x6x1llbb()]) }));
 
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
@@ -662,35 +509,7 @@ pub mod tests {
 
         repo.expect_shapes_with_width()
             .with(predicate::eq(10.0))
-            .returning(|_| {
-                Box::pin(async {
-                    Ok(vec![
-                        ShapeBuilder::new()
-                            .with_edi_std_nomenclature(String::from("2L10X10X1-3/8"))
-                            .with_aisc_manual_label(String::from("2L10X10X1-3/8"))
-                            .with_w_upper(174.0)
-                            .with_a_upper(51.2)
-                            .with_d_lower(10.0)
-                            .with_b_lower(10.0)
-                            .with_t_lower(1.38)
-                            .with_y_lower(3.0)
-                            .with_yp(1.28)
-                            .with_b_t(7.25)
-                            .with_ix(462.0)
-                            .with_zx(120.0)
-                            .with_sx(66.0)
-                            .with_rx(3.0)
-                            .with_iy(923.0)
-                            .with_zy(154.0)
-                            .with_sy(92.3)
-                            .with_ry(4.25)
-                            .with_ro(5.69)
-                            .with_h_upper(0.835)
-                            .try_build::<DE>()
-                            .unwrap(),
-                    ])
-                })
-            });
+            .returning(|_| Box::pin(async { Ok(vec![double_l10x10x1_3_8()]) }));
 
         let app_state = AppStateDyn {
             repo: Arc::new(repo),
